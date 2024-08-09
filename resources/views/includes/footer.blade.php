@@ -1,6 +1,6 @@
 <footer class="bg-black mt-10">
 
-    <div class="grid grid-cols-1 mx-auto py-14 gap-8 bg-primary text-white md:grid-cols-2">
+    <div class="grid grid-cols-1 mx-auto py-14 gap-8 bg-brand text-white md:grid-cols-2">
         <div class="ml-1 md:mx-auto">
             <div>
                 <h3 class="font-semibold text-3xl">
@@ -10,11 +10,11 @@
                     Get the latest updates on what’s going on!
                 </p>
             </div>
-            <div class="flex gap-2 flex-wrap">
-                <input class="h-auto p-2 text-lg text-black" placeholder="First Name" type="text">
-                <input class="h-auto p-2 text-lg text-black" placeholder="Your email address" type="email"
+            <div class="flex gap-2 mt-3 flex-wrap">
+                <input class="h-auto py-2 px-4 text-lg text-black rounded-full placeholder-black" placeholder="First Name" type="text">
+                <input class="h-auto py-2 px-4 text-lg text-black rounded-full placeholder-black" placeholder="Your email address" type="email"
                     name="email" id="email">
-                <button class="bg-black px-20 py-2 h-auto text-lg" type="submit">Subscribe</button>
+                <button class="bg-primary rounded-full px-20 py-2 h-auto text-lg" type="submit">Subscribe</button>
             </div>
         </div>
         <div class="ml-1 md:ml-auto mx-auto mt-auto text-center">
@@ -104,21 +104,15 @@
                 <h2 class="mb-1 text-lg font-semibold text-white">Useful links</h2>
                 <ul class="text-white font-light">
                     <li class="">
-                        <a href="https://www.pdpc.go.tz/" class="underline hover:text-gray-400" target="_blank">Data
-                            Protection</a>
+                        <a href="https://www.ictc.go.tz/" class="underline hover:text-gray-400" target="_blank">ICT Commission</a>
                     </li>
                     <li class="">
-                        <a href="https://www.ega.go.tz/" target="_blank"
-                            class="underline hover:text-gray-400">eGA</a>
+                        <a href="https://www.mawasiliano.go.tz/" target="_blank"
+                            class="underline hover:text-gray-400">Mawasiliano</a>
                     </li>
                     <li class="">
-                        <a href="https://www.mawasiliano.go.tz/" class="underline hover:text-gray-400"
-                            target="_blank">Ministry of Information, Communication
-                            and information Technology</a>
-                    </li>
-                    <li class="">
-                        <a href="https://www.tcra.go.tz/" class="underline hover:text-gray-400"
-                            target="_blank">TCRA</a>
+                        <a href="https://iprs.ictc.go.tz/" class="underline hover:text-gray-400"
+                            target="_blank">ICT Professional Registration</a>
                     </li>
                 </ul>
             </div>
@@ -126,13 +120,13 @@
                 <h2 class="mb-1 text-lg font-semibold text-white">Quick Links</h2>
                 <ul class="text-white font-light">
                     <li class="">
-                        <a href="#" class="underline hover:text-gray-400">Tanzania Startups</a>
+                        <a href="/" class="underline hover:text-gray-400">Home</a>
                     </li>
                     <li class="">
-                        <a href="#" class="underline hover:text-gray-400">EMS</a>
+                        <a href="https://taic.ictc.go.tz/#price" class="underline hover:text-gray-400">Conference Fees</a>
                     </li>
                     <li class="">
-                        <a href="#" class="underline hover:text-gray-400">IPRS</a>
+                        <a href="https://taic.ictc.go.tz/#team" class="underline hover:text-gray-400">Speakers</a>
                     </li>
                 </ul>
             </div>
@@ -152,9 +146,9 @@
             </div>
         </div>
     </div>
-    <div class="bg-primary w-full text-center py-5">
+    {{-- <div class="bg-primary w-full text-center py-5">
         <p class="text-white text-sm">
             Copyright &copy; {{ date('Y') }}, Designed and Developed by ICT Commission
         </p>
-    </div>
+    </div> --}}
 </footer>

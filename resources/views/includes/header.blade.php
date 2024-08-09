@@ -34,30 +34,13 @@
         ['link' => '/ict-register/ict-service-providers', 'title' => 'ICT Service Providers'],
     ];
 
-    $mediaCentreSubMenus = [
-        [
-            'link' => route('media_centre_gallery'),
-            'title' => 'Gallery',
-        ],
-        [
-            'link' => route('media_centre_videos'),
-            'title' => 'Videos',
-        ],
-        [
-            'link' => route('media_centre_posts', ['category' => Post::CATEGORY_SPEECH]),
-            'title' => 'Speeches',
-        ],
-        [
-            'link' => route('media_centre_posts', ['category' => Post::CATEGORY_PRESS_RELEASE]),
-            'title' => 'Press Releases',
-        ],
-    ];
+    $mediaCentreSubMenus = [];
 @endphp
 
 <div class="w-100 sm:h-auto md:h-15 py-4  bg-primary flex justify-center">
     <span class="mx-auto text-center align-middle text-white font-medium">
         <span class="ml-5 lg:ml-28 text-sm">
-            The United Republic of Tanzania |  Ministry of Information,
+            The United Republic of Tanzania | Ministry of Information,
             Communication and Information Technology | Information and Communication Technologies Commission
         </span>
     </span>
@@ -83,21 +66,19 @@
     </div>
 </div>
 <a href="/">
-    <div class="flex  divide-x-2 my-2 justify-center align-baseline space-x-5 py-4">
-        <div>
-            <img width="75px" class="" src="{{ Vite::asset('resources/images/emblem.png') }}" alt=""
-                srcset="">
+    <div class=" flex bg-brand  align-baseline justify-start py-4">
+        <div class="container mx-auto flex divide-x-2">
+            <img width="128.3px" class="mx-5" src="{{ Vite::asset('resources/images/white_logo.png') }}"
+                alt="" srcset="">
+                <p class="px-5 place-self-center text-5xl text-secondary font-bold">Events Management System</p>
         </div>
-        <div>
-            <img width="128.3px" class="ml-5" src="{{ Vite::asset('resources/images/ictc_logo.png') }}" alt=""
-                srcset="">
-        </div>
+
     </div>
 </a>
 
-<hr>
+<hr class="bg-white text-white">
 
-<header class="bg-white">
+<header class="bg-brand">
     <nav class="mx-auto flex  items-center justify-between p-4 lg:px-8" aria-label="Global">
         <div class="flex lg:flex-1">
             <a href="/" class="-m-1.5 p-1.5">
@@ -116,19 +97,21 @@
                 </svg>
             </button>
         </div>
-        <div class="hidden lg:flex lg:gap-x-5 xl:gap-x-20 text-black">
-            <a href="/" class="text-sm font-semibold leading-6">Home</a>
+        <div class="hidden lg:flex lg:gap-x-5 xl:gap-x-20 text-white">
+            <a href="/" class="text-lg font-regular leading-6">About</a>
+            <a href="/" class="text-lg font-semibold leading-6">Participant</a>
+            <a href="/" class="text-lg font-semibold leading-6">Exhibitor</a>
+            <a href="/" class="text-lg font-semibold leading-6">Sponsor</a>
+            <a href="/" class="text-lg font-semibold leading-6">Buyer</a>
+            <a href="/" class="text-lg font-semibold leading-6">Media</a>
+            <a href="/" class="text-lg font-semibold leading-6">Help</a>
 
-            <x-drop-down-menu title="About Us" :items=$aboutUsSubMenus />
-            <x-drop-down-menu title="Our Services" :items=$ourServicesSubMenus />
-            <x-drop-down-menu title="ICT Register" :items=$ictRegisterSubMenus />
-            <x-drop-down-menu title="Events" :items=$latestEvents />
-            <x-drop-down-menu title="Publications" :items=$publicationCategories />
-            <x-drop-down-menu title="Media Centre" :items=$mediaCentreSubMenus />
-
-
-            <a href="/contact-us" class="text-sm font-semibold leading-6">Contact Us</a>
-            <a href="/invest/invest-in-tanzania" class="text-sm font-semibold leading-6">Invest In Tanzania</a>
+            {{-- <x-drop-down-menu title="About Us" :items=$aboutUsSubMenus /> --}}
+            {{-- <x-drop-down-menu title="Our Services" :items=$ourServicesSubMenus /> --}}
+            {{-- <x-drop-down-menu title="ICT Register" :items=$ictRegisterSubMenus /> --}}
+            {{-- <x-drop-down-menu title="Events" :items=$latestEvents /> --}}
+            {{-- <x-drop-down-menu title="Publications" :items=$publicationCategories /> --}}
+            {{-- <x-drop-down-menu title="Media Centre" :items=$mediaCentreSubMenus /> --}}
         </div>
         <div class="hidden lg:flex lg:flex-1 lg:justify-end">
         </div>
@@ -158,27 +141,27 @@
                     <div class="space-y-2 py-6">
 
                         {{-- About Us Menu --}}
-                        <x-side-bar-menu title="About Us" :items=$aboutUsSubMenus />
+                        {{-- <x-side-bar-menu title="About Us" :items=$aboutUsSubMenus /> --}}
                         {{-- End of About Us Menu --}}
 
                         {{-- Our Service Menu --}}
-                        <x-side-bar-menu title="Our Services" :items=$ourServicesSubMenus />
+                        {{-- <x-side-bar-menu title="Our Services" :items=$ourServicesSubMenus /> --}}
                         {{-- End of Our Services Menu --}}
 
                         {{-- ICT Register Menu --}}
-                        <x-side-bar-menu title="ICT Register" :items=$ictRegisterSubMenus />
+                        {{-- <x-side-bar-menu title="ICT Register" :items=$ictRegisterSubMenus /> --}}
                         {{-- End of ICT Register Menu --}}
 
                         {{-- Events Menu --}}
-                        <x-side-bar-menu title="Events" :items=$latestEvents />
+                        {{-- <x-side-bar-menu title="Events" :items=$latestEvents /> --}}
                         {{-- End of Events Menu --}}
 
                         {{-- Publications Menu --}}
-                        <x-side-bar-menu title="Publications" :items=$publicationCategories />
+                        {{-- <x-side-bar-menu title="Publications" :items=$publicationCategories /> --}}
                         {{-- End of Publications Menu --}}
 
                         {{-- Media Centre Menu --}}
-                        <x-side-bar-menu title="Media Centre" :items=$mediaCentreSubMenus />
+                        {{-- <x-side-bar-menu title="Media Centre" :items=$mediaCentreSubMenus /> --}}
                         {{-- End of Media Centre Menu --}}
 
                         <a href="/contact-us"
