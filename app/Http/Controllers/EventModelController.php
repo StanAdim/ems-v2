@@ -5,62 +5,23 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreEventModelRequest;
 use App\Http\Requests\UpdateEventModelRequest;
 use App\Models\EventModel;
+use Illuminate\View\View;
 
 class EventModelController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+
+    public function about(EventModel $event): View
     {
-        //
+        return view('events.about', [
+            'event' => $event
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function participant(EventModel $event): View
     {
-        //
+        return view('events.participant', [
+            'event' => $event
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreEventModelRequest $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(EventModel $eventModel)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(EventModel $eventModel)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateEventModelRequest $request, EventModel $eventModel)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(EventModel $eventModel)
-    {
-        //
-    }
 }

@@ -10,7 +10,7 @@
         <header>
             @include('includes.header')
         </header>
-        <main class="mb-auto px-2 xl:px-64">
+        <main class="w-full">
             @yield('content')
         </main>
         <footer>

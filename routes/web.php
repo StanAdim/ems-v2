@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\EventModelController;
 use App\Http\Controllers\IndexController;
+use App\Models\EventModel;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,4 +16,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/',[IndexController::class,'index']);
+Route::get('/', [IndexController::class, 'index']);
+
+Route::controller(EventModelController::class)
+    ->prefix('event')
+    ->name('event.')
+    ->group(function () {
+        Route::get('about/{event}', 'about')->name('about');
+        Route::get('participant/{event}', 'participant')->name('participant');
+    });
