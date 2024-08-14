@@ -11,4 +11,14 @@ class IndexController extends Controller
     {
         return view('index');
     }
+
+    public function participant():View
+    {
+        return view('participant');
+    }
+
+    public function about():View
+    {
+        return view('about');
+    }
 }

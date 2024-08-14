@@ -25,6 +25,8 @@ class EventsPanelProvider extends PanelProvider
         return $panel
             ->default()
             ->id('events')
+            // ->topbar(false)
+            // ->spa(true)
             ->path('events')
             ->login()
             ->colors([
