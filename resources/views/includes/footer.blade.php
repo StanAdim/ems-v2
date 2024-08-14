@@ -12,9 +12,10 @@
                     </p>
                 </div>
                 <div class="flex gap-2 mt-3 flex-wrap">
-                    <input class="h-auto py-2 px-4 text-lg text-black rounded-full placeholder-black" placeholder="First Name" type="text">
-                    <input class="h-auto py-2 px-4 text-lg text-black rounded-full placeholder-black" placeholder="Your email address" type="email"
-                        name="email" id="email">
+                    <input class="h-auto py-2 px-4 text-lg text-black rounded-full placeholder-black"
+                        placeholder="First Name" type="text">
+                    <input class="h-auto py-2 px-4 text-lg text-black rounded-full placeholder-black"
+                        placeholder="Your email address" type="email" name="email" id="email">
                     <button class="bg-primary rounded-full px-20 py-2 h-auto text-lg" type="submit">Subscribe</button>
                 </div>
             </div>
@@ -29,7 +30,8 @@
                             </path>
                         </svg>
                     </a>
-                    <a class="ring-white ring-1 p-2 rounded-full" href="#">
+                    <a class="ring-white ring-1 p-2 rounded-full"
+                        href="https://x.com/ict_commission/status/1820362917436412099?s=48">
                         <svg class="text-white size-5" fill="currentColor" xmlns="http://www.w3.org/2000/svg" x="0px"
                             y="0px" width="100" height="100" viewBox="0 0 24 24">
                             <path
@@ -37,7 +39,8 @@
                             </path>
                         </svg>
                     </a>
-                    <a class="ring-white p-2 ring-1 rounded-full" href="#">
+                    <a class="ring-white p-2 ring-1 rounded-full"
+                        href="https://www.instagram.com/ict_commission_tanzania?igsh=MWc5OW1jemgycW1tcw%3D%3D&utm_source=qr">
                         <svg class="text-white size-5" fill="currentColor" xmlns="http://www.w3.org/2000/svg" x="0px"
                             y="0px" width="100" height="100" viewBox="0 0 50 50">
                             <path
@@ -53,7 +56,8 @@
                             </path>
                         </svg>
                     </a>
-                    <a class="ring-white p-2 ring-1 rounded-full" href="#">
+                    <a class="ring-white p-2 ring-1 rounded-full"
+                        href="https://youtube.com/@ictcommission5362?si=G0wDIsYYcEfpFmUQ">
                         <svg class="text-white size-5" fill="currentColor" xmlns="http://www.w3.org/2000/svg" x="0px"
                             y="0px" width="100" height="100" viewBox="0 0 24 24">
                             <path
@@ -61,7 +65,8 @@
                             </path>
                         </svg>
                     </a>
-                    <a class="ring-white p-2 ring-1 rounded-full" href="#">
+                    <a class="ring-white p-2 ring-1 rounded-full"
+                        href="https://www.linkedin.com/posts/ict-commission-tanzania_tanzaniametaverselecture-metaverse2024-innovation-activity-7225925620038291456-ZI5T?utm_source=share&utm_medium=member_ios">
                         <svg class="text-white size-5" fill="currentColor" xmlns="http://www.w3.org/2000/svg" x="0px"
                             y="0px" width="100" height="100" viewBox="0 0 50 50">
                             <path
@@ -89,16 +94,19 @@
                 <h2 class="mb-1 text-lg font-semibold text-white">Contact Us</h2>
                 <ul class="text-white font-light">
                     <li class="">
-                        <a href="#" class=" hover:underline">14 Jamhuri St,</a>
+                        <a href="#" class=" hover:underline">14 Jamhuri Street,</a>
                     </li>
                     <li class="">
-                        <a href="tel:+255736848444" class="hover:underline">+255 7368 48444</a>
+                        <a href="#" class=" hover:underline">
+                            P.O. BoX 70479 <br>
+                            11470 DAR ES SALAAM
+                        </a>
                     </li>
                     <li class="">
-                        <a href="mailto:dg@ictc.go.tz" class="hover:underline">dg@ictc.go.tz</a>
+                        <a href="mailto:dg@ictc.go.tz" class="hover:underline">Email: dg@ictc.go.tz</a>
                     </li>
                     <li class="">
-                        <a href="#" class="hover:underline">P.o.BOX 70479, Dar es salaam</a>
+                        <a href="tel:+255736848444" class="hover:underline ps-10">+255 7368 48444</a>
                     </li>
                 </ul>
             </div>
@@ -106,15 +114,16 @@
                 <h2 class="mb-1 text-lg font-semibold text-white">Useful links</h2>
                 <ul class="text-white font-light">
                     <li class="">
-                        <a href="https://www.ictc.go.tz/" class="underline hover:text-gray-400" target="_blank">ICT Commission</a>
+                        <a href="https://www.ictc.go.tz/" class="underline hover:text-gray-400" target="_blank">ICT
+                            Commission</a>
                     </li>
                     <li class="">
                         <a href="https://www.mawasiliano.go.tz/" target="_blank"
                             class="underline hover:text-gray-400">Mawasiliano</a>
                     </li>
                     <li class="">
-                        <a href="https://iprs.ictc.go.tz/" class="underline hover:text-gray-400"
-                            target="_blank">ICT Professional Registration</a>
+                        <a href="https://iprs.ictc.go.tz/" class="underline hover:text-gray-400" target="_blank">ICT
+                            Professional Registration</a>
                     </li>
                 </ul>
             </div>
@@ -125,7 +134,8 @@
                         <a href="/" class="underline hover:text-gray-400">Home</a>
                     </li>
                     <li class="">
-                        <a href="https://taic.ictc.go.tz/#price" class="underline hover:text-gray-400">Conference Fees</a>
+                        <a href="https://taic.ictc.go.tz/#price" class="underline hover:text-gray-400">Conference
+                            Fees</a>
                     </li>
                     <li class="">
                         <a href="https://taic.ictc.go.tz/#team" class="underline hover:text-gray-400">Speakers</a>
