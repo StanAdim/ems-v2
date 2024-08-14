@@ -21,4 +21,9 @@ class IndexController extends Controller
     {
         return view('about');
     }
+
+    public function login():View
+    {
+        return view('participant.login');
+    }
 }

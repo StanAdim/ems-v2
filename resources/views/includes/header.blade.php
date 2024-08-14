@@ -108,7 +108,7 @@
             </p>
         </div>
         <div class="place-content-center ml-auto justify-end">
-            <button class="ml-auto px-5 py-3 font-medium bg-secondary rounded-lg text-black">Register Now</button>
+            <a href="/login"><button class="ml-auto px-5 py-3 font-medium bg-secondary rounded-lg text-black">Register Now</button></a>
         </div>
     </div>
 </div>
@@ -121,9 +121,9 @@
                 <li>
                     <a href="/about" class="text-white dark:text-white hover:underline">About</a>
                 </li>
-                <li>
+                {{-- <li>
                     <a href="#" class="text-white dark:text-white hover:underline">Company</a>
-                </li>
+                </li> --}}
                 <li>
                     <a href="/participants" class="text-white dark:text-white hover:underline">Participant</a>
                 </li>
