@@ -10,8 +10,8 @@ background-position-y: center;">
         <div class="grid grid-cols-12 text-center py-10">
             <div class="col-span-1 place-self-center">
                 <button class="">
-                    <img class="w-8 object-cover" src="{{ Vite::asset('resources/images/icons/arrow_left.svg') }}"
-                        alt="" srcset="">
+                    {{-- <img class="w-8 object-cover" src="{{ Vite::asset('resources/images/icons/arrow_left.svg') }}"
+                        alt="" srcset=""> --}}
                 </button>
             </div>
 
@@ -35,8 +35,8 @@ background-position-y: center;">
 
             <div class="col-span-1 mx-1 place-self-center">
                 <button class="">
-                    <img class="w-10 object-cover" src="{{ Vite::asset('resources/images/icons/arrow_right.svg') }}"
-                        alt="" srcset="">
+                    {{-- <img class="w-10 object-cover" src="{{ Vite::asset('resources/images/icons/arrow_right.svg') }}"
+                        alt="" srcset=""> --}}
                 </button>
             </div>
         </div>
@@ -74,7 +74,7 @@ background-position-y: center;">
                     private institutions, and development partners. This gathering is essential for steering Tanzania towards a
                     digitally empowered economy, characterized by enhanced ICT accessibility, affordability, and availability.
                 </p>
-                
+
             </div>
         </div>
     </div>
