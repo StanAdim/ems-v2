@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\EventModelController;
 use App\Http\Controllers\IndexController;
-use App\Models\EventModel;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [IndexController::class, 'index']);
 Route::get('/participants', [IndexController::class, 'participant']);
 Route::get('/about', [IndexController::class, 'about']);
-Route::get('/login', [IndexController::class, 'login']);
+// Route::get('/login', [IndexController::class, 'login']);
 
 Route::controller(EventModelController::class)
     ->prefix('event')
@@ -28,3 +28,15 @@ Route::controller(EventModelController::class)
         Route::get('about/{event}', 'about')->name('about');
         Route::get('participant/{event}', 'participant')->name('participant');
     });
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+require __DIR__.'/auth.php';

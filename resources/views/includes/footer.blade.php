@@ -106,7 +106,7 @@
                         <a href="mailto:dg@ictc.go.tz" class="hover:underline">Email: dg@ictc.go.tz</a>
                     </li>
                     <li class="">
-                        <a href="tel:+255736848444" class="hover:underline ps-10">+255 7368 48444</a>
+                        <a href="tel:+255736848444" class="hover:underline">Phone: +255 7368 48444</a>
                     </li>
                 </ul>
             </div>

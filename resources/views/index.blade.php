@@ -212,7 +212,7 @@
                             src="{{ Vite::asset('resources/images/fee-3.svg') }}" alt="" srcset=""></div>
                     <p class="text-center text-2xl my-2  text-black">Foreign participants.<br><br></p>
                     <p class="text-center text-5xl mb-4 font-extrabold text-black"><sup
-                            class="font-light text-sm align-top">USD</sup>300</p>
+                            class="font-light text-sm align-top">TZS</sup>750,000</p>
                 </div>
                 <button class="mx-auto mb-10 px-8 md:px-20  py-3 font-medium bg-secondary rounded-lg text-black">Register
                     Now</button>

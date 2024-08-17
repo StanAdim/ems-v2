@@ -75,10 +75,10 @@ background-position-y: center;">
                     <img class="w-10 mx-auto object-cover" src="{{ Vite::asset($why['icon']) }}" alt=""
                         srcset="">
                     <a href="#">
-                        <h5 class="mb-2 mt-2 text-2xl font-semibold tracking-tight text-gray-900 dark:text-white">
+                        <h5 class="mb-2 mt-2 text-2xl font-semibold tracking-tight text-gray-900">
                             {{ $why['title'] }}</h5>
                     </a>
-                    <p class="mb-3 font-normal text-gray-500 dark:text-gray-400">{{ $why['description'] }}</p>
+                    <p class="mb-3 font-normal text-gray-500">{{ $why['description'] }}</p>
                 </div>
             @endforeach
 
