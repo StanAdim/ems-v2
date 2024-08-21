@@ -16,18 +16,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [IndexController::class, 'index']);
-Route::get('/participants', [IndexController::class, 'participant']);
-Route::get('/about', [IndexController::class, 'about']);
-// Route::get('/login', [IndexController::class, 'login']);
-
-Route::controller(EventModelController::class)
-    ->prefix('event')
-    ->name('event.')
-    ->group(function () {
-        Route::get('about/{event}', 'about')->name('about');
-        Route::get('participant/{event}', 'participant')->name('participant');
-    });
+Route::controller(IndexController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::get('/participants', 'participant');
+    Route::get('/about',  'about');
+});
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -39,4 +32,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
