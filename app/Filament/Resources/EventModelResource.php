@@ -29,7 +29,7 @@ class EventModelResource extends Resource
     protected static ?string $model = EventModel::class;
     protected static ?string $modelLabel = 'Event';
 
-    protected static ?string $navigationIcon = 'heroicon-s-calendar';
+    protected static ?string $navigationIcon = 'heroicon-o-calendar-days';
 
     public static function form(Form $form): Form
     {

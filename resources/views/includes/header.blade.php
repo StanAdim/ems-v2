@@ -155,9 +155,9 @@
                 <li>
                     <a href="#" class="text-white hover:underline">Sponsor</a>
                 </li>
-                <li>
+                {{-- <li>
                     <a href="#" class="text-white hover:underline">Buyer</a>
-                </li>
+                </li> --}}
                 <li>
                     <a href="#" class="text-white hover:underline">Media</a>
                 </li>
@@ -416,7 +416,7 @@
                             class="!py-2 !font-normal bg-white !text-gray-500 border !border-gray-500 !text-sm">
                             Cancel
                         </x-primary-button>
-                        <x-primary-button class="!py-2 !font-normal !text-sm">
+                        <x-primary-button data-modal-target="gepg-modal" data-modal-toggle="gepg-modal" class="!py-2 !font-normal !text-sm">
                             Pay Now (500,000)
                         </x-primary-button>
                     </div>
@@ -424,7 +424,7 @@
             </div>
 
             <!-- Payment with cards -->
-            <div class="grid border m-2 md:m-10 p-2 md:p-4 rounded-xl border-gray-400">
+            {{-- <div class="grid border m-2 md:m-10 p-2 md:p-4 rounded-xl border-gray-400">
                 <div class="flex justify-between">
                     <p class="font-semibold lg:pl-4 text-sm mt-1">Pay with Card (Tanzanians & Foreigners)</p>
                     <img class="w-1/3" src="{{ Vite::asset('resources/images/pay-cards.svg') }}" alt="">
@@ -501,7 +501,7 @@
                     </div>
                 </div>
 
-            </div>
+            </div> --}}
             <div class="h-4 p-3"></div>
         </div>
     </div>
