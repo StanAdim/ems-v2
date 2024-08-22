@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\MediaCollection;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
@@ -28,6 +30,13 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property string $layout
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property MediaCollection $event_logo
+ * @property-read mixed $about_banner
+ * @property-read mixed $main_banner
+ * @property-read \Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection<int, Media> $media
+ * @property-read int|null $media_count
+ * @property-read mixed $participate_banner
+ * @property-read mixed $theme_banner
  * @method static \Database\Factories\EventModelFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|EventModel newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|EventModel newQuery()
@@ -54,8 +63,8 @@ class EventModel extends Model implements HasMedia
 {
     use HasFactory, InteractsWithMedia;
 
-    // const MEDIA_COLLECTION_IMAGE_TYPES = ['I']
-    const MEDIA_COLLECTION_EVENT_LOGO = 'event-main-logo';
+    const MEDIA_COLLECTION_IMAGE_TYPES = ['image/png', 'image/svg'];
+    const MEDIA_COLLECTION_EVENT_LOGO = 'event-logo';
     const MEDIA_COLLECTION_MAIN_BANNER = 'event-main-banner';
     const MEDIA_COLLECTION_THEME_BANNER = 'event-theme-banner';
     const MEDIA_COLLECTION_PARTICIPATE_BANNER = 'event-participate-banner';
@@ -69,9 +78,22 @@ class EventModel extends Model implements HasMedia
         'startsOn',
         'endsOn',
         'location',
+        'theme',
+        'subThemes',
         'locationDescription',
         'aboutTitle',
         'aboutDescription',
+        'whyParticipate',
+        'layout',
+    ];
+
+    protected $casts = [
+        // 'event_logo' => MediaCollection::class,
+        'subThemes' => 'json',
+    ];
+
+    protected $attributes = [
+        'layout' => 'layout-complex',
     ];
 
     public function setLocationAttribute($location)
@@ -79,24 +101,63 @@ class EventModel extends Model implements HasMedia
         $this->location = json_encode($location);
     }
 
-    public function registerMediaconversions(?Media $media = null): void
+    public function mainBanner(): Attribute
+    {
+        return Attribute::make(
+            get: fn($value) => $this->getMedia(self::MEDIA_COLLECTION_MAIN_BANNER)
+        );
+    }
+
+    public function eventLogo(): Attribute
+    {
+        return Attribute::make(
+            fn($value) => $this->getMedia(self::MEDIA_COLLECTION_EVENT_LOGO)
+        );
+    }
+
+    public function themeBanner(): Attribute
+    {
+        return Attribute::make(
+            fn($value) => $this->getMedia(self::MEDIA_COLLECTION_THEME_BANNER)
+        );
+    }
+
+    public function participateBanner(): Attribute
+    {
+        return Attribute::make(
+            fn($value) => $this->getMedia(self::MEDIA_COLLECTION_PARTICIPATE_BANNER)
+        );
+    }
+
+    public function aboutBanner(): Attribute
+    {
+        return Attribute::make(
+            fn($value) => $this->getMedia(self::MEDIA_COLLECTION_ABOUT_BANNER)
+        );
+    }
+
+    /* public function registerMediaconversions(?Media $media = null): void
     {
         $this
             ->addMediaConversion('preview')
             ->fit(Fit::Contain, 300, 300)
             ->queued();
-    }
+    } */
 
     public function registerMediaCollections(): void
     {
-        $this
-            ->addMediaCollection(self::MEDIA_COLLECTION_EVENT_LOGO)
-            ->singleFile()
-            ->acceptsMimeTypes(['image/png', 'image/svg']);
+        $this->registerSingleFileImageCollection(self::MEDIA_COLLECTION_EVENT_LOGO);
+        $this->registerSingleFileImageCollection(self::MEDIA_COLLECTION_MAIN_BANNER);
+        $this->registerSingleFileImageCollection(self::MEDIA_COLLECTION_THEME_BANNER);
+        $this->registerSingleFileImageCollection(self::MEDIA_COLLECTION_ABOUT_BANNER);
+        $this->registerSingleFileImageCollection(self::MEDIA_COLLECTION_PARTICIPATE_BANNER);
+    }
 
+    private function registerSingleFileImageCollection(string $collectionName): void
+    {
         $this
-            ->addMediaCollection(self::MEDIA_COLLECTION_MAIN_BANNER)
+            ->addMediaCollection($collectionName)
             ->singleFile()
-            ->acceptsMimeTypes(['','']);
+            ->acceptsMimeTypes(self::MEDIA_COLLECTION_IMAGE_TYPES);
     }
 }

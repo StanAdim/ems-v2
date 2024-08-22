@@ -10,6 +10,7 @@ use Filament\Forms;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Section;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\Split;
 use Filament\Forms\Components\Tabs;
 use Filament\Forms\Components\Tabs\Tab;
@@ -36,34 +37,35 @@ class EventModelResource extends Resource
             ->schema([
                 Tabs::make('Tabs')
                     ->tabs([
-                        Tab::make('Event Configuration')
-                            ->schema([
-                                Section::make([
-                                    TextInput::make('title')->required(),
-                                    TextInput::make('linkTitle')->label('Short Title')->hint('For Displaying in Links')->required(),
-                                    Split::make([
-                                        DateTimePicker::make('startsOn')->minutesStep(15)->seconds(false)->required(),
-                                        DateTimePicker::make('endsOn')->minutesStep(15)->seconds(false)->required(),
-                                    ])
-                                ]),
-                                Section::make('Themes')->schema([
-                                    Textarea::make('theme')->label('Main')->required(),
-                                    Repeater::make('subThemes')->schema([
-                                        IconPicker::make('icon')->columnSpan(2),
-                                        Textarea::make('message')->columnSpan(4),
-                                    ])->label('Sub Themes')->columns(6)
-                                ]),
-                                Section::make('About')->schema([
-                                    Textarea::make('aboutTitle')->label('Heading')->required(),
-                                    Textarea::make('aboutDescription')->label('Description')->required(),
-                                ]),
-                                Section::make('Location')->schema([
-                                    TextInput::make('locationDescription')->label('Description')->required(),
-                                    LocationPickr::make('location')->label('Map'),
-                                ])
+                        Tab::make('Event Details')->schema([
+                            TextInput::make('title')->required(),
+                            TextInput::make('linkTitle')->label('Short Title')->hint('For Displaying in Links')->required(),
+                            Split::make([
+                                DateTimePicker::make('startsOn')->minutesStep(15)->seconds(false)->required(),
+                                DateTimePicker::make('endsOn')->minutesStep(15)->seconds(false)->required(),
                             ]),
-                        Tab::make('Banner Configuration')->schema([
-                            
+                            SpatieMediaLibraryFileUpload::make('event_logo')->collection(EventModel::MEDIA_COLLECTION_EVENT_LOGO),
+                        ]),
+                        Tab::make('About')->schema([
+                            Textarea::make('aboutTitle')->label('Heading')->required(),
+                            Textarea::make('aboutDescription')->label('Description')->required(),
+                            SpatieMediaLibraryFileUpload::make('about_banner')->collection(EventModel::MEDIA_COLLECTION_ABOUT_BANNER),
+                        ]),
+                        Tab::make('Themes')->schema([
+                            Textarea::make('theme')->label('Main')->required(),
+                            Repeater::make('subThemes')->schema([
+                                IconPicker::make('icon')->columnSpan(2),
+                                Textarea::make('message')->columnSpan(4),
+                            ])->label('Sub Themes')->columns(6),
+                            SpatieMediaLibraryFileUpload::make('theme_banner')->collection(EventModel::MEDIA_COLLECTION_THEME_BANNER),
+                        ]),
+                        Tab::make('Location')->schema([
+                            TextInput::make('locationDescription')->label('Description')->required(),
+                            LocationPickr::make('location')->label('Map'),
+                        ]),
+                        Tab::make('Banners Configuration')->schema([
+                            SpatieMediaLibraryFileUpload::make('main_banner')->collection(EventModel::MEDIA_COLLECTION_MAIN_BANNER),
+                            SpatieMediaLibraryFileUpload::make('participate_banner')->collection(EventModel::MEDIA_COLLECTION_PARTICIPATE_BANNER),
                         ])
                     ]),
             ])->columns(1);
