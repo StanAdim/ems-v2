@@ -1,0 +1,11 @@
+@import '/vendor/filament/filament/resources/css/theme.css';
+
+@config 'tailwind.config.js';
+
+.fi-input-wrp {
+    @apply rounded-none;
+}
+
+.fi-tabs-item-active {
+    @apply bg-primary-300/20 border-2 border-primary-200;
+}
