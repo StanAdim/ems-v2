@@ -9,7 +9,8 @@ export default defineConfig({
                 'resources/css/fontawesome/css/fontawesome.min.css',
                 'resources/css/fontawesome/css/brands.min.css',
                 'resources/css/fontawesome/css/solid.min.css',
-                'resources/js/app.js'
+                'resources/js/app.js',
+                'resources/css/filament/events/theme.css'
             ],
             refresh: true,
         }),
