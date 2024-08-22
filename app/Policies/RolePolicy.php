@@ -3,10 +3,10 @@
 namespace App\Policies;
 
 use App\Models\User;
-use App\Models\EventModel;
+use Spatie\Permission\Models\Role;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class EventModelPolicy
+class RolePolicy
 {
     use HandlesAuthorization;
 
@@ -15,15 +15,15 @@ class EventModelPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->can('view_any_event::model');
+        return $user->can('view_any_role');
     }
 
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, EventModel $eventModel): bool
+    public function view(User $user, Role $role): bool
     {
-        return $user->can('view_event::model');
+        return $user->can('view_role');
     }
 
     /**
@@ -31,23 +31,23 @@ class EventModelPolicy
      */
     public function create(User $user): bool
     {
-        return $user->can('create_event::model');
+        return $user->can('create_role');
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, EventModel $eventModel): bool
+    public function update(User $user, Role $role): bool
     {
-        return $user->can('update_event::model');
+        return $user->can('update_role');
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, EventModel $eventModel): bool
+    public function delete(User $user, Role $role): bool
     {
-        return $user->can('delete_event::model');
+        return $user->can('delete_role');
     }
 
     /**
@@ -55,15 +55,15 @@ class EventModelPolicy
      */
     public function deleteAny(User $user): bool
     {
-        return $user->can('delete_any_event::model');
+        return $user->can('delete_any_role');
     }
 
     /**
      * Determine whether the user can permanently delete.
      */
-    public function forceDelete(User $user, EventModel $eventModel): bool
+    public function forceDelete(User $user, Role $role): bool
     {
-        return $user->can('force_delete_event::model');
+        return $user->can('{{ ForceDelete }}');
     }
 
     /**
@@ -71,15 +71,15 @@ class EventModelPolicy
      */
     public function forceDeleteAny(User $user): bool
     {
-        return $user->can('force_delete_any_event::model');
+        return $user->can('{{ ForceDeleteAny }}');
     }
 
     /**
      * Determine whether the user can restore.
      */
-    public function restore(User $user, EventModel $eventModel): bool
+    public function restore(User $user, Role $role): bool
     {
-        return $user->can('restore_event::model');
+        return $user->can('{{ Restore }}');
     }
 
     /**
@@ -87,15 +87,15 @@ class EventModelPolicy
      */
     public function restoreAny(User $user): bool
     {
-        return $user->can('restore_any_event::model');
+        return $user->can('{{ RestoreAny }}');
     }
 
     /**
      * Determine whether the user can replicate.
      */
-    public function replicate(User $user, EventModel $eventModel): bool
+    public function replicate(User $user, Role $role): bool
     {
-        return $user->can('replicate_event::model');
+        return $user->can('{{ Replicate }}');
     }
 
     /**
@@ -103,6 +103,6 @@ class EventModelPolicy
      */
     public function reorder(User $user): bool
     {
-        return $user->can('reorder_event::model');
+        return $user->can('{{ Reorder }}');
     }
 }

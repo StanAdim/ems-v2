@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BookingController;
 use App\Http\Controllers\EventModelController;
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\ProfileController;
@@ -39,4 +40,13 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+Route::group(['middleware' => ['auth']], function () {
+    Route::get('/event-booking', [BookingController::class, 'event_booking'])->name('event-booking');
+    Route::get('/my-booking', [BookingController::class, 'my_booking'])->name('my-booking');
+    Route::get('/individual-booking', [BookingController::class, 'individual_booking'])->name('individual-booking');
+    Route::get('/group-booking', [BookingController::class, 'group_booking'])->name('group-booking');
+    Route::get('/exhibition-booking', [BookingController::class, 'exhibition_booking'])->name('exhibition-booking');
+    Route::get('/event-material', [BookingController::class, 'event_material'])->name('event-material');
+    Route::get('/question-and-answer', [BookingController::class, 'question_and_answer'])->name('question-and-answer');
+});
+require __DIR__ . '/auth.php';
