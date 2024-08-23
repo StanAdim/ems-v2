@@ -42,13 +42,12 @@ background-position-y: center;">
         </div>
     </div>
 
-    <div class="bg-alt-green">
+    <div class="bg-brand">
         <div class="container mx-auto py-10 grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-0">
             <div class="md:h-[40rem] mx-2 ">
                 <p class="text-7xl ml-10 font-extralight text-white">
                     About<br>
-                    Cybersecurity<br>
-                    Summit
+                    TAIC<br>
                 </p>
             </div>
             <div class="m-4 place-content-evenly text-white text-lg">

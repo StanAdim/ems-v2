@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [IndexController::class, 'index']);
 Route::get('/participants', [IndexController::class, 'participant']);
 Route::get('/about', [IndexController::class, 'about']);
+Route::get('/exhibitor', [IndexController::class, 'exhibitor']);
 // Route::get('/login', [IndexController::class, 'login']);
 
 Route::controller(EventModelController::class)
