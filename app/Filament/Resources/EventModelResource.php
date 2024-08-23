@@ -20,6 +20,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use FilamentTiptapEditor\TiptapEditor;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use TomatoPHP\FilamentIcons\Components\IconPicker;
@@ -48,7 +49,7 @@ class EventModelResource extends Resource
                         ]),
                         Tab::make('About')->schema([
                             Textarea::make('aboutTitle')->label('Heading')->required(),
-                            Textarea::make('aboutDescription')->label('Description')->required(),
+                        TiptapEditor::make('aboutDescription')->label('Description')->required(),
                             SpatieMediaLibraryFileUpload::make('about_banner')->collection(EventModel::MEDIA_COLLECTION_ABOUT_BANNER),
                         ]),
                         Tab::make('Themes')->schema([
