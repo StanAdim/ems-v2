@@ -25,10 +25,11 @@ background-position-y: center;">
                         industry leaders </h1>
                     <div class="mt-5 mb-20 mx-1">
                         <div class="place-content-center inline-flex gap-8 ml-auto justify-end">
-                            <button class="ml-auto px-5 py-3 font-medium bg-secondary rounded-lg text-black">Register
-                                Now</button>
-                            <button class="ml-auto px-5 py-3 font-medium ring-1 ring-white rounded-lg text-white">More
-                                Details</button>
+                            <a href="/register">
+                                <button class="ml-auto px-5 py-3 font-medium bg-secondary rounded-lg text-black">Exhibit Now</button>
+                            </a>
+                            {{-- <button class="ml-auto px-5 py-3 font-medium ring-1 ring-white rounded-lg text-white">More
+                                Details</button> --}}
                         </div>
                     </div>
                 </div>
