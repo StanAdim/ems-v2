@@ -28,6 +28,11 @@ class EventController extends Controller
         ]);
     }
 
+    public function exhibitor(EventModel $event): View
+    {
+        return view('exhibitor');
+    }
+
     public function login(): View
     {
         return view('participant.login');
