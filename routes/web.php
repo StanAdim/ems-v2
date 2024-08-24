@@ -1,8 +1,7 @@
 <?php
 
 use App\Http\Controllers\BookingController;
-use App\Http\Controllers\EventModelController;
-use App\Http\Controllers\IndexController;
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -17,19 +16,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [IndexController::class, 'index']);
-Route::get('/participants', [IndexController::class, 'participant']);
-Route::get('/about', [IndexController::class, 'about']);
-Route::get('/exhibitor', [IndexController::class, 'exhibitor']);
-// Route::get('/login', [IndexController::class, 'login']);
+Route::get('', function () {
+    return redirect(route('event.index'));
+});
 
-Route::controller(EventModelController::class)
-    ->prefix('event')
-    ->name('event.')
-    ->group(function () {
-        Route::get('about/{event}', 'about')->name('about');
-        Route::get('participant/{event}', 'participant')->name('participant');
-    });
+Route::controller(EventController::class)->prefix('event')->name('event.')->group(function () {
+    Route::get('{event?}/', 'index')->name('index');
+    Route::get('{event}/participants', 'participant')->name('participant');
+    Route::get('{event}/about', 'about')->name('about');
+    Route::get('{event}/exhibitor', 'exhibitor')->name('exhibitor');
+});
 
 Route::get('/dashboard', function () {
     return view('dashboard');

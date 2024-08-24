@@ -31,8 +31,7 @@
     <div class="container mx-auto grid grid-cols-1 md:grid-cols-2">
         <a href="/">
             <div class="flex divide-x-2 justify-center md:justify-start">
-                <img width="74px" src="{{ Vite::asset('resources/images/white_logo.png') }}" alt=""
-                    srcset="">
+                <img width="74px" src="{{ Vite::asset('resources/images/white_logo.png') }}" alt="" srcset="">
                 <p class="px-5 place-self-center text-sm lg:text-2xl text-secondary font-medium">Events Management
                     System
                 </p>
@@ -40,18 +39,12 @@
         </a>
 
         <div class="inline-flex gap-2 md:gap-4 justify-center text-nowrap py-2 lg:justify-end align-middle">
-            <a href="#" class=" my-auto text-xs lg:text-xl text-secondary underline ">
-                TAIC 2024
-            </a>
-            <a href="#" class=" my-auto text-xs lg:text-xl text-white underline ">
-                Cybersecurity
-            </a>
-            <a href="#" class=" my-auto text-xs lg:text-xl text-white underline ">
-                ICT Summit
-            </a>
-            <a href="#" class=" my-auto text-xs lg:text-xl text-white underline ">
-                ICT Conference
-            </a>
+            @foreach ($latestEvents as $latestEvent)
+                <a href="{{ $latestEvent['url'] }}"
+                    class=" my-auto text-xs lg:text-xl {{ $event && $event?->id == $latestEvent['id'] ? 'text-secondary' : '' }} underline ">
+                    {{ $latestEvent['title'] }}
+                </a>
+            @endforeach
         </div>
 
     </div>
@@ -62,8 +55,7 @@
     <div class="grid grid-cols-1 lg:grid-cols-5 container gap-2 mx-auto">
         <div class="lg:col-span-2 grid grid-cols-2 gap-4">
             <p class="text-sm lg:text-3xl font-semibold">
-                Tanzania Annual ICT<br>
-                Conference 2024
+                {{ $event->title }}
             </p>
             <p class="text-4xl text-primary grid grid-cols-1 font-semibold place-content-center">
                 <span>8th</span><span class="text-sm font-light text-secondary">Edition</span>
@@ -71,8 +63,7 @@
         </div>
         <div class="lg:col-span-2 grid grid-cols-1 place-content-center">
             <p class="inline-flex gap-2">
-                <svg width="19" height="19" viewBox="0 0 19 19" fill="none"
-                    xmlns="http://www.w3.org/2000/svg">
+                <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <g clip-path="url(#clip0_442_51)">
                         <path
                             d="M14.5317 10.9038C14.5317 10.067 14.3253 9.24311 13.9308 8.50519C13.5362 7.76727 12.9657 7.1381 12.2698 6.67345C11.5739 6.20879 10.7741 5.92302 9.94128 5.84145C9.10848 5.75988 8.26843 5.88505 7.49558 6.20585C6.72274 6.52665 6.04099 7.03317 5.51075 7.68051C4.98052 8.32786 4.6182 9.09602 4.4559 9.91691C4.2936 10.7378 4.33634 11.5861 4.58033 12.3865C4.82433 13.1869 5.26203 13.9147 5.85465 14.5055L9.44549 18.0193L13.0422 14.5019C13.5162 14.0305 13.8919 13.4698 14.1476 12.8521C14.4033 12.2345 14.5338 11.5722 14.5317 10.9038ZM9.44549 15.9849L6.87625 13.4723C6.36841 12.9644 6.02248 12.3175 5.88216 11.6131C5.74185 10.9088 5.81344 10.1787 6.08791 9.51498C6.36237 8.8513 6.82738 8.28386 7.42419 7.88435C8.02101 7.48484 8.72284 7.27118 9.44103 7.27037C10.1592 7.26956 10.8615 7.48163 11.4593 7.87979C12.057 8.27795 12.5233 8.84434 12.7992 9.50739C13.0752 10.1704 13.1484 10.9004 13.0097 11.6051C12.871 12.3098 12.5265 12.9575 12.0198 13.4665L9.44549 15.9849ZM9.44549 8.71888C9.01437 8.71888 8.59293 8.84673 8.23447 9.08624C7.876 9.32576 7.59661 9.6662 7.43163 10.0645C7.26665 10.4628 7.22348 10.9011 7.30759 11.3239C7.39169 11.7468 7.5993 12.1352 7.90415 12.44C8.209 12.7449 8.5974 12.9525 9.02024 13.0366C9.44308 13.1207 9.88136 13.0775 10.2797 12.9125C10.678 12.7476 11.0184 12.4682 11.2579 12.1097C11.4974 11.7512 11.6253 11.3298 11.6253 10.8987C11.6253 10.3206 11.3956 9.76612 10.9868 9.35733C10.5781 8.94854 10.0236 8.71888 9.44549 8.71888ZM18.1647 8.02571V18.1646H11.3732L12.8605 16.7115H16.7115V8.02353C16.7119 7.91321 16.6869 7.80427 16.6385 7.70512C16.5902 7.60597 16.5197 7.51927 16.4325 7.4517L9.89308 2.33354C9.76528 2.23361 9.60772 2.17932 9.44549 2.17932C9.28327 2.17932 9.1257 2.23361 8.99791 2.33354L2.45853 7.45024C2.37126 7.51808 2.30072 7.60504 2.25234 7.70443C2.20397 7.80382 2.17906 7.91299 2.17952 8.02353V16.7115H6.03049L7.51638 18.1646H0.726326V8.02353C0.725455 7.6925 0.80037 7.36566 0.945332 7.06805C1.09029 6.77044 1.30146 6.50997 1.56264 6.30658L8.10202 1.18988C8.48564 0.889369 8.95891 0.726074 9.44622 0.726074C9.93354 0.726074 10.4068 0.889369 10.7904 1.18988L17.3298 6.30803C17.5907 6.51127 17.8016 6.77155 17.9463 7.06891C18.091 7.36627 18.1657 7.69282 18.1647 8.02353V8.02571Z"
@@ -85,11 +76,10 @@
                         </clipPath>
                     </defs>
                 </svg>
-                Dar es Salaam, Tanzania Julius Nyerere International Convention Centre (JNICC)
+                {{ $event->locationDescription }}
             </p>
             <p class="inline-flex gap-2">
-                <svg width="18" height="19" viewBox="0 0 18 19" fill="none"
-                    xmlns="http://www.w3.org/2000/svg">
+                <svg width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <g clip-path="url(#clip0_442_32)">
                         <path
                             d="M15.2585 2.15754H13.0788V0.704346H11.6256V2.15754H5.81278V0.704346H4.35958V2.15754H2.17979C1.60168 2.15754 1.04724 2.3872 0.638446 2.79599C0.229656 3.20478 0 3.75922 0 4.33733L0 18.1427H17.4383V4.33733C17.4383 3.75922 17.2087 3.20478 16.7999 2.79599C16.3911 2.3872 15.8367 2.15754 15.2585 2.15754ZM1.45319 4.33733C1.45319 4.14463 1.52975 3.95981 1.66601 3.82355C1.80227 3.68729 1.98709 3.61073 2.17979 3.61073H15.2585C15.4512 3.61073 15.6361 3.68729 15.7723 3.82355C15.9086 3.95981 15.9851 4.14463 15.9851 4.33733V6.51712H1.45319V4.33733ZM1.45319 16.6895V7.97032H15.9851V16.6895H1.45319Z"
@@ -107,17 +97,18 @@
                         </clipPath>
                     </defs>
                 </svg>
-                13th - 17th OCTOBER, 2024
+                {{ $event->startsOn->format('jS') }} - {{ $event->endsOn->format('jS F Y') }}
             </p>
         </div>
         {{-- <div class="place-content-center ml-auto justify-end">
-            <a href="/login"><button class="ml-auto px-5 py-3 font-medium bg-secondary rounded-lg text-black">Register Now</button></a>
+            <a href="/login"><button class="ml-auto px-5 py-3 font-medium bg-secondary rounded-lg text-black">Register
+                    Now</button></a>
         </div> --}}
         <div class="place-content-center ml-auto justify-end">
             <button data-modal-target="register-event-modal" data-modal-toggle="register-event-modal"
                 class="ml-auto px-5 py-3 font-medium ring-1 ring-secondary bg-secondary rounded-lg text-black">Register
                 Now</button>
-            <a href="/login"><button
+            <a href="{{ route('login') }}"><button
                     class="ml-2 px-5 py-3 font-medium ring-1 ring-white rounded-lg text-white">Login</button></a>
         </div>
     </div>
@@ -138,19 +129,21 @@
 
     <div class="hidden w-full md:block md:w-auto px-4 py-3 container mx-auto" id="navbar-default">
         <div class="flex md:text-center md:place-content-center">
-            <ul
-                class="grid md:flex grid-cols-1 overflow-hidden font-normal mt-0 space-x-8 rtl:space-x-reverse text-lg">
+            <ul class="grid md:flex grid-cols-1 overflow-hidden font-normal mt-0 space-x-8 rtl:space-x-reverse text-lg">
                 <li>
-                    <a href="/about" class="text-white hover:underline ms-8 ">About</a>
+                    <a href="{{ route('event.about', ['event' => $event]) }}"
+                        class="text-white hover:underline ms-8 ">About</a>
                 </li>
                 {{-- <li>
                     <a href="#" class="text-white hover:underline">Company</a>
                 </li> --}}
                 <li>
-                    <a href="/participants" class="text-white hover:underline">Participant</a>
+                    <a href="{{ route('event.participant', ['event' => $event]) }}"
+                        class="text-white hover:underline">Participant</a>
                 </li>
                 <li>
-                    <a href="/exhibitor" class="text-white hover:underline">Exhibitor</a>
+                    <a href="{{ route('event.exhibitor', ['event' => $event]) }}"
+                        class="text-white hover:underline">Exhibitor</a>
                 </li>
                 <li>
                     <a href="#" class="text-white hover:underline">Sponsor</a>
@@ -164,7 +157,7 @@
                 <li>
                     <a href="#" class="text-white hover:underline">Help</a>
                 </li>
-                <a href="/login" class="md:hidden  text-white hover:underline">
+                <a href="{{ route('login') }}" class="md:hidden  text-white hover:underline">
                     Login
                 </a>
 
@@ -175,9 +168,11 @@
 
 <hr class="bg-white text-white">
 
-{{-- overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full flex --}}
+{{-- overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0
+h-[calc(100%-1rem)] max-h-full flex --}}
 
-{{-- overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full hidden --}}
+{{-- overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0
+h-[calc(100%-1rem)] max-h-full hidden --}}
 
 <!-- Register Event Modal -->
 <div id="register-event-modal" tabindex="-1" aria-hidden="register-event-modal"
@@ -245,7 +240,8 @@
                     class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">I
                     accept</button>
                 <button data-modal-hide="register-event-modal" type="button"
-                    class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Decline</button> --}}
+                    class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Decline</button>
+                --}}
                 <div class="inline-flex gap-2">
                     <input type="checkbox" class="my-auto border border-primary text-primary rounded-sm"
                         name="terms-conditions" id="terms-conditions">
@@ -356,8 +352,8 @@
                                     d="M27,5H5c-1.657,0-3,1.343-3,3v1c0-1.657,1.343-3,3-3H27c1.657,0,3,1.343,3,3v-1c0-1.657-1.343-3-3-3Z"
                                     fill="#fff" opacity=".2"></path>
                             </svg>
-                            +255 <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                            +255 <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                fill="none" viewBox="0 0 10 6">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                                     stroke-width="2" d="m1 1 4 4 4-4" />
                             </svg>
@@ -416,7 +412,8 @@
                             class="!py-2 !font-normal bg-white !text-gray-500 border !border-gray-500 !text-sm">
                             Cancel
                         </x-primary-button>
-                        <x-primary-button data-modal-target="gepg-modal" data-modal-toggle="gepg-modal" class="!py-2 !font-normal !text-sm">
+                        <x-primary-button data-modal-target="gepg-modal" data-modal-toggle="gepg-modal"
+                            class="!py-2 !font-normal !text-sm">
                             Pay Now (500,000)
                         </x-primary-button>
                     </div>
@@ -557,17 +554,17 @@
             </div>
             <div class="flex gap-5 p-4 border-gray-200 ">
                 <div class="grid mx-auto">
-                    <x-primary-button id="gepg-modal-button" onclick="closeThis()"
-                        data-modal-hide="order-details-modal" data-modal-target="extra-details-modal"
-                        data-modal-toggle="extra-details-modal" class="!py-2 !font-normal !text-sm">
+                    <x-primary-button id="gepg-modal-button" onclick="closeThis()" data-modal-hide="order-details-modal"
+                        data-modal-target="extra-details-modal" data-modal-toggle="extra-details-modal"
+                        class="!py-2 !font-normal !text-sm">
                         Download Invoice
                     </x-primary-button>
                 </div>
             </div>
             <div class="flex gap-5 p-4 border-gray-200 rounded-b dark:border-gray-600">
                 <div class="grid mx-auto">
-                    <p class="text-sm mb-4">Having any trouble?<a class="text-primary underline ml-1"
-                            href="#">Ask help</a> </p>
+                    <p class="text-sm mb-4">Having any trouble?<a class="text-primary underline ml-1" href="#">Ask
+                            help</a> </p>
                 </div>
             </div>
         </div>
@@ -604,10 +601,11 @@
             <div
                 class="grid grid-cols-1 items-center justify-between py-1 px-4 md:px-5 border-b rounded-t dark:border-gray-600">
                 <h3 class="text-2xl text-primary mx-auto font-semibold">
-                    Register for TAIC 2024
+                    Register for {{$event->shortTitle}}
                 </h3>
                 <p class="text-sm my-2 mx-auto">
-                    Happening from 13th -17th October, 2024 at JNICC, Dar es Salaam
+                    Happening from {{ $event->startsOn->format('jS') }} - {{ $event->endsOn->format('jS F Y') }}, Dar es
+                    Salaam
                 </p>
             </div>
             <!-- Modal body -->
@@ -723,8 +721,8 @@
                         class="!py-2 !font-normal  bg-white !text-gray-500 border border-gray-500 !text-sm">
                         Cancel
                     </x-primary-button>
-                    <x-primary-button type="submit" onclick="location.reload()"
-                        data-modal-hide="extra-details-modal" class="!py-2 !font-normal !text-sm">
+                    <x-primary-button type="submit" onclick="location.reload()" data-modal-hide="extra-details-modal"
+                        class="!py-2 !font-normal !text-sm">
                         Continue
                     </x-primary-button>
                 </div>
