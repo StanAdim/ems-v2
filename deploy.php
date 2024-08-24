@@ -21,9 +21,9 @@ host('45.79.252.40')
 
 // Tasks
 
-task('install_shield', function () {
-    run('cd {{release_path}} && php artisan shield:install -n');
-})->desc('Setup Shield Permissions');
+task('cache_icons', function () {
+    run('cd {{release_path}} && php artisan icons:clear && php artisan icons:cache');
+})->desc('Cache Blade Icons');
 
 task('update_assets', function () {
     run('cd {{release_path}} && npm install && npm run build');
@@ -31,6 +31,8 @@ task('update_assets', function () {
 
 // Hooks
 
+
+after('deploy:success', 'cache_icons');
 after('deploy:success', 'update_assets');
 after('deploy:failed', 'deploy:unlock');
 
