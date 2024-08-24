@@ -47,7 +47,9 @@ class EventController extends Controller
 
     public function exhibitor(EventModel $event): View
     {
-        return view('exhibitor');
+        return view('exhibitor', [
+            'event' => $event,
+        ]);
     }
 
     public function login(): View
