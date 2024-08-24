@@ -142,7 +142,7 @@
                         class="text-white hover:underline">Participant</a>
                 </li>
                 <li>
-                    <a href="#" class="text-white hover:underline">Exhibitor</a>
+                    <a href="/exhibitor" class="text-white hover:underline">Exhibitor</a>
                 </li>
                 <li>
                     <a href="#" class="text-white hover:underline">Sponsor</a>

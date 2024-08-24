@@ -16,7 +16,7 @@
                 Management System</span>
         </a>
         <ul class="space-y-2 font-medium">
-            <x-side-bar-link name="Dashboard" link="{{ route('dashboard') }}" route='dashboard'
+            <x-side-bar-link name="Home" link="{{ route('dashboard') }}" route='dashboard'
                 active="{{ request()->routeIs('dashboard') }}">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
                     xmlns="http://www.w3.org/2000/svg">
