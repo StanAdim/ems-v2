@@ -1,4 +1,4 @@
-@extends($event ? 'layouts.event' : 'layouts.index')
+@extends(isset($event) ? 'layouts.event' : 'layouts.index')
 
 @section('content')
     <div class="bg-gray-300">

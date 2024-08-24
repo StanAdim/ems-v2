@@ -1,4 +1,6 @@
-<x-guest-layout>
+@extends(isset($event) ? 'layouts.event' : 'layouts.index')
+
+@section('content')
     <div class="container grid grid-cols-1 xl:grid-cols-3  mx-auto p-5">
         <div></div>
         <div class="rounded-xl p-5 shadow-xl">
@@ -34,4 +36,4 @@
             </div>
         </div>
     </div>
-</x-guest-layout>
+@endsection
