@@ -4,7 +4,7 @@
 
 {{-- Hero Begins --}}
 <div class="md:mx-auto grid grid-cols-1 gap-1 bg-primary-50 mb-10"
-    style="background-image: url({{ Vite::asset('resources/images/hero.svg') }});background-size:cover; background-repeat:no-repeat; background-position-x: center;
+    style="background-image: url({{ $event->getMainBannerUrl() ?: Vite::asset('resources/images/hero.svg') }});background-size:cover; background-repeat:no-repeat; background-position-x: center;
 background-position-y: center;">
     <div class="grid grid-cols-12 text-center py-10">
         <div class="col-span-1 place-self-center">

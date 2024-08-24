@@ -18,7 +18,7 @@
         <p class="text-7xl ml-10 font-extralight text-primary"> {!! $event->aboutTitle !!}
         </p>
         <img class="w-full h-full p-10 object-fit md:object-cover "
-            src="{{ Vite::asset('resources/images/about.svg') }}" alt="" srcset="">
+            src="{{ $event->getEventLogoUrl() ?: Vite::asset('resources/images/about.svg') }}" alt="" srcset="">
     </div>
 
     <div class="m-4 place-content-evenly text-lg">
@@ -111,7 +111,8 @@
 
     </div>
     <div class="bg-primary grid md:rounded-e-lg">
-        <img class="w-full h-full object-cover" src="{{ Vite::asset('resources/images/theme.svg') }}" alt="" srcset="">
+        <img class="w-full h-full object-cover"
+            src="{{ $event->getThemeBannerUrl() ?: Vite::asset('resources/images/theme.svg') }}" alt="" srcset="">
     </div>
 </div>
 

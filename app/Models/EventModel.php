@@ -113,11 +113,24 @@ class EventModel extends Model implements HasMedia
         $this->location = json_encode($location);
     }
 
+    public function getMediaUrl($collectionMedia): ?string
+    {
+        if ($collectionMedia[0])
+            return $collectionMedia[0]->getUrl();
+
+        return null;
+    }
+
     public function mainBanner(): Attribute
     {
         return Attribute::make(
             get: fn($value) => $this->getMedia(self::MEDIA_COLLECTION_MAIN_BANNER)
         );
+    }
+
+    function getMainBannerUrl(): ?string
+    {
+        return $this->getMediaUrl($this->main_banner);
     }
 
     public function eventLogo(): Attribute
@@ -127,11 +140,21 @@ class EventModel extends Model implements HasMedia
         );
     }
 
+    function getEventLogoUrl(): ?string
+    {
+        return $this->getMediaUrl($this->event_logo);
+    }
+
     public function themeBanner(): Attribute
     {
         return Attribute::make(
             fn($value) => $this->getMedia(self::MEDIA_COLLECTION_THEME_BANNER)
         );
+    }
+
+    function getThemeBannerUrl(): ?string
+    {
+        return $this->getMediaUrl($this->theme_banner);
     }
 
     public function participateBanner(): Attribute
@@ -141,11 +164,21 @@ class EventModel extends Model implements HasMedia
         );
     }
 
+    function getParticipateBannerUrl(): ?string
+    {
+        return $this->getMediaUrl($this->participate_banner);
+    }
+
     public function aboutBanner(): Attribute
     {
         return Attribute::make(
             fn($value) => $this->getMedia(self::MEDIA_COLLECTION_ABOUT_BANNER)
         );
+    }
+
+    function getAboutBannerUrl(): ?string
+    {
+        return $this->getMediaUrl($this->about_banner);
     }
 
     /* public function registerMediaconversions(?Media $media = null): void
@@ -172,4 +205,7 @@ class EventModel extends Model implements HasMedia
             ->singleFile()
             ->acceptsMimeTypes(self::MEDIA_COLLECTION_IMAGE_TYPES);
     }
+
+    public function guardName() { return ['web']; }
+
 }

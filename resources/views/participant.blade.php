@@ -11,7 +11,7 @@
     <!-- Waste no more time arguing what a good man should be, be one. - Marcus Aurelius -->
 </div>
 
-<div class="md:mx-auto grid grid-cols-1 gap-1 bg-primary-50 mb-10" style="background-image: url({{  $event->participate_banner[0]?->getUrl() ?: Vite::asset('resources/images/p-hero.svg') }});background-size:cover; background-repeat:no-repeat; background-position-x: center;
+<div class="md:mx-auto grid grid-cols-1 gap-1 bg-primary-50 mb-10" style="background-image: url({{  $event->getParticipateBannerUrl() ?: Vite::asset('resources/images/p-hero.svg') }});background-size:cover; background-repeat:no-repeat; background-position-x: center;
 background-position-y: center;">
     <div class="grid grid-cols-12 text-center py-10">
         <div class="col-span-1 place-self-center">
