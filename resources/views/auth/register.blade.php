@@ -1,4 +1,6 @@
-<x-guest-layout>
+@extends($event ? 'layouts.event' : 'layouts.index')
+
+@section('content')
     <div class="bg-gray-300">
         <div class="container grid grid-cols-1 xl:grid-cols-6  mx-auto p-5">
             <div class="col-span-1"></div>
@@ -97,7 +99,7 @@
                                 </div>
 
                                 <div class="flex py-5">
-                                    <p class="mx-auto">You have an account already? <a href="/login"
+                                    <p class="mx-auto">You have an account already? <a href="{{ route('login') }}"
                                             class="underline text-primary">Login here</a>  </p>
                                 </div>
 
@@ -183,7 +185,7 @@
                                 </div>
 
                                 <div class="flex py-5">
-                                    <p class="mx-auto">You have an account already? <a href="/login"
+                                    <p class="mx-auto">You have an account already? <a href="{{ route('login') }}"
                                             class="underline text-primary">Login here</a>  </p>
                                 </div>
 
@@ -199,9 +201,7 @@
         </div>
     </div>
 
-</x-guest-layout>
-
-
+@endsection
 {{-- <div class="rounded-xl bg-white p-5 shadow-xl">
     <form method="POST" action="{{ route('register') }}">
         @csrf

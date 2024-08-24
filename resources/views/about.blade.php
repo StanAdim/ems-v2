@@ -4,7 +4,7 @@
  */
 ?>
 
-@extends('layouts.index')
+@extends('layouts.event')
 
 @section('content')
 <div>

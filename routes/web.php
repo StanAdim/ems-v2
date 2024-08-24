@@ -3,6 +3,7 @@
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\ProfileController;
+use App\Models\EventModel;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,8 +18,14 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('', function () {
-    return redirect(route('event.index'));
-});
+    $eventCount = EventModel::count();
+
+    if ($eventCount > 0) {
+        return redirect(route('event.index'));
+    }
+
+    return redirect(route('login'));
+})->name('site_index');
 
 Route::controller(EventController::class)->prefix('event')->name('event.')->group(function () {
     Route::get('{event?}/', 'index')->name('index');

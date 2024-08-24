@@ -21,9 +21,13 @@ host('45.79.252.40')
 
 // Tasks
 
+task('install_shield', function () {
+    run('cd {{release_path}} && php artisan shield:install -n');
+})->desc('Setup Shield Permissions');
+
 task('update_assets', function () {
     run('cd {{release_path}} && npm install && npm run build');
-})->desc('generate Assets for the UI');
+})->desc('Generate Assets for the UI');
 
 // Hooks
 

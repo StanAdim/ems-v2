@@ -28,7 +28,6 @@ class ViewServiceProvider extends ServiceProvider
                 }
 
                 $view->with('latestEvents', $latestEvents);
-                $view->with('event', EventModel::latest()->first());
             }
         );
     }

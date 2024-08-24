@@ -1,4 +1,5 @@
-@extends('layouts.index')
+
+@extends($event ? 'layouts.event' : 'layouts.index')
 
 @section('content')
     <div class="container mx-auto py-10 grid grid-cols-1 lg:grid-cols-2  gap-10 md:gap-0">
@@ -135,7 +136,7 @@
                             </a>
                         @endif
                     </div>
-                    <p class="mt-4">Don't have an account? <a href="/register" class="underline text-primary">Register Here</a></p>
+                    <p class="mt-4">Don't have an account? <a href="{{ route('register') }}" class="underline text-primary">Register Here</a></p>
 
                 </form>
             </div>

@@ -41,7 +41,7 @@
         <div class="inline-flex gap-2 md:gap-4 justify-center text-nowrap py-2 lg:justify-end align-middle">
             @foreach ($latestEvents as $latestEvent)
                 <a href="{{ $latestEvent['url'] }}"
-                    class=" my-auto text-xs lg:text-xl {{ $event && $event?->id == $latestEvent['id'] ? 'text-secondary' : '' }} underline ">
+                    class=" my-auto text-xs lg:text-xl {{ $event && $event?->id == $latestEvent['id'] ? 'text-secondary' : 'text-white' }} underline ">
                     {{ $latestEvent['title'] }}
                 </a>
             @endforeach
