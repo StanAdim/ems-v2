@@ -93,7 +93,6 @@
                 <div class="md:gap-10 flex flex-wrap  md:grid grid-cols-2 align-top lg:grid-cols-3">
                     @foreach ($event->subThemes as $subTheme)
                         <div class="max-w-sm p-6 m-2 grid gap-1 ">
-                            <!-- <img class="w-10 object-cover" src="{{ Vite::asset($subTheme['icon']) }}" alt="" srcset=""> -->
                             @svg($subTheme['icon'], 'w-24 h-24 text-secondary', )
                             <p class="mb-3 text-lg">{{ $subTheme['message'] }}</p>
                         </div>

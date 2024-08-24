@@ -12,6 +12,7 @@
         "arbermustafa/filament-locationpickr-field": "^2.0.0",
         "awcodes/filament-tiptap-editor": "^3.0",
         "bezhansalleh/filament-shield": "^3.2",
+        "blade-ui-kit/blade-heroicons": "^2.4",
         "filament/filament": "^3.2",
         "filament/spatie-laravel-media-library-plugin": "^3.2",
         "guzzlehttp/guzzle": "^7.2",
