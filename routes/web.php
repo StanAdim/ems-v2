@@ -1,8 +1,7 @@
 <?php
 
 use App\Http\Controllers\BookingController;
-use App\Http\Controllers\EventModelController;
-use App\Http\Controllers\IndexController;
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -17,10 +16,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::controller(IndexController::class)->group(function () {
-    Route::get('/', 'index');
-    Route::get('/participants', 'participant');
-    Route::get('/about',  'about');
+Route::get('', function () {
+    return redirect(route('event.index'));
+});
+
+Route::controller(EventController::class)->prefix('event')->name('event.')->group(function () {
+    Route::get('{event?}/', 'index')->name('index');
+    Route::get('{event}/participants', 'participant')->name('participant');
+    Route::get('{event}/about', 'about')->name('about');
 });
 
 Route::get('/dashboard', function () {

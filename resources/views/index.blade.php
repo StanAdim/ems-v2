@@ -1,3 +1,9 @@
+<?php
+/**
+ * @var \App\Models\EventModel $event
+ */
+?>
+
 @extends('layouts.index')
 
 @section('content')
@@ -9,7 +15,7 @@
 
 <div class="container mx-auto py-10 grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-0">
     <div class="md:h-[40rem] mx-2 ">
-        <p class="text-7xl ml-10 font-extralight text-primary">About<br> <span class="text-secondary">TAIC</span> 2024
+        <p class="text-7xl ml-10 font-extralight text-primary"> {!! $event->aboutTitle !!}
         </p>
         <img class="w-full h-full p-10 object-fit md:object-cover "
             src="{{ Vite::asset('resources/images/about.svg') }}" alt="" srcset="">
@@ -21,7 +27,7 @@
         @endif
 
 
-        <p class="my-5 text-justify">
+        <!-- <p class="my-5 text-justify">
             The 8th Tanzania Annual ICT Conference 2024 (TAIC-2024), first Africa Edition, organized by the ICT
             Commission (ICTC), in collaboration with ELEVATE and the African Union Development Agency-NEPAD
             (AUDA-NEPAD), is scheduled to take place in Dar es Salaam, Tanzania at the Julius Nyerere International
@@ -47,8 +53,8 @@
 
         <p class="text-black my-5 font-semibold text-4xl">
             <span class="text-primary">The launching of African Youth in</span> Artificial Intelligence and Robotics
-            Competition.
-        </p>
+            Competition. -->
+
 
     </div>
 </div>
@@ -57,38 +63,39 @@
 
     <div class="bg-primary p-10 lg:p-32 md:col-span-2 md:rounded-s-lg">
         <h4 class="font-light text-4xl text-secondary mb-5">
-            2024 MAIN THEME:
+            MAIN THEME:
         </h4>
         <p class="text-white font-bold text-2xl md:text-6xl mb-5">
-            Unleashing the Power of Artificial Intelligence and Robotics for Socio-Economic Transformation
+            {{ $event->theme }}
         </p>
 
         <h4 class="font-semibold text-lg mb-5 text-white">
             SUB THEMES
         </h4>
         <div>
-            <?php
-$sub_themes = [
-    [
-        'icon' => 'resources/images/sub-theme-1.svg',
-        'description' => 'Emerging technology for job creation',
-    ],
-    [
-        'icon' => 'resources/images/sub-theme-2.svg',
-        'description' => 'Digital Transformation',
-    ],
-    [
-        'icon' => 'resources/images/sub-theme-3.svg',
-        'description' => 'Artificial Intelligence for socio - economic development',
-    ],
-];
-                ?>
+            @php
+                $sub_themes = [
+                    [
+                        'icon' => 'resources/images/sub-theme-1.svg',
+                        'description' => 'Emerging technology for job creation',
+                    ],
+                    [
+                        'icon' => 'resources/images/sub-theme-2.svg',
+                        'description' => 'Digital Transformation',
+                    ],
+                    [
+                        'icon' => 'resources/images/sub-theme-3.svg',
+                        'description' => 'Artificial Intelligence for socio - economic development',
+                    ],
+                ];
+               @endphp
             <div class="col-span-3 text-white grid grid-cols-1">
                 <div class="md:gap-10 flex flex-wrap  md:grid grid-cols-2 align-top lg:grid-cols-3">
-                    {{-- @for ($i = 0; $i < 6; $i++) --}} @foreach ($sub_themes as $theme)
+                    @foreach ($event->subThemes as $subTheme)
                         <div class="max-w-sm p-6 m-2 grid gap-1 ">
-                            <img class="w-10 object-cover" src="{{ Vite::asset($theme['icon']) }}" alt="" srcset="">
-                            <p class="mb-3 text-lg">{{ $theme['description'] }}</p>
+                            <!-- <img class="w-10 object-cover" src="{{ Vite::asset($subTheme['icon']) }}" alt="" srcset=""> -->
+                            @svg($subTheme['icon'], 'w-24 h-24 text-secondary', )
+                            <p class="mb-3 text-lg">{{ $subTheme['message'] }}</p>
                         </div>
                     @endforeach
 

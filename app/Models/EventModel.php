@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use BezhanSalleh\FilamentShield\Traits\HasPanelShield;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -10,6 +11,7 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\MediaCollection;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Spatie\Permission\Traits\HasRoles;
 
 /**
  *
@@ -18,10 +20,10 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property string $title
  * @property string $linkTitle
  * @property string $theme
- * @property string $subThemes
+ * @property array $subThemes
  * @property string|null $bannerText
- * @property string $startsOn
- * @property string $endsOn
+ * @property \Illuminate\Support\Carbon $startsOn
+ * @property \Illuminate\Support\Carbon $endsOn
  * @property string|null $location
  * @property string|null $locationDescription
  * @property string|null $aboutTitle
@@ -30,17 +32,23 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property string $layout
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property MediaCollection $event_logo
  * @property-read mixed $about_banner
+ * @property-read mixed $event_logo
  * @property-read mixed $main_banner
  * @property-read \Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection<int, Media> $media
  * @property-read int|null $media_count
  * @property-read mixed $participate_banner
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Permission\Models\Permission> $permissions
+ * @property-read int|null $permissions_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Permission\Models\Role> $roles
+ * @property-read int|null $roles_count
  * @property-read mixed $theme_banner
  * @method static \Database\Factories\EventModelFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|EventModel newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|EventModel newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|EventModel permission($permissions, $without = false)
  * @method static \Illuminate\Database\Eloquent\Builder|EventModel query()
+ * @method static \Illuminate\Database\Eloquent\Builder|EventModel role($roles, $guard = null, $without = false)
  * @method static \Illuminate\Database\Eloquent\Builder|EventModel whereAboutDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EventModel whereAboutTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EventModel whereBannerText($value)
@@ -57,11 +65,13 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @method static \Illuminate\Database\Eloquent\Builder|EventModel whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EventModel whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EventModel whereWhyParticipate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|EventModel withoutPermission($permissions)
+ * @method static \Illuminate\Database\Eloquent\Builder|EventModel withoutRole($roles, $guard = null)
  * @mixin \Eloquent
  */
 class EventModel extends Model implements HasMedia
 {
-    use HasFactory, InteractsWithMedia;
+    use HasFactory, InteractsWithMedia, HasRoles, HasPanelShield;
 
     const MEDIA_COLLECTION_IMAGE_TYPES = ['image/png', 'image/svg'];
     const MEDIA_COLLECTION_EVENT_LOGO = 'event-logo';
@@ -90,6 +100,8 @@ class EventModel extends Model implements HasMedia
     protected $casts = [
         // 'event_logo' => MediaCollection::class,
         'subThemes' => 'json',
+        'startsOn' => 'datetime',
+        'endsOn' => 'datetime',
     ];
 
     protected $attributes = [
