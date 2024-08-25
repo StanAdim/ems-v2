@@ -4,7 +4,7 @@
         <input class="border-none w-full bg-gray-200 ring-0" type="text" placeholder="{{$placeholder}}">
     </div>
     <div class="ml-auto p-2 place-content-center">
-        <?xml version="1.0" encoding="UTF-8"?>
+        <xml version="1.0" encoding="UTF-8"?>
         <svg class="w-6 stroke-gray-400 ml-auto" xmlns="http://www.w3.org/2000/svg" id="Outline" viewBox="0 0 24 24" >
             <path
                 d="M18.656.93,6.464,13.122A4.966,4.966,0,0,0,5,16.657V18a1,1,0,0,0,1,1H7.343a4.966,4.966,0,0,0,3.535-1.464L23.07,5.344a3.125,3.125,0,0,0,0-4.414A3.194,3.194,0,0,0,18.656.93Zm3,3L9.464,16.122A3.02,3.02,0,0,1,7.343,17H7v-.343a3.02,3.02,0,0,1,.878-2.121L20.07,2.344a1.148,1.148,0,0,1,1.586,0A1.123,1.123,0,0,1,21.656,3.93Z" />

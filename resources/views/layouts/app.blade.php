@@ -29,7 +29,7 @@
 
                 @include('includes.app-header')
 
-                <div class="h-screen">
+                <div class="h-5/6 py-4">
                     @yield('content')
                     {{ $slot }}
                 </div>
