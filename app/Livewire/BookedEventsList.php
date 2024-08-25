@@ -2,7 +2,11 @@
 
 namespace App\Livewire;
 
+use App\Filament\Resources\EventBookingResource;
 use App\Models\EventBooking;
+use Filament\Actions\Action;
+use Filament\Actions\CreateAction as ActionsCreateAction;
+use Filament\Facades\Filament;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
@@ -19,6 +23,8 @@ class BookedEventsList extends Component implements HasForms, HasTable
 {
     use InteractsWithForms;
     use InteractsWithTable;
+
+    protected static string $resource = EventBookingResource::class;
 
     public function table(Table $table): Table
     {
@@ -47,6 +53,7 @@ class BookedEventsList extends Component implements HasForms, HasTable
                 //
             ])
             ->actions([
+                Tables\Actions\EditAction::make(),
                 //
             ])
             ->bulkActions([
@@ -55,10 +62,14 @@ class BookedEventsList extends Component implements HasForms, HasTable
                 ]),
             ])->headerActions([
                 CreateAction::make()
+                    ->model(EventBooking::class)
+                    ->label('Add My Bookings')
+                    ->color('primary')
                     ->form([
-                        TextInput::make('title')
-                            ->required()
-                            ->maxLength(255),
+                        TextInput::make('event_id')
+                            ->required(),
+                        TextInput::make('total_amount')
+                            ->required(),
                         // ...
                     ]),
             ]);

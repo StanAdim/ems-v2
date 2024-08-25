@@ -2,11 +2,16 @@
 
 namespace App\Models;
 
+use BezhanSalleh\FilamentShield\Traits\HasPageShield;
+use BezhanSalleh\FilamentShield\Traits\HasPanelShield;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Spatie\Permission\Traits\HasRoles;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $user_id
@@ -37,5 +42,34 @@ use Illuminate\Database\Eloquent\Model;
  */
 class UserProfile extends Model
 {
-    use HasFactory;
+    use HasFactory, HasRoles, HasPanelShield;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<string>
+     */
+    protected $fillable = [
+        'id',
+        'user_id',
+        'registration_status',
+        'phone_number',
+        'institution_name',
+        'position',
+        'nationality',
+        'address',
+        'can_receive_notification'
+    ];
+
+    /**
+     * Get the user associated with the UserProfile
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function guardName() { return ['web']; }
 }

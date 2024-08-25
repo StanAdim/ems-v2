@@ -1,14 +1,16 @@
 import './bootstrap';
 import 'flowbite';
-
-
+import 'alpinejs';
 import Alpine from 'alpinejs';
+
 
 import.meta.glob([
     '../images/**',
     '../fonts/**',
 ]);
 
-window.Alpine = Alpine;
-
 Alpine.start();
+
+// window.Alpine = Alpine;
+
+// Alpine.start();

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $attendees
@@ -30,4 +30,19 @@ use Illuminate\Database\Eloquent\Model;
 class EventBooking extends Model
 {
     use HasFactory;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<string>
+     */
+    protected $fillable = [
+        'id',
+        'attendees',
+        'event_id',
+        'total_amount',
+        'payment_id',
+        'created_at',
+        'updated_at',
+    ];
 }

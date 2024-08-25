@@ -85,4 +85,9 @@ class User extends Authenticatable implements FilamentUser
     ];
 
     protected $guard_name = ['web', ''];
+
+    public function profile()
+    {
+       return $this->hasOne(UserProfile::class);
+    }
 }
