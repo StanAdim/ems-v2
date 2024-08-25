@@ -136,18 +136,18 @@
                 class="grid md:flex grid-cols-1 overflow-hidden font-normal mt-0 space-x-8 rtl:space-x-reverse text-lg">
                 <li>
                     <a href="{{ route('event.about', ['event' => $event]) }}"
-                        class="text-white hover:underline ms-8 ">About</a>
+                        class="{{Route::is('event.about') ? 'text-secondary' : 'text-white '}} hover:underline ms-8" >About</a>
                 </li>
                 {{-- <li>
                     <a href="#" class="text-white hover:underline">Company</a>
                 </li> --}}
                 <li>
                     <a href="{{ route('event.participant', ['event' => $event]) }}"
-                        class="text-white hover:underline">Participant</a>
+                        class="{{Route::is('event.participant') ? 'text-secondary' : 'text-white '}} hover:underline">Participant</a>
                 </li>
                 <li>
                     <a href="{{ route('event.exhibitor', ['event' => $event]) }}"
-                        class="text-white hover:underline">Exhibitor</a>
+                        class="{{Route::is('event.exhibitor') ? 'text-secondary' : 'text-white '}} hover:underline">Exhibitor</a>
                 </li>
                 <li>
                     <a href="#" class="text-white hover:underline">Sponsor</a>
