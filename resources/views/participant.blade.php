@@ -31,7 +31,7 @@ background-position-y: center;">
                 </h1>
                 <div class="mt-auto mb-20 mx-1">
                     <div class="place-content-center inline-flex gap-8 ml-auto justify-end">
-                        <a href="/login">
+                        <a href="{{ route('login') }}">
                             <button class="ml-auto px-5 py-3 font-medium bg-secondary rounded-lg text-black">Register
                                 Now</button>
                         </a>

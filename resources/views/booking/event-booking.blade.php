@@ -43,12 +43,11 @@ $title = 'Event Bookings';
                         'route' => route('event-booking', ['id' => 5]),
                     ],
                 ];
-
             @endphp
 
-            @foreach ($events as $event)
+            @foreach ($upcomingEvents as $event)
                 <livewire:event-card title="{{ $event['title'] }}" location="{{ $event['location'] }}"
-                    image="{{ $event['image'] }}" route="{{ $event['route'] }}" />
+                    imageUrl="{{ $event['imageUrl'] }}" route="{{ $event['route'] }}" />
             @endforeach
 
 

@@ -8,17 +8,17 @@ class EventCard extends Component
 {
     public $title;
     public $location;
-    public $image;
+    public $imageUrl;
     public $route;
 
-    public function mount($title, $location, $image, $route)
+    public function mount($title, $location, $imageUrl, $route)
     {
         $this->title = $title;
         $this->location = $location;
-        $this->image = $image;
+        $this->imageUrl = $imageUrl;
         $this->route = $route;
     }
-    
+
     public function render()
     {
         return view('livewire.event-card');

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\EventModel;
 use Illuminate\View\View;
 
 class BookingController extends Controller
@@ -11,8 +11,18 @@ class BookingController extends Controller
 
     public function event_booking(): View
     {
-
-        return view('booking.event-booking', ['slot' => '']);
+        $upcomingEvents = EventModel::where('endsOn', '>', now())->get();
+        return view('booking.event-booking', [
+            'slot' => '',
+            'upcomingEvents' => $upcomingEvents->map(function (EventModel $event) {
+                return [
+                    'title' => $event->title,
+                    'location' => $event->locationDescription,
+                    'imageUrl' => $event->getMainBannerUrl(),
+                    'route' => route('event-booking', ['id' => $event->id]),
+                ];
+            })->toArray()
+        ]);
     }
 
     public function my_booking(): View
