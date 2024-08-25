@@ -18,14 +18,14 @@ background-position-y: center;">
             {{-- <img class="w-full" src="{{ Vite::asset('resources/images/events_1.png') }}" alt="" srcset=""> --}}
 
             <div class="lg:my-40 lg:ml-16">
-                <h1 class="text-3xl md:text-5xl font-black text-white mt-20">Unleashing the Power of<br> Artificial Intelligence<br> and
-                    Robotics for Socio-<br>Economic Transformation</h1>
+                <h1 class="text-3xl md:text-5xl font-black text-white mt-20 w-5/12">{{ $event->theme }}</h1>
                 <div class="mt-5 mb-20 mx-1">
                     <div class="place-content-center inline-flex gap-8 ml-auto justify-end">
                         <button data-modal-target="register-event-modal" data-modal-toggle="register-event-modal" class="ml-auto px-5 py-3 font-medium bg-secondary rounded-lg text-black">Register Now</button>
                         <button class="ml-auto px-5 py-3 font-medium ring-1 ring-white rounded-lg text-white">More Details</button>
                     </div>
                 </div>
+                <x-countdown-timer :endsOn="$event->endsOn" />
             </div>
         </div>
 

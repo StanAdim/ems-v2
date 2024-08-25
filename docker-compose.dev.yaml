@@ -10,9 +10,14 @@ services:
       MARIADB_DATABASE: ictc-ems
     ports:
       - 3306:3306
+    volumes:
+      - db-data:/var/lib/mysql:Z
 
   adminer:
     image: adminer
     restart: always
     ports:
       - 8080:8080
+
+volumes:
+  db-data:
