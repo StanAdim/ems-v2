@@ -56,7 +56,7 @@ class EventModelResource extends Resource
                         Tab::make('Themes')->schema([
                             Textarea::make('theme')->label('Main')->required(),
                             Repeater::make('subThemes')->schema([
-                                //IconPicker::make('icon')->columnSpan(2),
+                                IconPicker::make('icon')->columnSpan(2),
                                 Textarea::make('message')->columnSpan(4),
                             ])->label('Sub Themes')->columns(6),
                             SpatieMediaLibraryFileUpload::make('theme_banner')->collection(EventModel::MEDIA_COLLECTION_THEME_BANNER),
