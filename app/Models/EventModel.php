@@ -6,6 +6,7 @@ use BezhanSalleh\FilamentShield\Traits\HasPanelShield;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -207,5 +208,15 @@ class EventModel extends Model implements HasMedia
     }
 
     public function guardName() { return ['web']; }
+
+    /**
+     * Get all of the bookings for the EventModel
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function bookings(): HasMany
+    {
+        return $this->hasMany(EventBooking::class);
+    }
 
 }

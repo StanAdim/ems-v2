@@ -10,6 +10,9 @@ $title = 'My Bookings';
     [x-cloak] {
         display: none !important;
     }
+    /* .fi-btn-label {
+        @apply text-primary bg-brand !important;
+    } */
 </style>
 
 <div class="container mx-auto bg-white shadow-inner rounded-lg mt-10 p-5 lg:px-16">

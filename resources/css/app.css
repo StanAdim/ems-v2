@@ -6,5 +6,8 @@
 @tailwind utilities;
 
 [x-cloak] { display: none !important; }
+.fi-btn-label {
+    @apply text-primary !important;
+}
 
 

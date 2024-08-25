@@ -7,6 +7,7 @@ use App\Models\EventBooking;
 use Filament\Actions\Action;
 use Filament\Actions\CreateAction as ActionsCreateAction;
 use Filament\Facades\Filament;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
@@ -18,6 +19,7 @@ use Filament\Tables\Table;
 use Livewire\Component;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 
 class BookedEventsList extends Component implements HasForms, HasTable
 {
@@ -29,10 +31,10 @@ class BookedEventsList extends Component implements HasForms, HasTable
     public function table(Table $table): Table
     {
         return $table
-            ->query(EventBooking::query())
+            ->query(EventBooking::query()->where('user_id',Auth::user()->id))
             ->columns([
-                Tables\Columns\TextColumn::make('event_id')
-                    ->numeric()
+                Tables\Columns\TextColumn::make('event.name')
+                    ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('total_amount')
                     ->numeric()
@@ -64,9 +66,9 @@ class BookedEventsList extends Component implements HasForms, HasTable
                 CreateAction::make()
                     ->model(EventBooking::class)
                     ->label('Add My Bookings')
-                    ->color('primary')
                     ->form([
-                        TextInput::make('event_id')
+                        Select::make('event_id')
+                            ->relationship('event', 'title')
                             ->required(),
                         TextInput::make('total_amount')
                             ->required(),

@@ -4,9 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $attendees
@@ -39,10 +40,21 @@ class EventBooking extends Model
     protected $fillable = [
         'id',
         'attendees',
+        'user_id',
         'event_id',
         'total_amount',
         'payment_id',
         'created_at',
         'updated_at',
     ];
+
+    /**
+     * Get the user that owns the EventBooking
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function event(): BelongsTo
+    {
+        return $this->belongsTo(EventModel::class);
+    }
 }

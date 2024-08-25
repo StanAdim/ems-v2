@@ -19,6 +19,8 @@
 
     </div>
 
+    @livewireScriptConfig
+    @filamentScripts
     @vite('resources/js/app.js')
 
 </body>
