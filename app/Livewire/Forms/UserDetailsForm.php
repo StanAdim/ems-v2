@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Livewire\Forms;
+use App\Enums\ProfileType;
 use Livewire\Form;
 use Illuminate\Validation\Rules;
 use App\Models\User;
@@ -11,8 +12,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 
-class UserRegistrationForm extends Form
+class UserDetailsForm extends Form
 {
+    public $type = ProfileType::User;
     public $first_name = '';
     public $middle_name = '';
     public $last_name = '';
@@ -29,6 +31,10 @@ class UserRegistrationForm extends Form
     public $region = '';
     public $district = '';
 
+    public $company_service_category = '';
+    public $company_registration_number = '';
+    public $vat_number = '';
+
     public function rules()
     {
         return [
@@ -36,14 +42,17 @@ class UserRegistrationForm extends Form
             'last_name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'phone_number' => ['required'],
+            'phone_number' => ['required_if:type,user'],
             'registration_status' => ['required'],
-            'institution_name' => ['required'],
-            'position' => ['required'],
+            'institution_name' => ['required_if:type,user'],
+            'position' => ['required_if:type,user'],
             'nationality' => ['required'],
             'address' => ['required'],
             'region' => ['required'],
             'district' => ['required'],
+            'company_service_category' => ['required_if:type,exhibitor'],
+            'company_registration_number' => ['required_if:type,exhibitor'],
+            'vat_number' => ['required_if:type,exhibitor'],
         ];
     }
 
@@ -81,16 +90,17 @@ class UserRegistrationForm extends Form
 
                 UserProfile::create(
                     [
-                    'user_id' => $user->id,
-                    'phone_number' => $this->phone_number,
-                    'registration_status' => $this->registration_status,
-                    'institution_name' => $this->institution_name,
-                    'position' => $this->position,
-                    'nationality' => $this->nationality,
-                    'address' => $address_json,
-                    'can_receive_notification' => true,
+                        'user_id' => $user->id,
+                        'phone_number' => $this->phone_number,
+                        'registration_status' => $this->registration_status,
+                        'institution_name' => $this->institution_name,
+                        'position' => $this->position,
+                        'nationality' => $this->nationality,
+                        'address' => $address_json,
+                        'can_receive_notification' => true,
 
-                ]);
+                    ]
+                );
             }
 
             DB::commit();

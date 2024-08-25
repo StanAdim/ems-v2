@@ -133,8 +133,15 @@
                         </a>
                     @endif
                 </div>
-                <p class="mt-4">Don't have an account? <a href="{{ route('register') }}"
-                        class="text-primary underline">Register Here</a></p>
+                <p class="mt-4">Don't have an account
+                    @if ($registration_action)
+                        <button @click="{!! $registration_action !!}" class="text-blue-500 underline hover:text-blue-700">
+                            Register Here
+                        </button>
+                    @else
+                        <a href="{{ route('register') }}" class="text-blue-500 hover:text-blue-700 underline">Register Here</a>
+                    @endif
+                </p>
 
             </form>
         </div>

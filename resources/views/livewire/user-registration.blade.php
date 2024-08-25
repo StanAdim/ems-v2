@@ -1,6 +1,7 @@
+@use('App\Enums\ProfileType')
 <div class="bg-gray-300">
     <form wire:submit='save'>
-
+        <input type="hidden" name="type" value="{{ $type }}">
         <div class="container mx-auto grid grid-cols-1 p-5 xl:grid-cols-6">
             <div class="col-span-1"></div>
             <div class="col-span-4 my-32 rounded-xl bg-white p-5 shadow-xl">
@@ -24,12 +25,26 @@
                                     data-tabs-target="#initial-detail" type="button" role="tab"
                                     aria-controls="initial-detail" aria-selected="false">Initial Details</button>
                             </li>
-                            <li class="me-2" role="presentation" wire:ignore>
-                                <button class="inline-block w-3/4 p-4" id="final-details"
-                                    data-tabs-target="#final-detail" type="button" role="tab"
-                                    aria-controls="final-detail" aria-selected="false">Final
-                                    Details</button>
-                            </li>
+
+                            @switch($type)
+                                @case(ProfileType::User)
+                                    <li class="me-2" role="presentation" wire:ignore>
+                                        <button class="inline-block w-3/4 p-4" id="final-details"
+                                            data-tabs-target="#final-detail" type="button" role="tab"
+                                            aria-controls="final-detail" aria-selected="false">Final
+                                            Details</button>
+                                    </li>
+                                @break
+
+                                @case(ProfileType::Exhibitor)
+                                    <li class="me-2" role="presentation" wire:ignore>
+                                        <button class="inline-block w-3/4 p-4" id="company-details"
+                                            data-tabs-target="#company-detail" type="button" role="tab"
+                                            aria-controls="company-detail" aria-selected="false">Company Details</button>
+                                    </li>
+                                @break
+                            @endswitch
+
                         </ul>
                     </div>
                     <div id="default-tab-content" wire:ignore.self>
@@ -37,69 +52,27 @@
                             wire:ignore.self role="tabpanel" aria-labelledby="initial-details">
                             @csrf
                             <div class="grid gap-10 py-2 md:grid-cols-2">
-                                <!-- Name -->
-                                <div>
-                                    <x-input-label class="!text-gray-500" for="first_name" :value="__('First Name')" />
-                                    <x-text-input id="first_name" name="first_name" class="mt-1 block w-full"
-                                        type="text" wire:model='form.first_name' required autofocus
-                                        autocomplete="first_name" />
-                                    @error('form.first_name')
-                                        <x-input-error :messages="$message" class="mt-2" />
-                                    @enderror
-                                </div>
+                                <!-- First Name -->
+                                <x-input-with-label name='first_name' label="First Name" required autofocus />
                                 <!-- Middle Name -->
-                                <div>
-                                    <x-input-label class="!text-gray-500" for="middle_name" :value="__('Middle Name')" />
-                                    <x-text-input id="middle_name" name="middle_name" wire:model='form.middle_name'
-                                        autocomplete="name" class="mt-1 block w-full" type="text" />
-                                    @error('form.middle_name')
-                                        <x-input-error :messages="$message" class="mt-2" />
-                                    @enderror
-                                </div>
+                                <x-input-with-label name='middle_name' label="Middle Name" />
                             </div>
 
                             <div class="grid gap-10 py-2 md:grid-cols-2">
                                 <!-- Last Name -->
-                                <div>
-                                    <x-input-label class="!text-gray-500" for="last_name" :value="__('Last Name')" />
-                                    <x-text-input id="last_name" name="last_name" wire:model='form.last_name' required
-                                        autocomplete="last_name" class="mt-1 block w-full" type="text" />
-                                    @error('form.last_name')
-                                        <x-input-error :messages="$message" class="mt-2" />
-                                    @enderror
-                                </div>
+                                <x-input-with-label name='last_name' label="Last Name" required />
+
                                 <!-- Email Address -->
-                                <div class="">
-                                    <x-input-label class="!text-gray-500" for="email" :value="__('Email')" />
-                                    <x-text-input id="email" class="mt-1 block w-full" name="email"
-                                        wire:model='form.email' autocomplete="email" />
-                                    @error('form.email')
-                                        <x-input-error :messages="$message" class="mt-2" />
-                                    @enderror
-                                </div>
+                                <x-input-with-label name='email' type="email" label="Email" required />
+
                             </div>
 
                             <div class="grid gap-10 md:grid-cols-2">
                                 <!-- Password -->
-                                <div class="mt-4">
-                                    <x-input-label class="!text-gray-500" for="password" :value="__('Create Password')" />
-                                    <x-text-input id="password" class="mt-1 block w-full" type="password"
-                                        name="password" wire:model='form.password' autocomplete="new-password" />
-                                    @error('form.password')
-                                        <x-input-error :messages="$message" class="mt-2" />
-                                    @enderror
-                                </div>
+                                <x-input-with-label name="password" label="Password" type="password" />
                                 <!-- Confirm Password -->
-                                <div class="mt-4">
-                                    <x-input-label class="!text-gray-500" for="password_confirmation"
-                                        :value="__('Repeat Password')" />
-                                    <x-text-input id="password_confirmation" class="mt-1 block w-full" type="password"
-                                        name="password_confirmation" wire:model='form.password_confirmation' required
-                                        autocomplete="new-password" />
-                                    @error('form.password_confirmation')
-                                        <x-input-error :messages="$message" class="mt-2" />
-                                    @enderror
-                                </div>
+                                <x-input-with-label name="password_confirmation" label="Repeat Password"
+                                    type="password" />
                             </div>
 
                             <div class="mt-4 flex items-center justify-end">
@@ -110,30 +83,12 @@
                                     id="final-details-footer" wire:click="validateInitialDetails"
                                     onclick="return false;">Continue</button>
                             </div>
-
-                            <div class="flex py-5">
-                                <p class="mx-auto">You have an account already? <a href="{{ route('login') }}"
-                                        class="text-primary underline">Login here</a>  </p>
-                            </div>
-
-                            {{-- <div class="flex items-center justify-end mt-4">
-                                    <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                                        href="{{ route('login') }}">
-                                        {{ __('Already registered?') }}
-                                    </a>
-                                    <x-primary-button class="ms-4">
-                                        {{ __('Register') }}
-                                    </x-primary-button>
-                                </div> --}}
-
                         </div>
                         <div class="hidden rounded-lg bg-gray-50 p-4 dark:bg-gray-800" id="final-detail"
                             wire:ignore.self role="tabpanel" aria-labelledby="final-details">
                             <div class="grid gap-10 py-2 md:grid-cols-2">
-                                <!-- Name -->
-                                <div>
-                                    <x-input-label class="!text-gray-500" for="registration_status"
-                                        :value="__('Registration Status')" />
+                                <!-- Registration Status -->
+                                <x-input-with-label name='registration_status' label="Registration Status">
                                     <select id="registration_status" name="registration_status"
                                         wire:model='form.registration_status'
                                         class="mt-1 block h-auto w-full rounded-md px-4 py-3 text-lg text-black placeholder-black focus:border-primary-500 focus:ring-primary-500">
@@ -141,85 +96,35 @@
                                         <option value="registered">Registered</option>
                                         <option value="not-registered">Not Registered</option>
                                     </select>
-                                    @error('form.registration_status')
-                                        <x-input-error :messages="$message" class="mt-2" />
-                                    @enderror
-                                </div>
-                                <!-- Middle Name -->
-                                <div>
-                                    <x-input-label class="!text-gray-500" for="phone_number" :value="__('Phone Number')" />
-                                    <x-text-input id="phone_number" name="phone_number"
-                                        wire:model='form.phone_number' autocomplete="phone" required
-                                        class="mt-1 block w-full" type="text" />
-                                    @error('form.phone_number')
-                                        <x-input-error :messages="$message" class="mt-2" />
-                                    @enderror
-                                </div>
+                                </x-input-with-label>
+
+                                <!-- Phone Number -->
+                                <x-input-with-label name="phone_number" label="Phone Number" autocomplete="phone"
+                                    type="tel" />
                             </div>
 
                             <div class="grid gap-10 py-2 md:grid-cols-2">
-                                <!-- Last Name -->
-                                <div>
-                                    <x-input-label class="!text-gray-500" for="institution_name" :value="__('Company/Institution')" />
-                                    <x-text-input id="institution_name" name="institution_name"
-                                        wire:model='form.institution_name' required class="mt-1 block w-full"
-                                        type="text" />
-                                    @error('form.institution_name')
-                                        <x-input-error :messages="$message" class="mt-2" />
-                                    @enderror
-                                </div>
-                                <!-- Email Address -->
-                                <div>
-                                    <x-input-label class="!text-gray-500" for="position" :value="__('Position/Designation')" />
-                                    <x-text-input id="position" name="position" wire:model='form.position'
-                                        autocomplete="position" required class="mt-1 block w-full" type="text" />
-                                    @error('form.position')
-                                        <x-input-error :messages="$message" class="mt-2" />
-                                    @enderror
-                                </div>
+                                <!-- Company/Institution -->
+                                <x-input-with-label name="institution_name" label="Institution Name" />
+                                <!-- Position -->
+                                <x-input-with-label name="position" label="Position/Designation" />
                             </div>
 
                             <div class="grid gap-10 md:grid-cols-2">
-                                <!-- Password -->
-                                <div>
-                                    <x-input-label class="!text-gray-500" for="nationality" :value="__('Nationality')" />
-                                    <x-text-input id="nationality" name="nationality" wire:model='form.nationality'
-                                        autocomplete="nationality" required class="mt-1 block w-full"
-                                        type="text" />
-                                    @error('form.nationality')
-                                        <x-input-error :messages="$message" class="mt-2" />
-                                    @enderror
-                                </div>
-                                <!-- Confirm Password -->
-                                <div>
-                                    <x-input-label class="!text-gray-500" for="address" :value="__('Physical Address')" />
-                                    <x-text-input id="address" name="address" wire:model='form.address'
-                                        autocomplete="address" required class="mt-1 block w-full" type="text" />
-                                    @error('form.address')
-                                        <x-input-error :messages="$message" class="mt-2" />
-                                    @enderror
-                                </div>
+                                <!-- Nationality -->
+                                <x-input-with-label name="nationality" label="Nationality" />
+
+                                <!-- Physical Address -->
+                                <x-input-with-label name="address" label="Physical Address" />
+
                             </div>
 
                             <div class="my-2 grid gap-10 md:grid-cols-2">
-                                <!-- Password -->
-                                <div>
-                                    <x-input-label class="!text-gray-500" for="region" :value="__('Region')" />
-                                    <x-text-input id="region" name="region" wire:model='form.region'
-                                        autocomplete="region" required class="mt-1 block w-full" type="text" />
-                                    @error('form.region')
-                                        <x-input-error :messages="$message" class="mt-2" />
-                                    @enderror
-                                </div>
-                                <!-- Confirm Password -->
-                                <div>
-                                    <x-input-label class="!text-gray-500" for="district" :value="__('District')" />
-                                    <x-text-input id="district" name="district" wire:model='form.district'
-                                        autocomplete="district" required class="mt-1 block w-full" type="text" />
-                                    @error('form.district')
-                                        <x-input-error :messages="$message" class="mt-2" />
-                                    @enderror
-                                </div>
+                                <!-- Region -->
+                                <x-input-with-label name="region" label="Region" />
+
+                                <!-- District -->
+                                <x-input-with-label name="district" label="District" />
                             </div>
 
                             <div class="my-2 flex items-center justify-end">
@@ -230,11 +135,134 @@
                                 </x-primary-button>
                             </div>
 
-                            <div class="flex py-5">
-                                <p class="mx-auto">You have an account already? <a href="{{ route('login') }}"
-                                        class="text-primary underline">Login here</a>  </p>
-                            </div>
+
                         </div>
+                        @switch($type)
+                            @case(ProfileType::User)
+                                <div class="hidden rounded-lg bg-gray-50 p-4 dark:bg-gray-800" id="final-detail"
+                                    wire:ignore.self role="tabpanel" aria-labelledby="final-details">
+                                    <div class="grid gap-10 py-2 md:grid-cols-2">
+                                        <!-- Registration Status -->
+                                        <x-input-with-label name='registration_status' label="Registration Status">
+                                            <select id="registration_status" name="registration_status"
+                                                wire:model='form.registration_status'
+                                                class="mt-1 block h-auto w-full rounded-md px-4 py-3 text-lg text-black placeholder-black focus:border-primary-500 focus:ring-primary-500">
+                                                <option value>---</option>
+                                                <option value="registered">Registered</option>
+                                                <option value="not-registered">Not Registered</option>
+                                            </select>
+                                        </x-input-with-label>
+
+                                        <!-- Phone Number -->
+                                        <x-input-with-label name="phone_number" label="Phone Number" autocomplete="phone"
+                                            type="tel" />
+                                    </div>
+
+                                    <div class="grid gap-10 py-2 md:grid-cols-2">
+                                        <!-- Company/Institution -->
+                                        <x-input-with-label name="institution_name" label="Institution Name" />
+                                        <!-- Position -->
+                                        <x-input-with-label name="position" label="Position/Designation" />
+                                    </div>
+
+                                    <div class="grid gap-10 md:grid-cols-2">
+                                        <!-- Nationality -->
+                                        <x-input-with-label name="nationality" label="Nationality" />
+
+                                        <!-- Physical Address -->
+                                        <x-input-with-label name="address" label="Physical Address" />
+
+                                    </div>
+
+                                    <div class="my-2 grid gap-10 md:grid-cols-2">
+                                        <!-- Region -->
+                                        <x-input-with-label name="region" label="Region" />
+
+                                        <!-- District -->
+                                        <x-input-with-label name="district" label="District" />
+                                    </div>
+
+                                    <div class="my-2 flex items-center justify-end">
+                                        <button type="button" onclick="document.getElementById('initial-details').click()"
+                                            class="inline-block rounded-xl border border-gray-500 px-4 py-2">Previous</button>
+                                        <x-primary-button class="ms-4 rounded-xl">
+                                            {{ __('Finish') }}
+                                        </x-primary-button>
+                                    </div>
+
+
+                                </div>
+                            @break
+
+                            @case(ProfileType::Exhibitor)
+                                <div class="hidden rounded-lg bg-gray-50 p-4 dark:bg-gray-800" id="company-detail"
+                                    wire:ignore.self role="tabpanel" aria-labelledby="final-details">
+                                    <div class="grid gap-10 py-2 md:grid-cols-2">
+                                        <!-- Phone Number -->
+                                        <x-input-with-label name="company_service_category"
+                                            label="Company Service Category" />
+
+                                        <!-- Registration Status -->
+                                        <x-input-with-label name='registration_status' label="Registration Status">
+                                            <select id="registration_status" name="registration_status"
+                                                wire:model='form.registration_status'
+                                                class="mt-1 block h-auto w-full rounded-md px-4 py-3 text-lg text-black placeholder-black focus:border-primary-500 focus:ring-primary-500">
+                                                <option value>---</option>
+                                                <option value="registered">Registered</option>
+                                                <option value="not-registered">Not Registered</option>
+                                            </select>
+                                        </x-input-with-label>
+                                    </div>
+
+                                    <div class="grid gap-10 py-2 md:grid-cols-2">
+                                        <!-- Company Registration Number -->
+                                        <x-input-with-label name="company_registration_number"
+                                            label="Company Registration Number" />
+                                        <!-- VAT Number  -->
+                                        <x-input-with-label name="vat_number" label="VAT Number" />
+                                    </div>
+
+                                    <div class="grid gap-10 md:grid-cols-2">
+                                        <!-- Nationality -->
+                                        <x-input-with-label name="nationality" label="Nationality" />
+
+                                        <!-- Physical Address -->
+                                        <x-input-with-label name="address" label="Physical Address" />
+
+                                    </div>
+
+                                    <div class="my-2 grid gap-10 md:grid-cols-2">
+                                        <!-- Region -->
+                                        <x-input-with-label name="region" label="Region" />
+
+                                        <!-- District -->
+                                        <x-input-with-label name="district" label="District" />
+                                    </div>
+
+                                    <div class="my-2 flex items-center justify-end">
+                                        <button type="button" onclick="document.getElementById('initial-details').click()"
+                                            class="inline-block rounded-xl border border-gray-500 px-4 py-2">Previous</button>
+                                        <x-primary-button class="ms-4 rounded-xl">
+                                            {{ __('Finish') }}
+                                        </x-primary-button>
+                                    </div>
+
+
+                                </div>
+                            @break
+                        @endswitch
+                    </div>
+                    <div class="flex py-5">
+                        <p class="mx-auto">You have an account already?
+                            @if ($login_action)
+                                <button @click="{!! $login_action !!}"
+                                    class="text-blue-500 underline hover:text-blue-700">
+                                    Login Here
+                                </button>
+                            @else
+                                <a href="{{ route('login') }}" class="text-primary underline">Login here</a>
+                            @endif
+                        </p>
                     </div>
                 </div>
             </div>

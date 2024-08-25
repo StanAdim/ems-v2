@@ -8,6 +8,8 @@ use Livewire\Component;
 
 class UserLogin extends Component
 {
+    public $registration_action = '';
+
     #[Validate('required|email')]
     public $email = '';
     #[Validate('required')]

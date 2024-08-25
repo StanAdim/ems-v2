@@ -2,15 +2,19 @@
 
 namespace App\Livewire;
 
-use App\Livewire\Forms\UserRegistrationForm;
+use App\Enums\ProfileType;
+use App\Livewire\Forms\UserDetailsForm;
 use App\Providers\RouteServiceProvider;
 use Livewire\Component;
 
 class UserRegistration extends Component
 {
+    public $type = ProfileType::User;
+    public $login_action = '';
     public $event_title = '';
     public $active_tab = 'initial-details';
-    public UserRegistrationForm $form;
+
+    public UserDetailsForm $form;
 
     public function render()
     {
@@ -19,6 +23,7 @@ class UserRegistration extends Component
 
     public function save()
     {
+        $this->form->type = $this->type;
         $this->form->store();
 
         return redirect(RouteServiceProvider::HOME);
@@ -37,6 +42,9 @@ class UserRegistration extends Component
             $this->form->validateOnly($field);
         }
 
-        $this->dispatch('initial-details-validated', nextTab: 'final-details');
+        $this->dispatch('initial-details-validated', nextTab: match ($this->type) {
+            ProfileType::User => 'final-details',
+            ProfileType::Exhibitor => 'company-details',
+        });
     }
 }
