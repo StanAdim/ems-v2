@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\EventBookingController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\ProfileController;
 use App\Models\EventModel;
@@ -26,6 +27,8 @@ Route::get('', function () {
 
     return redirect(route('login'));
 })->name('site_index');
+
+Route::post('/event-bookings', [EventBookingController::class, 'store'])->name('event-bookings.store');
 
 Route::controller(EventController::class)->prefix('event')->name('event.')->group(function () {
     Route::get('{event?}/', 'index')->name('index');

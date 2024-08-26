@@ -375,7 +375,7 @@
         </div>
         <div class="flex py-10 gap-5 text-center justify-center">
             <x-heroicon-o-chevron-left class="w-8"/>
-            <p class="my-auto text-xl">2/15</p>
+            <p class="my-auto text-xl">1</p>
             <x-heroicon-o-chevron-right class="w-8"/>
         </div>
 

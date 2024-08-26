@@ -19,7 +19,7 @@
 
     </div>
 
-    @livewireScripts
+    {{-- @livewireScripts --}}
     @filamentScripts
     @vite('resources/js/app.js')
 

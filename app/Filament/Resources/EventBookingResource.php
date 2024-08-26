@@ -32,9 +32,6 @@ class EventBookingResource extends Resource
                 Forms\Components\TextInput::make('total_amount')
                     ->required()
                     ->numeric(),
-                Forms\Components\TextInput::make('payment_id')
-                    ->required()
-                    ->numeric(),
             ]);
     }
 
@@ -56,9 +53,6 @@ class EventBookingResource extends Resource
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('payment_id')
-                    ->numeric()
-                    ->sortable(),
             ])
             ->filters([
                 //

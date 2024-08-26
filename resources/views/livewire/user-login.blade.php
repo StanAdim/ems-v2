@@ -6,7 +6,7 @@
     <div class="order-1 m-4 place-content-evenly rounded-xl border p-2 text-lg lg:order-2 lg:ml-auto">
         <div class="grid grid-cols-1 flex-wrap gap-4 lg:m-20">
             <div class="mx-auto text-2xl font-semibold lg:text-4xl">Login to Continue</div>
-            <button
+            {{-- <button
                 class="inline-flex h-auto place-content-center gap-2 rounded-md border border-gray-500 py-3 align-middle font-semibold xl:px-20 xl:text-xl"
                 type="submit">
                 <svg class="w-6" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -77,7 +77,7 @@
                 </svg>
 
                 Continue with Apple
-            </button>
+            </button> --}}
 
 
 

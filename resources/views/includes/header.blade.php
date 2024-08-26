@@ -175,12 +175,16 @@
 {{-- <livewire:create-event-booking :event="$event" /> --}}
 
 <!-- Register Event Modal -->
-<div x-data={registeredPrice:420000,nonRegisteredPrice:500000,foreignPrice:720000,singleTicketPrice:0,ticketCounts:1}
+<div x-data={registeredPrice:420000,nonRegisteredPrice:500000,foreignPrice:750000,singleTicketPrice:0,ticketCounts:1}
     x-init="$data.singleTicketPrice = (document.getElementById('registration-status').value === 'registered') ? $data.registeredPrice : $data.nonRegisteredPrice;" id="register-event-modal" tabindex="-1" aria-hidden="register-event-modal"
     data-modal-backdrop="static"
     class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
     <div class="relative p-4 w-full max-w-2xl max-h-full">
-        <form class="">
+        <form action="{{ route('event-bookings.store') }}" method="POST">
+            @csrf
+            <!-- Add hidden inputs for the event ID and total amount -->
+            <input type="hidden" name="event_id" value="{{ $event->id }}">
+            <input type="hidden" name="total_amount" x-model="singleTicketPrice * ticketCounts">
             <!-- Modal content -->
             <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
                 <!-- Modal header -->
@@ -211,9 +215,9 @@
                     <template x-for="i in count" :key="i">
                         <div :id="'attendee-' + i" class="p-4 md:px-10 space-y-1">
                             <p class=" font-semibold" x-text="'Attendee #' + i + ' Details'"></p>
-                            <x-attendees-input placeholder="Name: Karim Salkim"></x-attendees-input>
-                            <x-attendees-input placeholder="Phone Number: +255 714 474 336"></x-attendees-input>
-                            <x-attendees-input placeholder="Email: karimsalmik@gmail.com"></x-attendees-input>
+                            <x-attendees-input required="1" placeholder="Name: Karim Salkim"></x-attendees-input>
+                            <x-attendees-input required="1" placeholder="Phone Number: +255 714 474 336"></x-attendees-input>
+                            <x-attendees-input required="1" placeholder="Email: karimsalmik@gmail.com"></x-attendees-input>
                         </div>
                     </template>
 
@@ -241,14 +245,14 @@
                         <div class="">
                             <label for="institution_name" class="block mb-1 font-normal text-gray-500 text-sm">
                                 Organization/Company</label>
-                            <input id="institution_name" name="institution_name" autocomplete="institution_name"
+                            <input id="institution_name" required name="institution_name" autocomplete="institution_name"
                                 type="text" placeholder="Organization/Company" id="institution_name"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 placeholder-gray-900 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         </div>
                         <div>
                             <label for="nationality"
                                 class="block mb-1 font-normal text-gray-500 text-sm">Nationality</label>
-                            <select id="nationality" name="nationality" autocomplete="nationality"
+                            <select id="nationality" required name="nationality" autocomplete="nationality"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                 <option selected>Choose a country</option>
                                 <option value="TZ" @selected(true)>Tanzania</option>
@@ -261,18 +265,19 @@
                             <label for="registration-status"
                                 class="block mb-1 font-normal text-gray-500 text-sm">Registration
                                 Status</label>
-                            <select id="registration-status"
-                                x-on:change="$el.value=='registered' ? $data.singleTicketPrice=$data.registeredPrice : $data.singleTicketPrice=$data.nonRegisteredPrice"
+                            <select id="registration-status" required
+                                x-on:change="$el.value=='registered' ? $data.singleTicketPrice=$data.registeredPrice : ($el.value=='foreigner' ? $data.singleTicketPrice=750000 : $data.singleTicketPrice=$data.nonRegisteredPrice)"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                 <option selected>Select Status</option>
                                 <option value="registered" @selected(true)>Registered</option>
                                 <option value="not-registered">Not Registered</option>
+                                <option value="foreigner">Foreigner</option>
                             </select>
                         </div>
                         <div class="">
                             <label for="reg-number" class="block mb-1 font-normal text-gray-500 text-sm">Registration
                                 Number</label>
-                            <input type="text" placeholder="1274793-123" id="reg-number" name="reg-number"
+                            <input type="text" required placeholder="1274793-123" id="reg-number" name="reg-number"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 placeholder-gray-900 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         </div>
                     </div>
@@ -303,20 +308,21 @@
                             class="!py-2 !font-normal bg-white !text-gray-500 border border-gray-500 !text-sm">
                             Cancel
                         </x-primary-button>
-                        {{-- <x-primary-button data-modal-hide="register-event-modal"
-                            data-modal-target="order-details-modal" data-modal-toggle="order-details-modal"
-                            class="hidden !py-2 !font-normal !text-sm">
-                            Continue
-                        </x-primary-button> --}}
-                        <a href="/auth/register" data-modal-hide="register-event-modal"
-                            class="text-sm items-center px-4 py-2 bg-primary border border-transparent rounded-md font-normal text-white tracking-widest hover:bg-brand focus:bg-brand active:bg-brand focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">Register
-                            to Pay</a>
+
+                        <x-primary-button type="submit" class="text-sm items-center px-4 py-2 bg-primary border border-transparent rounded-md font-normal text-white tracking-widest hover:bg-brand focus:bg-brand active:bg-brand focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">Register
+                            to Pay</x-primary-button>
                     </div>
                 </div>
             </div>
         </form>
     </div>
 </div>
+
+{{-- <x-primary-button data-modal-hide="register-event-modal"
+                            data-modal-target="order-details-modal" data-modal-toggle="order-details-modal"
+                            class="hidden !py-2 !font-normal !text-sm">
+                            Continue
+                        </x-primary-button> --}}
 
 <!-- Order Details Event Modal -->
 {{-- <div id="order-details-modal" tabindex="-1" aria-hidden="order-details-modal"
