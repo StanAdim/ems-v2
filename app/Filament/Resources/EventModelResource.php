@@ -10,6 +10,7 @@ use Filament\Forms;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\Split;
 use Filament\Forms\Components\Tabs;
@@ -18,6 +19,7 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Support\RawJs;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -47,10 +49,30 @@ class EventModelResource extends Resource
                                 DateTimePicker::make('endsOn')->minutesStep(15)->seconds(false)->required(),
                             ]),
                             SpatieMediaLibraryFileUpload::make('event_logo')->collection(EventModel::MEDIA_COLLECTION_EVENT_LOGO),
+                            Repeater::make('fees')->schema([
+                                Select::make('package_type')
+                                    ->options(EventModel::getFeesTypesList())
+                                    ->native(false)
+                                    ->columnSpan(6)
+                                    ->distinct()
+                                    ->required(),
+                                TextInput::make('amount')
+                                    ->label('Fee Amount')
+                                    ->required()
+                                    ->numeric()
+                                    ->mask(RawJs::make('$money($input)'))
+                                    ->stripCharacters(',')
+                                    ->columnSpan(6)
+                                    ->required(),
+                            ])
+                                ->label('Fee Packages')
+                                ->columns(12)
+                                ->minItems(3)
+                                ->maxItems(3),
                         ]),
                         Tab::make('About')->schema([
                             Textarea::make('aboutTitle')->label('Heading')->required(),
-                        TiptapEditor::make('aboutDescription')->label('Description')->required(),
+                            TiptapEditor::make('aboutDescription')->label('Description')->required(),
                             SpatieMediaLibraryFileUpload::make('about_banner')->collection(EventModel::MEDIA_COLLECTION_ABOUT_BANNER),
                         ]),
                         Tab::make('Themes')->schema([

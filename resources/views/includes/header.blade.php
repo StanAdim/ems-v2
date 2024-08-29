@@ -1,11 +1,11 @@
-<div class="w-100 sm:h-auto md:h-15 py-4  bg-primary flex justify-center">
-    <span class="mx-auto text-center align-middle text-white font-medium">
-        <span class="ml-5 lg:ml-28 text-sm">
+<div class="w-100 md:h-15 flex justify-center bg-primary py-4 sm:h-auto">
+    <span class="mx-auto text-center align-middle font-medium text-white">
+        <span class="ml-5 text-sm lg:ml-28">
             The United Republic of Tanzania | Ministry of Information,
             Communication and Information Technology | Information and Communication Technologies Commission
         </span>
     </span>
-    <div class="hidden md:flex divide-x-2 justify-center space-x-5 ">
+    <div class="hidden justify-center space-x-5 divide-x-2 md:flex">
         <div class="flex space-x-1">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="white"
                 class="size-6">
@@ -13,7 +13,7 @@
                     d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-1.605.42-3.113 1.157-4.418" />
             </svg>
 
-            <a href="#" class="text-white inline-flex">English
+            <a href="#" class="inline-flex text-white">English
                 <svg class="-mr-1 h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                     <path fill-rule="evenodd"
                         d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
@@ -27,22 +27,22 @@
     </div>
 </div>
 
-<div class="flex flex-wrap bg-[#0b1224] align-baseline py-4">
+<div class="flex flex-wrap bg-[#0b1224] py-4 align-baseline">
     <div class="container mx-auto grid grid-cols-1 md:grid-cols-2">
         <a href="/">
-            <div class="flex divide-x-2 justify-center md:justify-start">
+            <div class="flex justify-center divide-x-2 md:justify-start">
                 <img width="74px" src="{{ Vite::asset('resources/images/white_logo.png') }}" alt=""
                     srcset="">
-                <p class="px-5 place-self-center text-sm lg:text-2xl text-secondary font-medium">Events Management
+                <p class="place-self-center px-5 text-sm font-medium text-secondary lg:text-2xl">Events Management
                     System
                 </p>
             </div>
         </a>
 
-        <div class="inline-flex gap-2 md:gap-4 justify-center text-nowrap py-2 lg:justify-end align-middle">
+        <div class="text-nowrap inline-flex justify-center gap-2 py-2 align-middle md:gap-4 lg:justify-end">
             @foreach ($latestEvents as $latestEvent)
                 <a href="{{ $latestEvent['url'] }}"
-                    class=" my-auto text-xs lg:text-xl {{ $event && $event?->id == $latestEvent['id'] ? 'text-secondary' : 'text-white' }} underline ">
+                    class="{{ $event && $event?->id == $latestEvent['id'] ? 'text-secondary' : 'text-white' }} my-auto text-xs underline lg:text-xl">
                     {{ $latestEvent['title'] }}
                 </a>
             @endforeach
@@ -52,17 +52,17 @@
 </div>
 
 <hr class="bg-white text-white">
-<div class="bg-brand hidden md:block text-white py-4">
-    <div class="grid grid-cols-1 lg:grid-cols-5 container gap-2 mx-auto">
-        <div class="lg:col-span-2 grid grid-cols-2 gap-4">
-            <p class="text-sm lg:text-3xl font-semibold">
+<div class="hidden bg-brand py-4 text-white md:block">
+    <div class="container mx-auto grid grid-cols-1 gap-2 lg:grid-cols-5">
+        <div class="grid grid-cols-2 gap-4 lg:col-span-2">
+            <p class="text-sm font-semibold lg:text-3xl">
                 {{ $event->title }}
             </p>
-            <p class="text-4xl text-primary grid grid-cols-1 font-semibold place-content-center">
+            <p class="grid grid-cols-1 place-content-center text-4xl font-semibold text-primary">
                 <span>8th</span><span class="text-sm font-light text-secondary">Edition</span>
             </p>
         </div>
-        <div class="lg:col-span-2 grid grid-cols-1 place-content-center">
+        <div class="grid grid-cols-1 place-content-center lg:col-span-2">
             <p class="inline-flex gap-2">
                 <svg width="19" height="19" viewBox="0 0 19 19" fill="none"
                     xmlns="http://www.w3.org/2000/svg">
@@ -107,36 +107,36 @@
             <a href="/login"><button class="ml-auto px-5 py-3 font-medium bg-secondary rounded-lg text-black">Register
                     Now</button></a>
         </div> --}}
-        <div class="place-content-center ml-auto justify-end">
+        <div class="ml-auto place-content-center justify-end">
             <button data-modal-target="register-event-modal" data-modal-toggle="register-event-modal"
-                class="ml-auto px-5 py-3 font-medium ring-1 ring-secondary bg-secondary rounded-lg text-black">Register
+                class="ml-auto rounded-lg bg-secondary px-5 py-3 font-medium text-black ring-1 ring-secondary">Register
                 Now</button>
             <a href="{{ route('login') }}"><button
-                    class="ml-2 px-5 py-3 font-medium ring-1 ring-white rounded-lg text-white">Login</button></a>
+                    class="ml-2 rounded-lg px-5 py-3 font-medium text-white ring-1 ring-white">Login</button></a>
         </div>
     </div>
 </div>
 <hr class="bg-white text-white">
 
-<nav class="bg-brand mx-auto">
+<nav class="mx-auto bg-brand">
 
     <button data-collapse-toggle="navbar-default" type="button"
-        class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-white rounded-lg md:hidden"
+        class="inline-flex h-10 w-10 items-center justify-center rounded-lg p-2 text-sm text-white md:hidden"
         aria-controls="navbar-default" aria-expanded="false">
         <span class="sr-only">Open main menu</span>
-        <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
+        <svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M1 1h15M1 7h15M1 13h15" />
         </svg>
     </button>
 
-    <div class="hidden w-full md:block md:w-auto px-4 py-3 container mx-auto" id="navbar-default">
-        <div class="flex md:text-center md:place-content-center">
+    <div class="container mx-auto hidden w-full px-4 py-3 md:block md:w-auto" id="navbar-default">
+        <div class="flex md:place-content-center md:text-center">
             <ul
-                class="grid md:flex grid-cols-1 overflow-hidden font-normal mt-0 space-x-8 rtl:space-x-reverse text-lg">
+                class="mt-0 grid grid-cols-1 space-x-8 overflow-hidden text-lg font-normal rtl:space-x-reverse md:flex">
                 <li>
                     <a href="{{ route('event.about', ['event' => $event]) }}"
-                        class="{{ Route::is('event.about') ? 'text-secondary' : 'text-white ' }} hover:underline ms-8">About</a>
+                        class="{{ Route::is('event.about') ? 'text-secondary' : 'text-white ' }} ms-8 hover:underline">About</a>
                 </li>
                 {{-- <li>
                     <a href="#" class="text-white hover:underline">Company</a>
@@ -161,7 +161,7 @@
                 <li>
                     <a href="#" class="text-white hover:underline">Help</a>
                 </li>
-                <a href="{{ route('login') }}" class="md:hidden  text-white hover:underline">
+                <a href="{{ route('login') }}" class="text-white hover:underline md:hidden">
                     Login
                 </a>
 
@@ -171,11 +171,34 @@
 </nav>
 
 <hr class="bg-white text-white">
+<div id="register-event-modal" tabindex="-1" aria-hidden="register-event-modal" data-modal-backdrop="static"
+    class="fixed left-0 right-0 top-0 z-50 hidden h-[calc(100%-1rem)] max-h-full w-full items-center justify-center overflow-y-auto overflow-x-hidden md:inset-0">
+    <div class="relative max-h-full w-full max-w-2xl p-4">
+        <!-- Modal content -->
+        <div class="relative rounded-lg bg-white shadow dark:bg-gray-700">
+            <!-- Modal header -->
+            <div class="flex items-center justify-between rounded-t">
+                <button type="button"
+                    class="m-1 ms-auto inline-flex h-8 w-8 items-center justify-center rounded-lg bg-transparent text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-600 dark:hover:text-white"
+                    data-modal-hide="register-event-modal">
+                    <svg class="h-3 w-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                    </svg>
+                    <span class="sr-only">Close modal</span>
+                </button>
+            </div>
 
-{{-- <livewire:create-event-booking :event="$event" /> --}}
+            <livewire:create-event-booking :event="$event" parentId='register-event-modal'>
+
+        </div>
+    </div>
+</div>
+
 
 <!-- Register Event Modal -->
-<div x-data={registeredPrice:420000,nonRegisteredPrice:500000,foreignPrice:750000,singleTicketPrice:0,ticketCounts:1}
+{{-- <div x-data={registeredPrice:420000,nonRegisteredPrice:500000,foreignPrice:750000,singleTicketPrice:0,ticketCounts:1}
     x-init="$data.singleTicketPrice = (document.getElementById('registration-status').value === 'registered') ? $data.registeredPrice : $data.nonRegisteredPrice;" id="register-event-modal" tabindex="-1" aria-hidden="register-event-modal"
     data-modal-backdrop="static"
     class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
@@ -316,7 +339,7 @@
             </div>
         </form>
     </div>
-</div>
+</div> --}}
 
 {{-- <x-primary-button data-modal-hide="register-event-modal"
                             data-modal-target="order-details-modal" data-modal-toggle="order-details-modal"

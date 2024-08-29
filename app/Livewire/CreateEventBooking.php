@@ -1,23 +1,54 @@
 <?php
 
 namespace App\Livewire;
+use App\Models\EventBooking;
 use App\Models\EventModel;
 
 
+use Livewire\Attributes\On;
+use Livewire\Attributes\Validate;
 use Livewire\Component;
 
 class CreateEventBooking extends Component
 {
-    public $event;
-    public $registeredPrice = 420000;
-    public $nonRegisteredPrice = 500000;
-    public $foreignPrice = 720000;
+    public EventModel $event;
     public $singleTicketPrice = 0;
-    public $ticketCounts = 1;
-    public $registrationStatus = 'registered';
 
+    #[Validate('required|numeric')]
+    public $totalPrice = 0;
+    public $ticketCounts = 1;
+
+    #[Validate('required|string')]
+    public $registrationStatus = '';
+
+    #[Validate('integer|min:1')]
     public $count = 1; // To track the number of attendees
+
+    #[Validate(
+        rule: [
+            // 'attendees' => 'array:name,phone,email|size:1',
+            'attendees.*.name' => 'required|string|max:255',
+            'attendees.*.phone' => 'required|string|max:15',
+            'attendees.*.email' => 'required|email',
+        ],
+        attribute: [
+            'attendees.*.name' => 'Name',
+            'attendees.*.phone' => 'Phone',
+            'attendees.*.email' => 'Email',
+        ]
+    )]
     public $attendees = []; // To store the attendee details
+
+    #[Validate('nullable|string|max:255')]
+    public $institution_name = '';
+
+    #[Validate('required|string|max:100')]
+    public $nationality = '';
+
+    #[Validate('required_if:registrationStatus,registered|string|max:100')]
+    public $reg_number = '';
+
+    public $parentId = null;
 
     public function mount($event)
     {
@@ -26,7 +57,6 @@ class CreateEventBooking extends Component
         $this->attendees = [
             ['name' => '', 'phone' => '', 'email' => '']
         ];
-        // $this->updatedRegistrationStatus();
 
     }
 
@@ -35,6 +65,7 @@ class CreateEventBooking extends Component
         $this->count++;
         $this->ticketCounts++;
         $this->attendees[] = ['name' => '', 'phone' => '', 'email' => ''];
+        $this->dispatch('update-attendees');
     }
 
     public function removeAttendee($index)
@@ -44,30 +75,45 @@ class CreateEventBooking extends Component
             $this->attendees = array_values($this->attendees); // Reindex the array
             $this->count--;
             $this->ticketCounts--;
+            $this->dispatch('update-attendees');
         }
     }
 
-    public function updatedRegistrationStatus($value)
+    public function updateUserRegistrationStatus()
     {
-        if ($value == 'registered') {
-            $this->singleTicketPrice = $this->registeredPrice;
-        } else {
-            $this->singleTicketPrice = $this->nonRegisteredPrice;
-        }
+        $this->singleTicketPrice = $this->event->getAvailableFeesList()[$this->registrationStatus]['amount'];
+        $this->dispatch('update-registration-status');
+
     }
 
-    public function getTotalPriceProperty()
+    #[On('update-attendees')]
+    #[On('update-registration-status')]
+    public function updateTotalPrice()
     {
-        return $this->singleTicketPrice * $this->ticketCounts;
+        $this->totalPrice = $this->singleTicketPrice * $this->ticketCounts;
     }
 
-    public function calculateSingleTicketPrice()
-    {
-        $this->singleTicketPrice = $this->registeredPrice * $this->ticketCounts;
-    }
 
     public function render()
     {
         return view('livewire.create-event-booking');
+    }
+
+    public function store()
+    {
+        $this->updateTotalPrice();
+        $validatedData = $this->validate();
+
+        EventBooking::create([
+            'attendees' => json_encode($validatedData['attendees']),
+            'user_id' => auth()->id(),
+            'event_id' => $this->event->id,
+            'total_amount' => $validatedData['totalPrice'],
+            // 'payment_id' => 1, // Handle payment logic here if applicable
+        ]);
+
+        return redirect()
+            ->route('register', $this->event->id)
+            ->with('success', 'Registration successful!');
     }
 }

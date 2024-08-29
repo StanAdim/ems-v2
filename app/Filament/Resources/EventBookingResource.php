@@ -7,6 +7,9 @@ use App\Filament\Resources\EventBookingResource\RelationManagers;
 use App\Models\EventBooking;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Infolists\Components\RepeatableEntry;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -18,6 +21,11 @@ class EventBookingResource extends Resource
     protected static ?string $model = EventBooking::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-arrow-down-on-square-stack';
+
+    public static function canCreate(): bool
+    {
+        return false;
+    }
 
     public static function form(Form $form): Form
     {
@@ -39,11 +47,14 @@ class EventBookingResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('event_id')
+                Tables\Columns\TextColumn::make('event.title')
+                    ->numeric()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('attendee_count')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('total_amount')
-                    ->numeric()
+                    ->money('TSHS')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
@@ -58,13 +69,28 @@ class EventBookingResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make()->modal(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
+    }
+
+    public static function infolist(Infolist $infoList): Infolist
+    {
+        return $infoList
+            ->schema([
+                RepeatableEntry::make('attendees')
+                    ->schema([
+                        TextEntry::make('name'),
+                        TextEntry::make('phone'),
+                        TextEntry::make('email'),
+                    ])->columns(3),
+                TextEntry::make('total_amount')->money('TSHS'),
+                TextEntry::make('created_at')->dateTime(),
+            ])->columns(1);
     }
 
     public static function getRelations(): array
@@ -78,8 +104,6 @@ class EventBookingResource extends Resource
     {
         return [
             'index' => Pages\ListEventBookings::route('/'),
-            'create' => Pages\CreateEventBooking::route('/create'),
-            'edit' => Pages\EditEventBooking::route('/{record}/edit'),
         ];
     }
 }

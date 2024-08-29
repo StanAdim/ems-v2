@@ -31,9 +31,12 @@ use Spatie\Permission\Traits\HasRoles;
  * @property string $aboutDescription
  * @property string|null $whyParticipate
  * @property string $layout
+ * @property array $fees
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read mixed $about_banner
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\EventBooking> $bookings
+ * @property-read int|null $bookings_count
  * @property-read mixed $event_logo
  * @property-read mixed $main_banner
  * @property-read \Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection<int, Media> $media
@@ -55,6 +58,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @method static \Illuminate\Database\Eloquent\Builder|EventModel whereBannerText($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EventModel whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EventModel whereEndsOn($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|EventModel whereFees($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EventModel whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EventModel whereLayout($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EventModel whereLinkTitle($value)
@@ -81,6 +85,10 @@ class EventModel extends Model implements HasMedia
     const MEDIA_COLLECTION_PARTICIPATE_BANNER = 'event-participate-banner';
     const MEDIA_COLLECTION_ABOUT_BANNER = 'event-about-banner';
 
+    const FEE_REGISTERED = 'registered';
+    const FEE_NON_REGISTERED = 'non_registered';
+    const FEE_FOREIGNER = 'foreigner';
+
 
     protected $fillable = [
         'title',
@@ -96,6 +104,7 @@ class EventModel extends Model implements HasMedia
         'aboutDescription',
         'whyParticipate',
         'layout',
+        'fees',
     ];
 
     protected $casts = [
@@ -103,6 +112,7 @@ class EventModel extends Model implements HasMedia
         'subThemes' => 'json',
         'startsOn' => 'datetime',
         'endsOn' => 'datetime',
+        'fees' => 'json',
     ];
 
     protected $attributes = [
@@ -182,14 +192,6 @@ class EventModel extends Model implements HasMedia
         return $this->getMediaUrl($this->about_banner);
     }
 
-    /* public function registerMediaconversions(?Media $media = null): void
-    {
-        $this
-            ->addMediaConversion('preview')
-            ->fit(Fit::Contain, 300, 300)
-            ->queued();
-    } */
-
     public function registerMediaCollections(): void
     {
         $this->registerSingleFileImageCollection(self::MEDIA_COLLECTION_EVENT_LOGO);
@@ -207,7 +209,10 @@ class EventModel extends Model implements HasMedia
             ->acceptsMimeTypes(self::MEDIA_COLLECTION_IMAGE_TYPES);
     }
 
-    public function guardName() { return ['web']; }
+    public function guardName()
+    {
+        return ['web'];
+    }
 
     /**
      * Get all of the bookings for the EventModel
@@ -217,6 +222,30 @@ class EventModel extends Model implements HasMedia
     public function bookings(): HasMany
     {
         return $this->hasMany(EventBooking::class);
+    }
+
+    public function getAvailableFeesList()
+    {
+        $fees = [];
+        foreach ($this->fees as $fee_array) {
+            $package_type = $fee_array['package_type'];
+            $amount = $fee_array['amount'] ?? 0;
+            $fees[$package_type] = [
+                'amount' => $amount,
+                'title' => self::getFeesTypesList()[$package_type]
+            ];
+        }
+
+        return $fees;
+    }
+
+    public static function getFeesTypesList()
+    {
+        return [
+            self::FEE_REGISTERED => 'Registered',
+            self::FEE_NON_REGISTERED => 'Non Registered',
+            self::FEE_FOREIGNER => 'Foreigner',
+        ];
     }
 
 }
