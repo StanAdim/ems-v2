@@ -12,6 +12,7 @@ use Livewire\Component;
 class CreateEventBooking extends Component
 {
     public EventModel $event;
+    public EventBooking $booking;
     public $singleTicketPrice = 0;
 
     #[Validate('required|numeric')]
@@ -104,16 +105,12 @@ class CreateEventBooking extends Component
         $this->updateTotalPrice();
         $validatedData = $this->validate();
 
-        EventBooking::create([
+        $this->booking = EventBooking::create([
             'attendees' => json_encode($validatedData['attendees']),
             'user_id' => auth()->id(),
             'event_id' => $this->event->id,
             'total_amount' => $validatedData['totalPrice'],
             // 'payment_id' => 1, // Handle payment logic here if applicable
         ]);
-
-        return redirect()
-            ->route('register', $this->event->id)
-            ->with('success', 'Registration successful!');
     }
 }

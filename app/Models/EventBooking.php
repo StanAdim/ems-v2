@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  *
@@ -19,6 +20,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int|null $user_id
  * @property-read mixed $attendee_count
  * @property-read \App\Models\EventModel $event
+ * @property-read \App\Models\PaymentOrder|null $payment_order
+ * @property-read mixed $type
  * @method static \Illuminate\Database\Eloquent\Builder|EventBooking newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|EventBooking newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|EventBooking query()
@@ -36,7 +39,7 @@ class EventBooking extends Model
     use HasFactory;
 
     protected $casts = [
-        'attendees' => 'json',
+        'attendees' => 'array',
     ];
 
     /**
@@ -65,10 +68,31 @@ class EventBooking extends Model
         return $this->belongsTo(EventModel::class);
     }
 
-    public function attendeeCount(): Attribute
+    public function payment_order(): HasOne
+    {
+        return $this->hasOne(PaymentOrder::class)->latestOfMany('created_at');
+    }
+
+    protected function attendeeCount(): Attribute
     {
         return Attribute::make(
-            fn($value) => count($this->attendees)
+            get: fn($value) => count((array) $this->attendees)
         );
+    }
+
+    protected function type(): Attribute
+    {
+        return Attribute::make(
+            get: fn($value) => $this->attendee_count > 0 ? 'Single' : 'Group'
+        );
+    }
+
+    public function getAttendees(): array
+    {
+        if (is_array($this->attendees)) {
+            return $this->attendees;
+        }
+
+        return json_decode($this->attendees, true);
     }
 }
