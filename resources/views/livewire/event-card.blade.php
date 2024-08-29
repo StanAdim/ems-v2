@@ -8,7 +8,5 @@
             {{ $location }}
         </p>
     </div>
-    <div class="lg:px-6 pt-3 pb-2">
-        <a href="{{ $route }}" class="bg-primary text-white font-medium py-2 px-8 rounded">Book</a>
-    </div>
+    
 </div>

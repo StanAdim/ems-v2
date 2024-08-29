@@ -6,6 +6,7 @@ use Filament\FontProviders\GoogleFontProvider;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\MenuItem;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -18,6 +19,8 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use OpenSpout\Reader\ODS\Helper\SettingsHelper;
+use App\Filament\Pages\Settings;
 
 class EventsPanelProvider extends PanelProvider
 {
@@ -27,6 +30,12 @@ class EventsPanelProvider extends PanelProvider
             ->default()
             ->id('events')
             ->path('events')
+            ->userMenuItems([
+                    MenuItem::make()
+                        ->label('Site Dashboard')
+                        ->url('/dashboard')
+                        ->icon('heroicon-o-globe-alt')
+            ])
             // ->login()
             ->font('IBM Plex Sans', provider: GoogleFontProvider::class)
             ->colors([

@@ -16,6 +16,7 @@ class BookingController extends Controller
             'slot' => '',
             'upcomingEvents' => $upcomingEvents->map(function (EventModel $event) {
                 return [
+                    'event' => $event,
                     'title' => $event->title,
                     'location' => $event->locationDescription,
                     'imageUrl' => $event->getMainBannerUrl(),

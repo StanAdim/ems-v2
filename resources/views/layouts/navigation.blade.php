@@ -28,7 +28,8 @@
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <button
-                            class="inline-flex items-center rounded-full border border-gray-500 bg-white px-6 py-3 text-sm font-medium leading-4 text-black transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none">
+                            class="inline-flex gap-2 items-center rounded-full border bg-white px-6 py-1.5 text-sm font-medium leading-4 text-black transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none">
+                            <x-heroicon-o-user class="w-8 bg-gray-300 border rounded-full p-1"/>
                             <div>{{ Auth::user()->name }}</div>
 
                             <div class="ms-1">

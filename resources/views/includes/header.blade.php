@@ -109,8 +109,7 @@
         </div> --}}
         <div class="ml-auto place-content-center justify-end">
             <button data-modal-target="register-event-modal" data-modal-toggle="register-event-modal"
-                class="ml-auto rounded-lg bg-secondary px-5 py-3 font-medium text-black ring-1 ring-secondary">Register
-                Now</button>
+                class="ml-auto rounded-lg bg-secondary px-5 py-3 font-medium text-black ring-1 ring-secondary">Attend this event</button>
             <a href="{{ route('login') }}"><button
                     class="ml-2 rounded-lg px-5 py-3 font-medium text-white ring-1 ring-white">Login</button></a>
         </div>
@@ -152,11 +151,17 @@
                 <li>
                     <a href="#" class="text-white hover:underline">Sponsor</a>
                 </li>
-                {{-- <li>
+                <li>
                     <a href="#" class="text-white hover:underline">Buyer</a>
-                </li> --}}
+                </li>
                 <li>
                     <a href="#" class="text-white hover:underline">Media</a>
+                </li>
+                <li>
+                    <a href="#" class="text-white hover:underline">Hospitality</a>
+                </li>
+                <li>
+                    <a href="#" class="text-white hover:underline">Tours</a>
                 </li>
                 <li>
                     <a href="#" class="text-white hover:underline">Help</a>
