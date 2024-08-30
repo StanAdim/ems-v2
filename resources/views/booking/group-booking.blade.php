@@ -9,8 +9,7 @@ $title = 'Group Bookings';
         <h4 class="text-3xl font-medium">List of group bookings</h4>
     </div>
     <div class="">
-        @livewire('booked-events-table')
-    </div>
+        @livewire('booked-events-list')    </div>
 
 
 </div>

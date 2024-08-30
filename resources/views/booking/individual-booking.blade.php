@@ -10,7 +10,8 @@ $title = 'Individual Bookings';
         <h4 class="text-3xl font-medium">List of individual bookings</h4>
     </div>
     <div class="">
-        @livewire('booked-events-table')
+        {{-- @livewire('booked-events-table') --}}
+        @livewire('booked-events-list')
     </div>
 
 

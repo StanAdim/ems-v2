@@ -15,7 +15,7 @@
 
     <div class="container mx-auto py-10 grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-0">
         <div class="md:h-[40rem] mx-2 ">
-            <p class="text-7xl ml-10 font-extralight text-primary"> {!! $event->aboutTitle !!}
+            <p class="text-5xl md:text-7xl ml-10 font-extralight text-primary"> {!! $event->aboutTitle !!}
             </p>
             <img class="w-full h-full p-10 object-fit md:object-cover "
                 src="{{ $event->getEventLogoUrl() ?: Vite::asset('resources/images/about.svg') }}" alt=""
@@ -117,9 +117,9 @@
         </div>
     </div>
 
-    <div class="container mx-auto py-10 grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-0">
+    <div class="container mx-auto py-10 grid grid-cols-1 xl:grid-cols-2 gap-10 md:gap-0">
         <div class="w-full h-96 mx-2 text-left">
-            <p class="text-7xl font-extralight text-primary">About<br> <span class="text-secondary">TAIC</span> 2024</p>
+            <p class="text-5xl xl:text-7xl font-extralight text-primary">About<br> <span class="text-secondary">TAIC</span> 2024</p>
             <img class="w-full h-full p-1 object-fit" src="{{ Vite::asset('resources/images/about.svg') }}" alt=""
                 srcset="">
         </div>
@@ -186,13 +186,13 @@
     <div class="container md:mx-auto  rounded-lg bg-brand my-5 md:my-24">
         <div class="grid grid-cols-1 md:grid-cols-2">
             <img class="w-100" src="{{ Vite::asset('resources/images/fee.svg') }}" alt="" srcset="">
-            <div class="justify-end p-10 md:p-20 text-2xl md:text-7xl font-light">
+            <div class="justify-end p-10 md:p-20 text-4xl xl:text-7xl font-light">
                 <p class="text-end text-secondary">Conference</p>
                 <p class="text-end text-primary">Fees</p>
             </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3">
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
             <div class="grid grid-cols-1 gap-10">
                 <div class="grid grid-cols-1 py-10 bg-alt-green">
                     <div class="place-content-center  w-56 mx-auto my-5"><img class="w-full"
@@ -253,8 +253,8 @@
         <div class="py-10">
             <h4 class="text-center text-4xl font-bold">What people say about TAIC</h4>
         </div>
-        <div class="grid grid-cols-1 lg:grid-cols-3 border-y py-10">
-            <div class="flex-1 mx-auto">
+        <div class="grid grid-cols-1 lg:grid-cols-3 border-y py-10 gap-5">
+            <div class="flex-1 border-b xl:border-none mx-auto">
                 <div class="font-semibold text-2xl">Total Reviews</div>
                 <div class="text-gray-400 text-center text-7xl font-black">
                     3K
@@ -311,8 +311,8 @@
 
     <div class="container mx-auto pt-10 pb-28">
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
-            <div class="grid grid-cols-2 gap-5">
-                <img class="place-self-end mb-auto mt-1 rounded-full overflow-clip" src="{{ Vite::asset('resources/images/doreen.svg') }}"
+            <div class="inline-flex gap-5">
+                <img class="ml-2 place-self-end mb-auto mt-1 rounded-full overflow-clip" src="{{ Vite::asset('resources/images/doreen.svg') }}"
                     alt="">
                 <div>
                     <h4 class="font-bold">Doreen Mushi</h4>
@@ -331,8 +331,8 @@
                     </p>
                 </div>
             </div>
-            <div class="grid grid-cols-2 gap-5">
-                <img class="place-self-end mb-auto mt-1 rounded-full overflow-clip" src="{{ Vite::asset('resources/images/david.svg') }}"
+            <div class="inline-flex gap-5">
+                <img class="ml-2 place-self-end mb-auto mt-1 rounded-full overflow-clip" src="{{ Vite::asset('resources/images/david.svg') }}"
                     alt="">
                 <div>
                     <h4 class="font-bold">David Bilosha</h4>
@@ -352,8 +352,8 @@
                     </p>
                 </div>
             </div>
-            <div class="grid grid-cols-2 gap-5">
-                <img class="place-self-end mb-auto mt-1 rounded-full overflow-clip" src="{{ Vite::asset('resources/images/skylar.svg') }}"
+            <div class="inline-flex gap-5">
+                <img class="ml-2 place-self-end mb-auto mt-1 rounded-full overflow-clip" src="{{ Vite::asset('resources/images/skylar.svg') }}"
                     alt="">
                 <div>
                     <h4 class="font-bold">Skylar Brooks</h4>

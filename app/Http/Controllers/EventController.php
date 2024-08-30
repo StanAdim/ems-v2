@@ -60,4 +60,11 @@ class EventController extends Controller
     {
         return view('participant.login');
     }
+
+    public function sponsor(EventModel $event): View
+    {
+
+        return view('sponsor', ['event' => $event]);
+    }
+
 }

@@ -3,6 +3,12 @@
 @section('content')
 @use('App\Enums\ProfileType')
     <div x-data="{ activePage: 'exhibition' }" class="md:mx-auto">
+        <div x-show="activePage == 'login'">
+            <livewire:user-login registration_action="activePage = 'register'"/>
+        </div>
+        <div x-show="activePage == 'register'">
+            <livewire:user-registration login_action="activePage = 'login'" :type='ProfileType::Exhibitor'/>
+        </div>
         <div x-show="activePage == 'exhibition'">
             <div class="grid grid-cols-1 gap-1 bg-primary-50"
                 style="background-image: url({{ Vite::asset('resources/images/exhibitor.svg') }});background-size:cover; background-repeat:no-repeat; background-position-x: center; background-position-y: center;">
@@ -93,11 +99,6 @@
                 </div>
             </div>
         </div>
-        <div x-show="activePage == 'login'">
-            <livewire:user-login registration_action="activePage = 'register'"/>
-        </div>
-        <div x-show="activePage == 'register'">
-            <livewire:user-registration login_action="activePage = 'login'" :type='ProfileType::Exhibitor'/>
-        </div>
+
     </div>
 @endsection

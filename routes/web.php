@@ -35,6 +35,8 @@ Route::controller(EventController::class)->prefix('event')->name('event.')->grou
     Route::get('{event}/participants', 'participant')->name('participant');
     Route::get('{event}/about', 'about')->name('about');
     Route::get('{event}/exhibitor', 'exhibitor')->name('exhibitor');
+    Route::get('{event}/sponsor', 'sponsor')->name('sponsor');
+
 });
 
 Route::get('/dashboard', function () {
