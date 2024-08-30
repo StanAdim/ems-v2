@@ -24,10 +24,10 @@ $title = 'Home';
     <div class="container mx-auto">
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-10">
             {{-- @livewire('dashboard-card') --}}
-            @livewire('dashboard-card', ['title' => 'Booked events', 'description' => 'The numbers of events you have booked so far', 'route' => 'event-booking', 'count' => 4])
-            @livewire('dashboard-card', ['title' => 'Planned events', 'description' => 'Here are the events saved in your calendar', 'route' => 'my-booking', 'count' => 4])
-            @livewire('dashboard-card', ['title' => 'Pending payments', 'description' => 'Here are the events saved in your calendar', 'route' => 'event-booking', 'count' => 4])
-            @livewire('dashboard-card', ['title' => 'Invoices ', 'description' => 'Here are the events saved in your calendar', 'route' => 'event-booking', 'count' => 4])
+            @livewire('dashboard-card', ['title' => 'Booked events', 'description' => 'The numbers of events you have booked so far', 'route' => 'event-booking', 'count' => $myBookingCount ])
+            @livewire('dashboard-card', ['title' => 'Planned events', 'description' => 'Here are the events saved in your calendar', 'route' => 'my-booking', 'count' => $activeEvents])
+            @livewire('dashboard-card', ['title' => 'Pending payments', 'description' => 'Here are the events saved in your calendar', 'route' => 'event-booking', 'count' => $pendingPaymentsCount])
+            @livewire('dashboard-card', ['title' => 'Invoices ', 'description' => 'Here are the events saved in your calendar', 'route' => 'event-booking', 'count' => $pendingPaymentsCount])
 
         </div>
     </div>

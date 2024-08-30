@@ -44,6 +44,8 @@ use Spatie\Permission\Traits\HasRoles;
  * @property-read mixed $participate_banner
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Permission\Models\Permission> $permissions
  * @property-read int|null $permissions_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\EventConversation> $questions
+ * @property-read int|null $questions_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Permission\Models\Role> $roles
  * @property-read int|null $roles_count
  * @property-read mixed $theme_banner
@@ -246,6 +248,11 @@ class EventModel extends Model implements HasMedia
             self::FEE_NON_REGISTERED => 'Non Registered',
             self::FEE_FOREIGNER => 'Foreigner',
         ];
+    }
+
+    public function questions(): HasMany
+    {
+        return $this->hasMany(EventConversation::class)->where('parent_conversation_id', '=', null);
     }
 
 }

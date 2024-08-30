@@ -7,13 +7,15 @@ namespace App\Models;
 use BezhanSalleh\FilamentShield\Traits\HasPanelShield;
 use Filament\Models\Contracts\FilamentUser;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $name
@@ -23,8 +25,12 @@ use Spatie\Permission\Traits\HasRoles;
  * @property string|null $remember_token
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\EventBooking> $bookings
+ * @property-read int|null $bookings_count
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PaymentOrder> $payment_orders
+ * @property-read int|null $payment_orders_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Permission\Models\Permission> $permissions
  * @property-read int|null $permissions_count
  * @property-read \App\Models\UserProfile|null $profile
@@ -89,6 +95,17 @@ class User extends Authenticatable implements FilamentUser
 
     public function profile()
     {
-       return $this->hasOne(UserProfile::class);
+        return $this->hasOne(UserProfile::class);
     }
+
+    public function bookings(): HasMany
+    {
+        return $this->hasMany(EventBooking::class);
+    }
+
+    public function payment_orders(): HasManyThrough
+    {
+        return $this->hasManyThrough(PaymentOrder::class, EventBooking::class, secondKey: 'booking_id');
+    }
+
 }

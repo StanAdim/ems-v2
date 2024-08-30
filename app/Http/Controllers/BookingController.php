@@ -58,9 +58,7 @@ class BookingController extends Controller
 
     public function question_and_answer(): View
     {
-
-        return view('booking.question-and-answer', ['slot' => '']);
+        $event = EventModel::latest()->first();
+        return view('booking.question-and-answer', ['slot' => '', 'eventId' => $event->id]);
     }
-
-
 }

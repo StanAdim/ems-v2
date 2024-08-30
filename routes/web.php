@@ -4,7 +4,9 @@ use App\Http\Controllers\BookingController;
 use App\Http\Controllers\EventBookingController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\ProfileController;
+use App\Models\EventBooking;
 use App\Models\EventModel;
+use App\Models\PaymentOrder;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -40,7 +42,16 @@ Route::controller(EventController::class)->prefix('event')->name('event.')->grou
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    $user = auth()->user();
+    $myBookingsCount = $user->bookings()->count();
+    $pendingPaymentsCount = $user->payment_orders()->count();
+    $activeEvents = EventModel::count();
+
+    return view('dashboard', [
+        'myBookingCount' => $myBookingsCount,
+        'pendingPaymentsCount' => $pendingPaymentsCount,
+        'activeEvents' => $activeEvents,
+    ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
