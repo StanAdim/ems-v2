@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\ProfileType;
 use BezhanSalleh\FilamentShield\Traits\HasPageShield;
 use BezhanSalleh\FilamentShield\Traits\HasPanelShield;
 use Illuminate\Database\Eloquent\Casts\AsEnumCollection;
@@ -12,7 +13,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Spatie\Permission\Traits\HasRoles;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $user_id
