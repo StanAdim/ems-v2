@@ -5,7 +5,7 @@ require 'recipe/laravel.php';
 
 // Config
 
-set('repository', 'git@github.com-ictc-event-management-system:Pricism/ictc-event-management-system.git');
+set('repository', 'git@github.com-ictc-event-management-system:Apropriare/ictc-event-management-system.git');
 set('update_code_strategy', 'archive');
 
 add('shared_files', []);
