@@ -35,9 +35,9 @@
             </div>
             <div class="flex gap-5 border-gray-200 p-4">
                 <div class="mx-auto grid">
-                    <a href="{{ $payment_order->invoice_url }}" class="!py-2 !text-sm !font-normal">
+                    <x-primary-link-button href="{{ $payment_order->invoice_url }}" class="!py-2 !text-sm !font-normal">
                         Download Invoice
-                    </a>
+                    </x-primary-link-button>
                 </div>
             </div>
             <div class="flex gap-5 rounded-b border-gray-200 p-4 dark:border-gray-600">

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\PaymentOrderStatus;
 use App\Observers\PaymentOrderObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -9,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $booking_id
@@ -17,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string|null $control_no
  * @property float $total_amount
  * @property string|null $phone_number
+ * @property string $status
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $expires_on
@@ -33,6 +35,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentOrder whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentOrder whereInvoiceUrl($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentOrder wherePhoneNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PaymentOrder whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentOrder whereTotalAmount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentOrder whereUpdatedAt($value)
  * @mixin \Eloquent
@@ -45,6 +48,7 @@ class PaymentOrder extends Model
 
     protected $casts = [
         'expires_on' => 'datetime',
+        'status' => PaymentOrderStatus::class,
     ];
 
     protected $fillable = [

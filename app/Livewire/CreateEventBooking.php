@@ -110,6 +110,7 @@ class CreateEventBooking extends Component
             'user_id' => auth()->id(),
             'event_id' => $this->event->id,
             'total_amount' => $validatedData['totalPrice'],
+            'attendees_count' => count($validatedData['attendees']),
             // 'payment_id' => 1, // Handle payment logic here if applicable
         ]);
     }

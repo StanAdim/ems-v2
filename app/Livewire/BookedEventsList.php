@@ -2,8 +2,11 @@
 
 namespace App\Livewire;
 
+use App\Enums\BookingType;
+use App\Enums\PaymentOrderStatus;
 use App\Filament\Resources\EventBookingResource;
 use App\Models\EventBooking;
+use App\Models\EventModel;
 use Filament\Actions\Action;
 use Filament\Actions\CreateAction as ActionsCreateAction;
 use Filament\Actions\DeleteAction;
@@ -36,6 +39,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
+use Filament\Forms\Get;
 
 class BookedEventsList extends Component implements HasForms, HasTable, HasInfolists
 {
@@ -44,11 +48,28 @@ class BookedEventsList extends Component implements HasForms, HasTable, HasInfol
     use InteractsWithTable;
 
     protected static string $resource = EventBookingResource::class;
+    public ?BookingType $bookingType = null;
+
+    public static function canCreate(): bool
+    {
+        return false;
+    }
 
     public function table(Table $table): Table
     {
+        $query = EventBooking::query()->where('user_id', Auth::user()->id);
+        switch ($this->bookingType) {
+            case BookingType::Single:
+                $query->where('attendee_count', '==', 1);
+                break;
+
+            case BookingType::Group:
+                $query->where('attendee_count', '>', 1);
+                break;
+        }
+
         return $table
-            ->query(EventBooking::query()->where('user_id', Auth::user()->id))
+            ->query($query)
             ->columns([
                 Tables\Columns\TextColumn::make('event.title')
                     ->searchable()
@@ -58,6 +79,17 @@ class BookedEventsList extends Component implements HasForms, HasTable, HasInfol
                 Tables\Columns\TextColumn::make('total_amount')
                     ->numeric()
                     ->sortable(),
+
+                TextColumn::make('type'),
+                TextColumn::make('payment_order.status')
+                    ->label('Status')
+                    ->badge()
+                    ->color(fn (PaymentOrderStatus $state): string => match ($state) {
+                        PaymentOrderStatus::Paid => 'success',
+                        PaymentOrderStatus::Pending => 'warning',
+                        default => 'danger',
+                    }),
+
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -74,10 +106,10 @@ class BookedEventsList extends Component implements HasForms, HasTable, HasInfol
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                // Tables\Actions\EditAction::make(),
                 ViewAction::make()->modal()->form($this->formSchema()),
 
-                ActionsDeleteAction::make()
+                // ActionsDeleteAction::make()
                 //
             ])
             ->bulkActions([
@@ -85,149 +117,157 @@ class BookedEventsList extends Component implements HasForms, HasTable, HasInfol
                     //
                 ]),
             ])->headerActions([
-                CreateAction::make()
-                    ->model(EventBooking::class)
-                    ->label('Create Bookings')
-                    ->form([
-                        Hidden::make('user_id')
-                            ->default(Auth::id()),
-                        Select::make('event_id')
-                            ->relationship('event', 'title')
-                            ->required(),
-                        TextInput::make('total_amount')
-                            ->required(),
+                    CreateAction::make()
+                        ->model(EventBooking::class)
+                        ->label('Create Bookings')
+                        ->form([
+                            Hidden::make('user_id')
+                                ->default(Auth::id()),
+                            Select::make('event_id')
+                                ->relationship('event', 'title')
+                                ->required()
+                                ->live(),
+                            TextInput::make('total_amount')
+                                ->required(),
 
-                        Repeater::make('attendees')
-                            ->label('Attendees Details')
-                            ->schema([
-                                TextInput::make('name')
-                                    ->label('Name')
-                                    ->required(),
+                            Repeater::make('attendees')
+                                ->label('Attendees Details')
+                                ->schema([
+                                    TextInput::make('name')
+                                        ->label('Name')
+                                        ->required(),
 
-                                TextInput::make('phone_number')
-                                    ->label('Phone Number')
-                                    ->required(),
+                                    TextInput::make('phone_number')
+                                        ->label('Phone Number')
+                                        ->required(),
 
-                                TextInput::make('email')
-                                    ->label('Email')
-                                    ->email()
-                                    ->required(),
-                            ])
-                            ->createItemButtonLabel('Add Attendee')
-                            ->columns(3)
-                            ->defaultItems(1)
-                            ->collapsible(true), // Starts with one attendee row by default
+                                    TextInput::make('email')
+                                        ->label('Email')
+                                        ->email()
+                                        ->required(),
+                                ])
+                                ->createItemButtonLabel('Add Attendee')
+                                ->columns(3)
+                                ->defaultItems(1)
+                                ->collapsible(true), // Starts with one attendee row by default
 
-                        Section::make('Extra Attendees Details')
-                            ->schema([
-                                TextInput::make('organization')
-                                    ->label('Organization/Company')
-                                    ->placeholder('Organization/Company'),
+                            Section::make('Extra Attendees Details')
+                                ->schema([
+                                    TextInput::make('organization')
+                                        ->label('Organization/Company')
+                                        ->placeholder('Organization/Company'),
 
-                                Select::make('nationality')
-                                    ->label('Nationality')
-                                    ->options([
-                                        'tanzania' => 'Tanzania',
-                                        'kenya' => 'Kenya',
-                                        // add more countries here
-                                    ])
-                                    ->placeholder('Choose a country'),
+                                    Select::make('nationality')
+                                        ->label('Nationality')
+                                        ->options([
+                                            'tanzania' => 'Tanzania',
+                                            'kenya' => 'Kenya',
+                                            // add more countries here
+                                        ])
+                                        ->placeholder('Choose a country'),
 
-                                Select::make('registration_status')
-                                    ->label('Registration Status')
-                                    ->options([
-                                        'not registered' => 'Not Registered',
-                                        'foreigner' => 'Foreigner',
-                                        // add more statuses here
-                                    ])->default(['registered'])
-                                    ->placeholder('Select Status'),
+                                    Select::make('registration_status')
+                                        ->label('Registration Status')
+                                        ->options(function (Get $get) {
+                                            $eventId = $get('event_id');
+                                            if (!$eventId)
+                                                return [];
 
-                                TextInput::make('registration_number')
-                                    ->label('Registration Number')
-                                    ->placeholder('1274793-123'),
-                            ])->columns(2),
+                                            $event = EventModel::whereId($eventId)->first();
+                                            $availableFees = [];
+                                            foreach ($event->getAvailableFeesList() as $type => $fee) {
+                                                $availableFees[$type] = $fee['title'];
+                                            }
+                                            return $availableFees;
+                                        })->default(['registered'])
+                                        ->placeholder('Select Status'),
 
-                        Checkbox::make('agree_to_terms')
-                            ->label('Agree to term & conditions')
-                            ->required(),
-                        // ...
-                    ]),
-            ]);
+                                    TextInput::make('registration_number')
+                                        ->label('Registration Number')
+                                        ->placeholder('1274793-123'),
+                                ])->columns(2),
+
+                            Checkbox::make('agree_to_terms')
+                                ->label('Agree to term & conditions')
+                                ->required(),
+                            // ...
+                        ]),
+                ]);
     }
 
     public static function formSchema(): array
     {
         return
-                [
-                    Hidden::make('user_id')
-                        ->default(Auth::id()),
-                    Select::make('event_id')
-                        ->relationship('event', 'title')
-                        ->required(),
-                    TextInput::make('total_amount')
-                        ->required(),
+            [
+                Hidden::make('user_id')
+                    ->default(Auth::id()),
+                Select::make('event_id')
+                    ->relationship('event', 'title')
+                    ->required(),
+                TextInput::make('total_amount')
+                    ->required(),
 
-                    Repeater::make('attendees')
-                        ->label('Attendees Details')
-                        ->schema([
-                            TextInput::make('name')
-                                ->label('Name')
-                                ->required(),
+                Repeater::make('attendees')
+                    ->label('Attendees Details')
+                    ->schema([
+                        TextInput::make('name')
+                            ->label('Name')
+                            ->required(),
 
-                            TextInput::make('phone_number')
-                                ->label('Phone Number')
-                                ->required(),
+                        TextInput::make('phone_number')
+                            ->label('Phone Number')
+                            ->required(),
 
-                            TextInput::make('email')
-                                ->label('Email')
-                                ->email()
-                                ->required(),
-                        ])
-                        ->createItemButtonLabel('Add Attendee')
-                        ->columns(3)
-                        ->defaultItems(1)
-                        ->collapsible(true), // Starts with one attendee row by default
+                        TextInput::make('email')
+                            ->label('Email')
+                            ->email()
+                            ->required(),
+                    ])
+                    ->createItemButtonLabel('Add Attendee')
+                    ->columns(3)
+                    ->defaultItems(1)
+                    ->collapsible(true), // Starts with one attendee row by default
 
-                    Section::make('Extra Attendees Details')
-                        ->schema([
-                            TextInput::make('organization')
-                                ->label('Organization/Company')
-                                ->placeholder('Organization/Company'),
+                Section::make('Extra Attendees Details')
+                    ->schema([
+                        TextInput::make('organization')
+                            ->label('Organization/Company')
+                            ->placeholder('Organization/Company'),
 
-                            Select::make('nationality')
-                                ->label('Nationality')
-                                ->options([
-                                    'tanzania' => 'Tanzania',
-                                    'kenya' => 'Kenya',
-                                    // add more countries here
-                                ])
-                                ->placeholder('Choose a country'),
+                        Select::make('nationality')
+                            ->label('Nationality')
+                            ->options([
+                                'tanzania' => 'Tanzania',
+                                'kenya' => 'Kenya',
+                                // add more countries here
+                            ])
+                            ->placeholder('Choose a country'),
 
-                            Select::make('registration_status')
-                                ->label('Registration Status')
-                                ->options([
-                                    'not registered' => 'Not Registered',
-                                    'foreigner' => 'Foreigner',
-                                    // add more statuses here
-                                ])->default(['registered'])
-                                ->placeholder('Select Status'),
+                        Select::make('registration_status')
+                            ->label('Registration Status')
+                            ->options([
+                                'not registered' => 'Not Registered',
+                                'foreigner' => 'Foreigner',
+                                // add more statuses here
+                            ])->default(['registered'])
+                            ->placeholder('Select Status'),
 
-                            TextInput::make('registration_number')
-                                ->label('Registration Number')
-                                ->placeholder('1274793-123'),
-                        ])->columns(2),
+                        TextInput::make('registration_number')
+                            ->label('Registration Number')
+                            ->placeholder('1274793-123'),
+                    ])->columns(2),
 
-                    Checkbox::make('agree_to_terms')
-                        ->label('Agree to term & conditions')
-                        ->required(),
-                    // ...
-                ];
+                Checkbox::make('agree_to_terms')
+                    ->label('Agree to term & conditions')
+                    ->required(),
+                // ...
+            ];
     }
 
     protected function viewForm(EventBooking $record): Form
-{
-    return $this->form($record);
-}
+    {
+        return $this->form($record);
+    }
 
 
     // public static function getInfolist() : array {

@@ -18,13 +18,14 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property int|null $user_id
- * @property-read mixed $attendee_count
+ * @property int $attendee_count
  * @property-read \App\Models\EventModel $event
  * @property-read \App\Models\PaymentOrder|null $payment_order
  * @property-read mixed $type
  * @method static \Illuminate\Database\Eloquent\Builder|EventBooking newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|EventBooking newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|EventBooking query()
+ * @method static \Illuminate\Database\Eloquent\Builder|EventBooking whereAttendeeCount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EventBooking whereAttendees($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EventBooking whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EventBooking whereEventId($value)
@@ -70,20 +71,13 @@ class EventBooking extends Model
 
     public function payment_order(): HasOne
     {
-        return $this->hasOne(PaymentOrder::class)->latestOfMany('created_at');
-    }
-
-    protected function attendeeCount(): Attribute
-    {
-        return Attribute::make(
-            get: fn($value) => count((array) $this->attendees)
-        );
+        return $this->hasOne(PaymentOrder::class, 'booking_id')->latestOfMany('created_at');
     }
 
     protected function type(): Attribute
     {
         return Attribute::make(
-            get: fn($value) => $this->attendee_count > 0 ? 'Single' : 'Group'
+            get: fn($value) => $this->attendee_count > 1 ? 'Group' : 'Single',
         );
     }
 
