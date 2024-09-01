@@ -5,6 +5,7 @@ use App\Models\EventBooking;
 use App\Models\EventModel;
 
 
+use App\Rules\MembershipRegistrationNumber;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Validate;
@@ -50,7 +51,12 @@ class CreateEventBooking extends Component
     #[Validate('required|string|max:100')]
     public $nationality = '';
 
-    #[Validate('required_if:registrationStatus,registered|string|max:100')]
+    #[Validate([
+        'required_if:registrationStatus,registered',
+        'string',
+        'max:100',
+        new MembershipRegistrationNumber,
+    ])]
     public $reg_number = '';
 
     public $parentId = null;
