@@ -1,7 +1,7 @@
 <x-mail::message>
 # Hi there,
 
-You have made a booking for the {{ $eventTitle }} event, and are supposed to pay {{ $totalPrice }}. Your control
+You have made a booking for the {{ $description }}, and are supposed to pay {{ $totalPrice }}. Your control
 number is {{ $controlNumber }}, please pay before {{ $expiresOn }}.
 
 To download the your invoice, click the button below,

@@ -30,24 +30,19 @@ class PaymentOrderObserver
 
     function generateInvoiceDocument(PaymentOrder $paymentOrder)
     {
-        $seller = new Party([
-            'name' => 'ICT Comission',
-            'phone' => '+255 612 345 678',
-        ]);
+        $seller = new Party(config('app.business'));
 
-        $emails = [];
-        foreach ($paymentOrder->booking->getAttendees() as $attendee) {
-            $emails[] = $attendee['email'];
-        }
+        $firstCustomer = $paymentOrder->customer_details->first();
+        $emails = $paymentOrder->customer_details->map(fn($value) => $value['email']);
 
         $customer = new Buyer([
-            'name' => $paymentOrder->booking->getAttendees()[0]['name'],
+            'name' => $firstCustomer['name'],
             'custom_fields' => [
-                'email' => $emails[0],
+                'email' => $firstCustomer['email'],
             ],
         ]);
 
-        $item = InvoiceItem::make($paymentOrder->description)->pricePerUnit($paymentOrder->booking->total_amount);
+        $item = InvoiceItem::make($paymentOrder->description)->pricePerUnit($paymentOrder->total_amount);
         $invoice = Invoice::make($paymentOrder->control_no)
             ->seller($seller)
             ->buyer($customer)
@@ -65,7 +60,7 @@ class PaymentOrderObserver
 
         foreach ($emails as $recepient) {
             Mail::to($recepient)
-            ->send(new PaymentOrderInvoice($paymentOrder));
+                ->send(new PaymentOrderInvoice($paymentOrder));
         }
     }
     /**

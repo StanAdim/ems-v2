@@ -18,7 +18,7 @@
             </div>
             <div class="flex gap-5 border-gray-200 p-4">
                 <div class="mx-auto grid">
-                    <x-primary-link-button href="{{ route('event.about', ['event' => $booking->event]) }}"
+                    <x-primary-link-button href="{{ route('event.about', ['event' => $this->booking->event]) }}"
                         class="!py-2 !text-sm !font-normal">
                         Okay
                     </x-primary-link-button>
@@ -38,15 +38,15 @@
                         </tr>
                         <tr>
                             <td class="font-medium">Event:</td>
-                            <td class="text-end">{{ $booking->event->title }}</td>
+                            <td class="text-end">{{ $this->booking->event->title }}</td>
                         </tr>
                         <tr>
                             <td class="font-medium">Ticket type:</td>
-                            <td class="text-end">{{ $booking_type }}</td>
+                            <td class="text-end">{{ $this->booking_type }}</td>
                         </tr>
                         <tr>
                             <td class="font-medium">Total</td>
-                            <td class="text-end">{{ Number::format($booking->total_amount) }}</td>
+                            <td class="text-end">{{ Number::format($this->booking->total_amount) }}</td>
                         </tr>
                     </table>
                 </div>
@@ -151,7 +151,7 @@
                             <x-primary-button wire:loading.attr="disabled" wire:loading.class="animate-pulse"
                                 data-modal-target="gepg-modal" data-modal-toggle="gepg-modal"
                                 class="!py-2 !text-sm !font-normal">
-                                Pay Now ({{ Number::format($booking->total_amount) }})
+                                Pay Now ({{ Number::format($this->booking->total_amount) }})
                             </x-primary-button>
                         </div>
                     </div>

@@ -187,4 +187,10 @@ return [
         // 'Example' => App\Facades\Example::class,
     ])->toArray(),
 
+    'business' => [
+        'name' => env('BUSINESS_NAME'),
+        'phone' => env('BUSINESS_PHONE'),
+        'address' => env('BUSINESS_ADDRESS'),
+    ],
+
 ];

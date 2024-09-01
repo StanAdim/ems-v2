@@ -5,15 +5,14 @@ namespace App\Models;
 use App\Enums\PaymentOrderStatus;
 use App\Observers\PaymentOrderObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Casts\AsCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * 
  *
  * @property int $id
- * @property int $booking_id
  * @property string $description
  * @property string|null $control_no
  * @property float $total_amount
@@ -23,13 +22,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $expires_on
  * @property string|null $invoice_url
- * @property-read \App\Models\EventBooking $booking
+ * @property \Illuminate\Support\Collection|null $customer_details
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentOrder newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentOrder newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentOrder query()
- * @method static \Illuminate\Database\Eloquent\Builder|PaymentOrder whereBookingId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentOrder whereControlNo($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentOrder whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PaymentOrder whereCustomerDetails($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentOrder whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentOrder whereExpiresOn($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentOrder whereId($value)
@@ -49,19 +48,16 @@ class PaymentOrder extends Model
     protected $casts = [
         'expires_on' => 'datetime',
         'status' => PaymentOrderStatus::class,
+        'customer_details' => AsCollection::class,
+        'total_amount' => 'float',
     ];
 
     protected $fillable = [
-        'booking_id',
         'description',
         'control_no',
         'total_amount',
         'expires_on',
+        'customer_details',
     ];
-
-    public function booking(): BelongsTo
-    {
-        return $this->belongsTo(EventBooking::class);
-    }
 
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\AsCollection;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -12,13 +13,14 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * 
  *
  * @property int $id
- * @property array $attendees
+ * @property \Illuminate\Support\Collection $attendees
  * @property int $event_id
  * @property float $total_amount
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property int|null $user_id
  * @property int $attendee_count
+ * @property int|null $payment_order_id
  * @property-read \App\Models\EventModel $event
  * @property-read \App\Models\PaymentOrder|null $payment_order
  * @property-read mixed $type
@@ -30,6 +32,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static \Illuminate\Database\Eloquent\Builder|EventBooking whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EventBooking whereEventId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EventBooking whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|EventBooking wherePaymentOrderId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EventBooking whereTotalAmount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EventBooking whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EventBooking whereUserId($value)
@@ -40,7 +43,8 @@ class EventBooking extends Model
     use HasFactory;
 
     protected $casts = [
-        'attendees' => 'array',
+        'attendees' => AsCollection::class,
+        'total_amount' => 'float',
     ];
 
     /**
@@ -57,6 +61,7 @@ class EventBooking extends Model
         'payment_id',
         'created_at',
         'updated_at',
+        'attendee_count',
     ];
 
     /**
@@ -69,9 +74,9 @@ class EventBooking extends Model
         return $this->belongsTo(EventModel::class);
     }
 
-    public function payment_order(): HasOne
+    public function payment_order(): BelongsTo
     {
-        return $this->hasOne(PaymentOrder::class, 'booking_id')->latestOfMany('created_at');
+        return $this->belongsTo(PaymentOrder::class);
     }
 
     protected function type(): Attribute
@@ -79,14 +84,5 @@ class EventBooking extends Model
         return Attribute::make(
             get: fn($value) => $this->attendee_count > 1 ? 'Group' : 'Single',
         );
-    }
-
-    public function getAttendees(): array
-    {
-        if (is_array($this->attendees)) {
-            return $this->attendees;
-        }
-
-        return json_decode($this->attendees, true);
     }
 }

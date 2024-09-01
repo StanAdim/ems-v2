@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\PaymentOrderStatus;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\EventBookingController;
 use App\Http\Controllers\EventController;
@@ -42,9 +43,13 @@ Route::controller(EventController::class)->prefix('event')->name('event.')->grou
 });
 
 Route::get('/dashboard', function () {
+    /** @var \App\Models\User $user */
     $user = auth()->user();
     $myBookingsCount = $user->bookings()->count();
-    $pendingPaymentsCount = $user->payment_orders()->count();
+    $pendingPaymentsCount = $user->bookings->reduce(function (?int $carry, EventBooking $booking) {
+        $carry += ($booking->payment_order?->status == PaymentOrderStatus::Pending) ? 1 : 0;
+        return $carry;
+    });
     $activeEvents = EventModel::count();
 
     return view('dashboard', [

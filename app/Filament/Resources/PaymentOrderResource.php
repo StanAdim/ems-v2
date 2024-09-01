@@ -28,9 +28,6 @@ class PaymentOrderResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('booking_id')
-                    ->required()
-                    ->numeric(),
                 Forms\Components\Textarea::make('description')
                     ->required()
                     ->columnSpanFull(),
@@ -47,13 +44,14 @@ class PaymentOrderResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('booking_id')
-                    ->numeric()
-                    ->sortable(),
+                Tables\Columns\TextColumn::make('description')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('control_no')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('total_amount')
                     ->numeric()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('status')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()

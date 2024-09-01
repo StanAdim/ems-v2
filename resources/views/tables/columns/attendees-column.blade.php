@@ -3,15 +3,12 @@
         $state = $getState();
     @endphp
 
-    @if (is_array($state))
-        @foreach ($state as $item)
+    @if ($state)
         <ul class="list-disc">
-            <li>{{ $item['name'] ?? 'No Name' }}</li>
-            <li>{{ $item['phone_number'] ?? 'No Phone' }}</li>
-            <li>{{ $item['email'] ?? 'No Email' }}</li>
+            @foreach ($state as $item)
+                <li>{{ $item['name'] ?? '' }} ({{ $item['phone_number'] ?? '' }} {{ $item['email'] ?? '' }})</li>
+            @endforeach
         </ul>
-
-        @endforeach
     @else
         No attendees available.
     @endif

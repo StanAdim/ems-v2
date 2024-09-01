@@ -1,5 +1,5 @@
 <div class="w-100 md:h-15 flex justify-between bg-primary py-4 sm:h-auto">
-    <p class="mx-1 text-center align-middle font-medium text-white text-xs md:text-sm lg:mx-auto">
+    <p class="mx-1 text-center align-middle text-xs font-medium text-white md:text-sm lg:mx-auto">
 
         The United Republic of Tanzania | Ministry of Information,
         Communication and Information Technology | Information and Communication Technologies Commission
@@ -27,13 +27,13 @@
     </div>
 </div>
 
-<div class="flex flex-wrap px-3 bg-[#0b1224] py-4 align-baseline">
+<div class="flex flex-wrap bg-[#0b1224] px-3 py-4 align-baseline">
     <div class="container mx-auto grid grid-cols-1 md:grid-cols-2">
         <a href="/">
-            <div class="flex justify-center divide-gray-400 divide-x-2 md:justify-start">
+            <div class="flex justify-center divide-x-2 divide-gray-400 md:justify-start">
                 <img width="74px" class="me-2" src="{{ Vite::asset('resources/images/white_logo.png') }}"
                     alt="" srcset="">
-                <p class="place-content-center mt-2 px-3 text-sm sm:text-lg font-medium text-secondary lg:text-2xl">
+                <p class="mt-2 place-content-center px-3 text-sm font-medium text-secondary sm:text-lg lg:text-2xl">
                     Events Management
                     System
                 </p>
@@ -41,10 +41,10 @@
         </a>
 
         <div
-            class="text-nowrap inline-flex justify-center mt-2 place-content-center gap-2 py-2 align-middle md:gap-4 lg:justify-end">
+            class="text-nowrap mt-2 inline-flex place-content-center justify-center gap-2 py-2 align-middle md:gap-4 lg:justify-end">
             @foreach ($latestEvents as $latestEvent)
                 <a href="{{ $latestEvent['url'] }}"
-                    class="{{ $event && $event?->id == $latestEvent['id'] ? 'text-secondary' : 'text-white' }} my-auto text-xs sm:text-base underline lg:text-xl">
+                    class="{{ $event && $event?->id == $latestEvent['id'] ? 'text-secondary' : 'text-white' }} my-auto text-xs underline sm:text-base lg:text-xl">
                     {{ $latestEvent['title'] }}
                 </a>
             @endforeach
@@ -54,10 +54,10 @@
 </div>
 
 <hr class="bg-white text-white">
-<div class="hidden bg-brand py-4 px-3 text-white md:block">
+<div class="hidden bg-brand px-3 py-4 text-white md:block">
     <div class="container mx-auto grid grid-cols-1 gap-4 xl:grid-cols-5">
         <div class="flex gap-2 xl:col-span-2">
-            <p class="text-sm xl:w-1/2 font-semibold lg:text-3xl">
+            <p class="text-sm font-semibold lg:text-3xl xl:w-1/2">
                 {{ $event->title }}
             </p>
             <p class="grid grid-cols-1 place-content-center text-4xl font-semibold text-primary">
@@ -110,11 +110,16 @@
                     Now</button></a>
         </div> --}}
         <div class="ml-auto place-content-center justify-end">
-            <button data-modal-target="register-event-modal" data-modal-toggle="register-event-modal"
-                class="ml-auto rounded-lg bg-secondary px-5 py-3 font-medium text-black ring-1 ring-secondary">Attend
-                this event</button>
-            <a href="{{ route('login') }}"><button
-                    class="ml-2 rounded-lg px-5 py-3 font-medium text-white ring-1 ring-white">Login</button></a>
+            <div class="flex">
+                <button data-modal-target="register-event-modal" data-modal-toggle="register-event-modal"
+                    class="ml-auto rounded-lg bg-secondary px-5 py-3 font-medium text-black ring-1 ring-secondary">Attend
+                    this event</button>
+                <a class="ml-2 rounded-lg px-5 py-3 font-medium text-white ring-1 ring-white"
+                    href="{{ Auth::user() ? route('dashboard') : route('login') }}">
+                    {{ Auth::user() ? 'Dashboard' : 'Login' }}
+                </a>
+            </div>
+
         </div>
     </div>
 </div>
@@ -122,11 +127,12 @@
 
 <nav class="mx-auto bg-brand">
     <div class="flex justify-between">
-        <div class="md:hidden ms-5 place-content-center text-white">
-            <a href="{{ route('event.index', ['event' => $event]) }}" class="{{ Route::is('event.index') ? 'text-secondary' : 'text-white ' }}hover:underline">Home</a>
+        <div class="ms-5 place-content-center text-white md:hidden">
+            <a href="{{ route('event.index', ['event' => $event]) }}"
+                class="{{ Route::is('event.index') ? 'text-secondary' : 'text-white ' }}hover:underline">Home</a>
         </div>
         <button data-collapse-toggle="navbar-default" type="button"
-            class="inline-flex h-10 w-10 items-center justify-center me-2 rounded-lg p-2 text-sm text-white md:hidden"
+            class="me-2 inline-flex h-10 w-10 items-center justify-center rounded-lg p-2 text-sm text-white md:hidden"
             aria-controls="navbar-default" aria-expanded="false">
             <span class="sr-only">Open main menu</span>
             <svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -140,7 +146,7 @@
     <div class="container mx-auto hidden w-full px-4 py-3 md:block md:w-auto" id="navbar-default">
         <div class="flex md:place-content-center md:text-center">
             <ul
-                class="mt-0 grid grid-cols-1 space-x-8 overflow-hidden text-sm  lg:text-lg font-normal rtl:space-x-reverse md:flex">
+                class="mt-0 grid grid-cols-1 space-x-8 overflow-hidden text-sm font-normal rtl:space-x-reverse md:flex lg:text-lg">
                 <li>
                     <a href="{{ route('event.about', ['event' => $event]) }}"
                         class="{{ Route::is('event.about') ? 'text-secondary' : 'text-white ' }} ms-8 hover:underline">About</a>

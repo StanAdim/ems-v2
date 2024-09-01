@@ -29,7 +29,7 @@ class PaymentOrderInvoice extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Payment Order Invoice for ' . $this->paymentOrder->booking->event->title,
+            subject: 'Payment Order Invoice for ' . $this->paymentOrder->description,
         );
     }
 
@@ -41,7 +41,7 @@ class PaymentOrderInvoice extends Mailable implements ShouldQueue
         return new Content(
             markdown: 'mail.payment-order.invoice',
             with: [
-                'eventTitle' => $this->paymentOrder->booking->event->title,
+                'description' => $this->paymentOrder->description,
                 'controlNumber' => $this->paymentOrder->control_no,
                 'expiresOn' => $this->paymentOrder->expires_on->format('F j, Y'),
                 'attachementLink' => $this->paymentOrder->invoice_url,

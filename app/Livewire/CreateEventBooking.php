@@ -5,14 +5,18 @@ use App\Models\EventBooking;
 use App\Models\EventModel;
 
 
+use Livewire\Attributes\Locked;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 
 class CreateEventBooking extends Component
 {
+    #[Locked]
     public EventModel $event;
+    #[Locked]
     public EventBooking $booking;
+    #[Locked]
     public $singleTicketPrice = 0;
 
     #[Validate('required|numeric')]
@@ -106,12 +110,11 @@ class CreateEventBooking extends Component
         $validatedData = $this->validate();
 
         $this->booking = EventBooking::create([
-            'attendees' => json_encode($validatedData['attendees']),
+            'attendees' => $validatedData['attendees'],
             'user_id' => auth()->id(),
             'event_id' => $this->event->id,
             'total_amount' => $validatedData['totalPrice'],
-            'attendees_count' => count($validatedData['attendees']),
-            // 'payment_id' => 1, // Handle payment logic here if applicable
+            'attendee_count' => count($validatedData['attendees']),
         ]);
     }
 }

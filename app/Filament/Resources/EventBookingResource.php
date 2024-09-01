@@ -50,8 +50,7 @@ class EventBookingResource extends Resource
                 Tables\Columns\TextColumn::make('event.title')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('attendee_count')
-                    ->numeric()
+                Tables\Columns\TextColumn::make('type')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('total_amount')
                     ->money('TSHS')
