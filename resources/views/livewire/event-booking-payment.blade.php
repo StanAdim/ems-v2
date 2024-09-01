@@ -9,41 +9,19 @@
             <!-- Modal body -->
             <div class="flex gap-5 border-gray-200 p-4">
                 <div class="mx-auto grid">
-                    <p class="text-md mx-auto place-self-center pt-2 font-semibold">Your control number is:</p>
-                </div>
-            </div>
-            <div class="flex gap-5 border-gray-200 p-4">
-                <div class="mx-auto grid">
-                    <div class="text-3xl font-extrabold text-primary !no-underline md:text-5xl"
+                    <div class="text-center font-bold text-primary !no-underline"
                         style="text-decoration: none !important;">
-                        {{ $payment_order->control_no }}
+                        Your booking has been received, you should receive a control number in your email soon. Thank
+                        you!
                     </div>
                 </div>
             </div>
             <div class="flex gap-5 border-gray-200 p-4">
                 <div class="mx-auto grid">
-                    <p class="text-center text-lg text-gray-400">"Payments can be made anytime before
-                        {{ $payment_order->expires_on->format('F j, Y') }},
-                        <br>via mobile or bank transfer."
-                    </p>
-                </div>
-            </div>
-            <div class="flex gap-5 border-gray-200 p-4">
-                <div class="mx-auto grid">
-                    <img class="mx-auto" src="{{ Vite::asset('resources/images/mobile-money.svg') }}" alt="">
-                </div>
-            </div>
-            <div class="flex gap-5 border-gray-200 p-4">
-                <div class="mx-auto grid">
-                    <x-primary-link-button href="{{ $payment_order->invoice_url }}" class="!py-2 !text-sm !font-normal">
-                        Download Invoice
+                    <x-primary-link-button href="{{ route('event.about', ['event' => $booking->event]) }}"
+                        class="!py-2 !text-sm !font-normal">
+                        Okay
                     </x-primary-link-button>
-                </div>
-            </div>
-            <div class="flex gap-5 rounded-b border-gray-200 p-4 dark:border-gray-600">
-                <div class="mx-auto grid">
-                    <p class="mb-4 text-sm">Having any trouble?<a class="ml-1 text-primary underline" href="#">Ask
-                            help</a> </p>
                 </div>
             </div>
         </div>
@@ -170,7 +148,8 @@
                                 class="border !border-gray-500 bg-white !py-2 !text-sm !font-normal !text-gray-500">
                                 Cancel
                             </x-primary-button>
-                            <x-primary-button data-modal-target="gepg-modal" data-modal-toggle="gepg-modal"
+                            <x-primary-button wire:loading.attr="disabled" wire:loading.class="animate-pulse"
+                                data-modal-target="gepg-modal" data-modal-toggle="gepg-modal"
                                 class="!py-2 !text-sm !font-normal">
                                 Pay Now ({{ Number::format($booking->total_amount) }})
                             </x-primary-button>

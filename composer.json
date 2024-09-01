@@ -21,6 +21,7 @@
         "laravel/tinker": "^2.8",
         "laraveldaily/laravel-invoices": "^4.0",
         "spatie/laravel-medialibrary": "^11.8",
+        "tijsverkoyen/css-to-inline-styles": "^2.2",
         "tomatophp/filament-icons": "^1.1",
         "wiebenieuwenhuis/filament-code-editor": "^1.0"
     },

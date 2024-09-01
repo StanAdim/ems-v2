@@ -2,12 +2,14 @@
 
 namespace App\Observers;
 
+use App\Mail\PaymentOrderInvoice;
 use App\Models\PaymentOrder;
 use Carbon\Carbon;
 use LaravelDaily\Invoices\Classes\Buyer;
 use LaravelDaily\Invoices\Classes\InvoiceItem;
 use LaravelDaily\Invoices\Classes\Party;
 use LaravelDaily\Invoices\Invoice;
+use Mail;
 
 class PaymentOrderObserver
 {
@@ -33,10 +35,15 @@ class PaymentOrderObserver
             'phone' => '+255 612 345 678',
         ]);
 
+        $emails = [];
+        foreach ($paymentOrder->booking->getAttendees() as $attendee) {
+            $emails[] = $attendee['email'];
+        }
+
         $customer = new Buyer([
             'name' => $paymentOrder->booking->getAttendees()[0]['name'],
             'custom_fields' => [
-                'email' => $paymentOrder->booking->getAttendees()[0]['email'],
+                'email' => $emails[0],
             ],
         ]);
 
@@ -55,6 +62,11 @@ class PaymentOrderObserver
 
         $paymentOrder->invoice_url = $invoice->url();
         $paymentOrder->save();
+
+        foreach ($emails as $recepient) {
+            Mail::to($recepient)
+            ->send(new PaymentOrderInvoice($paymentOrder));
+        }
     }
     /**
      * Handle the PaymentOrder "created" event.
