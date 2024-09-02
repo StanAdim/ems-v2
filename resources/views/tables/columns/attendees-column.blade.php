@@ -6,7 +6,7 @@
     @if ($state)
         <ul class="list-disc">
             @foreach ($state as $item)
-                <li>{{ $item['name'] ?? '' }} ({{ $item['phone_number'] ?? '' }} {{ $item['email'] ?? '' }})</li>
+                <li>{{ $item['name'] ?? '' }} {{-- ({{ $item['phone_number'] ?? '' }} {{ $item['email'] ?? '' }}) --}}</li>
             @endforeach
         </ul>
     @else

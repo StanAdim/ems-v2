@@ -12,6 +12,7 @@ use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\ViewColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -52,6 +53,7 @@ class EventBookingResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('type')
                     ->sortable(),
+                ViewColumn::make('attendees')->view('tables.columns.attendees-column'),
                 Tables\Columns\TextColumn::make('total_amount')
                     ->money('TSHS')
                     ->sortable(),

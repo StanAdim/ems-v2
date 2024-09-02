@@ -113,7 +113,7 @@
                     <div class="">
                         <label for="reg-number" class="mb-1 block text-sm font-normal text-gray-500">Registration
                             Number</label>
-                        <input type="text" placeholder="1274793-123" id="reg-number" name="reg-number"
+                        <input type="text" placeholder="P1234-ABC or P1234ABC" id="reg-number" name="reg-number"
                             wire:model='reg_number'
                             class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 placeholder-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:border-blue-500 dark:focus:ring-blue-500">
                         @error('reg_number')

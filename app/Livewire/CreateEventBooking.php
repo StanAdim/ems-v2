@@ -55,8 +55,12 @@ class CreateEventBooking extends Component
         'required_if:registrationStatus,registered',
         'string',
         'max:100',
+        'regex:/[A-Z]\d{4}-?[A-Z]{3,4}/',
+        'uppercase',
         new MembershipRegistrationNumber,
-    ])]
+    ],
+        'Registration Number'
+    )]
     public $reg_number = '';
 
     public $parentId = null;
