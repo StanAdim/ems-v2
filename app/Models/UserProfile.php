@@ -27,9 +27,9 @@ use Spatie\Permission\Traits\HasRoles;
  * @property string|null $company_registration_number
  * @property string|null $vat_number
  * @property int $can_receive_notification
+ * @property ProfileType $type
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property AsEnumCollection $type
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Permission\Models\Permission> $permissions
  * @property-read int|null $permissions_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Permission\Models\Role> $roles
@@ -77,7 +77,8 @@ class UserProfile extends Model
         'position',
         'nationality',
         'address',
-        'can_receive_notification'
+        'can_receive_notification',
+        'type',
     ];
 
     /**
@@ -93,7 +94,7 @@ class UserProfile extends Model
     public function guardName() { return ['web']; }
 
     protected $casts = [
-        'type' => AsEnumCollection::class . ':' . ProfileType::class,
+        'type' => ProfileType::class,
         'address' => 'json',
     ];
 

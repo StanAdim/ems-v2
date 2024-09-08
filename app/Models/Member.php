@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- *
+ * 
  *
  * @property int $id
  * @property string $registered_on
@@ -16,8 +16,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $employer
  * @property string $professional_category
  * @property string|null $area_of_specialization
- * @property string $email (DC2Type:json)
- * @property string $phone_number (DC2Type:json)
+ * @property \Illuminate\Support\Collection $email (DC2Type:json)
+ * @property \Illuminate\Support\Collection $phone_number (DC2Type:json)
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @method static \Illuminate\Database\Eloquent\Builder|Member newModelQuery()

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Contracts\Billable;
 use App\Enums\PaymentOrderStatus;
 use App\Observers\PaymentOrderObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
@@ -59,5 +60,23 @@ class PaymentOrder extends Model
         'expires_on',
         'customer_details',
     ];
+
+    public static function make(Billable $billable, string $phoneNumber): self
+    {
+        $payment_order = PaymentOrder::create([
+            'description' => $billable->description(),
+            'total_amount' => $billable->amount(),
+            'phone_number' => $phoneNumber,
+            'customer_details' => $billable->customerDetails(),
+        ]);
+
+        $billable->updateWithPaymentOrder($payment_order);
+        return $payment_order;
+    }
+
+    public function isPaid(): bool
+    {
+        return $this->status === PaymentOrderStatus::Paid;
+    }
 
 }

@@ -90,6 +90,32 @@ class EventModelResource extends Resource
                         Tab::make('Banners Configuration')->schema([
                             SpatieMediaLibraryFileUpload::make('main_banner')->collection(EventModel::MEDIA_COLLECTION_MAIN_BANNER),
                             SpatieMediaLibraryFileUpload::make('participate_banner')->collection(EventModel::MEDIA_COLLECTION_PARTICIPATE_BANNER),
+                        ]),
+                        Tab::make('Exhibition Configuration')->schema([
+                            SpatieMediaLibraryFileUpload::make('exhibition_layout_plan')->collection(EventModel::MEDIA_COLLECTION_EXHIBITION_LAYOUT_PLAN),
+                            Repeater::make('exhibition_booths')
+                                ->schema([
+                                    TextInput::make('name')
+                                        ->label('Booth Name')
+                                        ->columnSpan(3)
+                                        ->required()
+                                        ->distinct(),
+                                    TextInput::make('size')
+                                        ->label('Booth Size')
+                                        ->columnSpan(3)
+                                        ->required(),
+                                    TextInput::make('price')
+                                        ->label('Booth Price')
+                                        ->numeric()
+                                        ->mask(RawJs::make('$money($input)'))
+                                        ->stripCharacters(',')
+                                        ->columnSpan(6)
+                                        ->required(),
+                                ])
+                                ->cloneable()
+                                ->label('Available Booths')
+                                ->columns(12)
+                                ->minItems(3),
                         ])
                     ]),
             ])->columns(1);

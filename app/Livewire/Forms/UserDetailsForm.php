@@ -98,7 +98,7 @@ class UserDetailsForm extends Form
                         'nationality' => $this->nationality,
                         'address' => $address_json,
                         'can_receive_notification' => true,
-
+                        'type' => $this->type,
                     ]
                 );
             }

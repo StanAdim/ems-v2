@@ -31,8 +31,6 @@ Route::get('', function () {
     return redirect(route('login'));
 })->name('site_index');
 
-Route::post('/event-bookings', [EventBookingController::class, 'store'])->name('event-bookings.store');
-
 Route::controller(EventController::class)->prefix('event')->name('event.')->group(function () {
     Route::get('{event?}/', 'index')->name('index');
     Route::get('{event}/participants', 'participant')->name('participant');
@@ -42,23 +40,6 @@ Route::controller(EventController::class)->prefix('event')->name('event.')->grou
 
 });
 
-Route::get('/dashboard', function () {
-    /** @var \App\Models\User $user */
-    $user = auth()->user();
-    $myBookingsCount = $user->bookings()->count();
-    $pendingPaymentsCount = $user->bookings->reduce(function (?int $carry, EventBooking $booking) {
-        $carry += ($booking->payment_order?->status == PaymentOrderStatus::Pending) ? 1 : 0;
-        return $carry;
-    });
-    $activeEvents = EventModel::count();
-
-    return view('dashboard', [
-        'myBookingCount' => $myBookingsCount,
-        'pendingPaymentsCount' => $pendingPaymentsCount,
-        'activeEvents' => $activeEvents,
-    ]);
-})->middleware(['auth', 'verified'])->name('dashboard');
-
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -66,6 +47,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::group(['middleware' => ['auth']], function () {
+    Route::get('/dashboard', [BookingController::class, 'dashboard'])->name('dashboard');
     Route::get('/event-booking', [BookingController::class, 'event_booking'])->name('event-booking');
     Route::get('/my-booking', [BookingController::class, 'my_booking'])->name('my-booking');
     Route::get('/individual-booking', [BookingController::class, 'individual_booking'])->name('individual-booking');

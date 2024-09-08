@@ -18,8 +18,7 @@
             </div>
             <div class="flex gap-5 border-gray-200 p-4">
                 <div class="mx-auto grid">
-                    <x-primary-link-button href="{{ route('event.about', ['event' => $this->booking->event]) }}"
-                        class="!py-2 !text-sm !font-normal">
+                    <x-primary-link-button href="{{ route('event.index') }}" class="!py-2 !text-sm !font-normal">
                         Okay
                     </x-primary-link-button>
                 </div>
@@ -32,21 +31,15 @@
                     class="mx-5 grid grid-cols-1 place-content-between items-end rounded-b border-y border-gray-200 p-4 dark:border-gray-600 md:p-5">
 
                     <table class="table w-full">
-                        <tr>
-                            <td class="font-medium">Ticket Number</td>
-                            <td class="text-end">81845532</td>
-                        </tr>
-                        <tr>
-                            <td class="font-medium">Event:</td>
-                            <td class="text-end">{{ $this->booking->event->title }}</td>
-                        </tr>
-                        <tr>
-                            <td class="font-medium">Ticket type:</td>
-                            <td class="text-end">{{ $this->booking_type }}</td>
-                        </tr>
+                        @foreach ($billable->descriptionLines() as $description)
+                            <tr>
+                                <td class="font-medium">{{ $description[0] }}</td>
+                                <td class="text-end">{{ $description[1] ?? '' }}</td>
+                            </tr>
+                        @endforeach
                         <tr>
                             <td class="font-medium">Total</td>
-                            <td class="text-end">{{ Number::format($this->booking->total_amount) }}</td>
+                            <td class="text-end">{{ Number::format($billable->amount()) }}</td>
                         </tr>
                     </table>
                 </div>
@@ -151,7 +144,7 @@
                             <x-primary-button wire:loading.attr="disabled" wire:loading.class="animate-pulse"
                                 data-modal-target="gepg-modal" data-modal-toggle="gepg-modal"
                                 class="!py-2 !text-sm !font-normal">
-                                Pay Now ({{ Number::format($this->booking->total_amount) }})
+                                Pay Now ({{ Number::format($billable->amount()) }})
                             </x-primary-button>
                         </div>
                     </div>

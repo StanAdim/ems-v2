@@ -2,12 +2,48 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\PaymentOrderStatus;
 use App\Models\EventModel;
 use Illuminate\View\View;
 
 class BookingController extends Controller
 {
     protected $layout = 'layouts.app';
+
+    public function dashboard(): View
+    {
+        /** @var \App\Models\User $user */
+        $user = auth()->user();
+        $myBookingsCount = $user->bookings()->count();
+        $myExhibitionsCount = $user->exhibitions()->count();
+
+        $payableModel = $user->canExhibit() ? $user->exhibitions : $user->bookings;
+        $pendingPaymentsCount = $payableModel->reduce(function (?int $carry, $p) {
+            $carry += ($p->payment_order?->status == PaymentOrderStatus::Pending) ? 1 : 0;
+            return $carry;
+        });
+        $activeEvents = EventModel::count();
+
+        $upcomingEvents = EventModel::where('endsOn', '>', now())->get();
+
+        return view('dashboard', [
+            'myBookingCount' => $myBookingsCount,
+            'myExhibitionsCount' => $myExhibitionsCount,
+            'pendingPaymentsCount' => $pendingPaymentsCount ?? 0,
+            'activeEvents' => $activeEvents,
+            'slot' => '',
+            'upcomingEvents' => $upcomingEvents->map(function (EventModel $event) {
+                return [
+                    'event' => $event,
+                    'title' => $event->title,
+                    'location' => $event->locationDescription,
+                    'imageUrl' => $event->getMainBannerUrl(),
+                    'model' => $event,
+                    'route' => route('event-booking', ['id' => $event->id]),
+                ];
+            })->toArray()
+        ]);
+    }
 
     public function event_booking(): View
     {
@@ -20,6 +56,7 @@ class BookingController extends Controller
                     'title' => $event->title,
                     'location' => $event->locationDescription,
                     'imageUrl' => $event->getMainBannerUrl(),
+                    'model' => $event,
                     'route' => route('event-booking', ['id' => $event->id]),
                 ];
             })->toArray()

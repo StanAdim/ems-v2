@@ -2,18 +2,20 @@
 
 namespace App\Models;
 
+use App\Contracts\Billable;
 use Illuminate\Database\Eloquent\Casts\AsCollection;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Collection;
 
 /**
  * 
  *
  * @property int $id
- * @property \Illuminate\Support\Collection $attendees
+ * @property Collection $attendees
  * @property int $event_id
  * @property float $total_amount
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -38,7 +40,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static \Illuminate\Database\Eloquent\Builder|EventBooking whereUserId($value)
  * @mixin \Eloquent
  */
-class EventBooking extends Model
+class EventBooking extends Model implements Billable
 {
     use HasFactory;
 
@@ -84,5 +86,31 @@ class EventBooking extends Model
         return Attribute::make(
             get: fn($value) => $this->attendee_count > 1 ? 'Group' : 'Single',
         );
+    }
+
+    public function descriptionLines(): array
+    {
+        return [
+            ['Ticket Number', '81845532'],
+            ['Event', $this->event->title],
+            ['Ticket Type', $this->type],
+        ];
+    }
+    public function description(): string
+    {
+        return "{$this->event->title} ({$this->type})";
+    }
+    public function amount(): float
+    {
+        return $this->total_amount;
+    }
+    public function customerDetails(): Collection
+    {
+        return $this->attendees;
+    }
+    public function updateWithPaymentOrder(PaymentOrder $paymentOrder): void
+    {
+        $this->payment_order_id = $paymentOrder->id;
+        $this->save();
     }
 }

@@ -223,7 +223,7 @@
     data-modal-backdrop="static"
     class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
     <div class="relative p-4 w-full max-w-2xl max-h-full">
-        <form action="{{ route('event-bookings.store') }}" method="POST">
+        <form method="POST">
             @csrf
             <!-- Add hidden inputs for the event ID and total amount -->
             <input type="hidden" name="event_id" value="{{ $event->id }}">

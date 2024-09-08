@@ -9,7 +9,7 @@ $title = 'Exhibition Bookings';
         <h4 class="text-3xl font-medium">My exhibition bookings list</h4>
     </div>
     <div class="">
-        @livewire('booked-events-table')
+        <livewire:list-booked-exhibitions />
     </div>
 
 

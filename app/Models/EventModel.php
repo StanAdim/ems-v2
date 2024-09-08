@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use App\Casts\BoothConfigurationCast;
 use BezhanSalleh\FilamentShield\Traits\HasPanelShield;
+use Illuminate\Database\Eloquent\Casts\AsCollection;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -34,10 +36,13 @@ use Spatie\Permission\Traits\HasRoles;
  * @property array $fees
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Collection|\App\Models\JSON\Booth[]|null $exhibition_booths
  * @property-read mixed $about_banner
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\EventBooking> $bookings
  * @property-read int|null $bookings_count
+ * @property-read mixed $booths_available
  * @property-read mixed $event_logo
+ * @property-read mixed $exhibition_layout_plan
  * @property-read mixed $main_banner
  * @property-read \Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection<int, Media> $media
  * @property-read int|null $media_count
@@ -60,6 +65,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @method static \Illuminate\Database\Eloquent\Builder|EventModel whereBannerText($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EventModel whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EventModel whereEndsOn($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|EventModel whereExhibitionBooths($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EventModel whereFees($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EventModel whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EventModel whereLayout($value)
@@ -86,6 +92,7 @@ class EventModel extends Model implements HasMedia
     const MEDIA_COLLECTION_THEME_BANNER = 'event-theme-banner';
     const MEDIA_COLLECTION_PARTICIPATE_BANNER = 'event-participate-banner';
     const MEDIA_COLLECTION_ABOUT_BANNER = 'event-about-banner';
+    const MEDIA_COLLECTION_EXHIBITION_LAYOUT_PLAN = 'exhibition-layout-plan';
 
     const FEE_REGISTERED = 'registered';
     const FEE_NON_REGISTERED = 'non_registered';
@@ -107,6 +114,7 @@ class EventModel extends Model implements HasMedia
         'whyParticipate',
         'layout',
         'fees',
+        'exhibition_booths',
     ];
 
     protected $casts = [
@@ -115,6 +123,7 @@ class EventModel extends Model implements HasMedia
         'startsOn' => 'datetime',
         'endsOn' => 'datetime',
         'fees' => 'json',
+        'exhibition_booths' => BoothConfigurationCast::class,
     ];
 
     protected $attributes = [
@@ -194,6 +203,18 @@ class EventModel extends Model implements HasMedia
         return $this->getMediaUrl($this->about_banner);
     }
 
+    public function exhibitionLayoutPlan(): Attribute
+    {
+        return Attribute::make(
+            fn($value) => $this->getMedia(self::MEDIA_COLLECTION_EXHIBITION_LAYOUT_PLAN)
+        );
+    }
+
+    function getExhibitionLayoutPlanUrl(): ?string
+    {
+        return $this->getMediaUrl($this->exhibition_layout_plan);
+    }
+
     public function registerMediaCollections(): void
     {
         $this->registerSingleFileImageCollection(self::MEDIA_COLLECTION_EVENT_LOGO);
@@ -201,6 +222,7 @@ class EventModel extends Model implements HasMedia
         $this->registerSingleFileImageCollection(self::MEDIA_COLLECTION_THEME_BANNER);
         $this->registerSingleFileImageCollection(self::MEDIA_COLLECTION_ABOUT_BANNER);
         $this->registerSingleFileImageCollection(self::MEDIA_COLLECTION_PARTICIPATE_BANNER);
+        $this->registerSingleFileImageCollection(self::MEDIA_COLLECTION_EXHIBITION_LAYOUT_PLAN);
     }
 
     private function registerSingleFileImageCollection(string $collectionName): void
@@ -253,6 +275,13 @@ class EventModel extends Model implements HasMedia
     public function questions(): HasMany
     {
         return $this->hasMany(EventConversation::class)->where('parent_conversation_id', '=', null);
+    }
+
+    protected function boothsAvailable(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => $this->exhibition_booths->where('booking_id', '==', null)
+        );
     }
 
 }

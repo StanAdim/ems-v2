@@ -14,7 +14,7 @@
             at {{ $event->locationDescription }}</p>
     </div>
     @if ($booking)
-        <livewire:event-booking-payment wire:transition.in :booking_id="$booking->id" />
+        <livewire:create-payment-order wire:transition.in :billable="$booking" />
     @else
         <form wire:submit='store' wire.transition.out>
             <div class="space-y-1 p-4 md:p-5">

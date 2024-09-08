@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Enums\ProfileType;
 use BezhanSalleh\FilamentShield\Traits\HasPanelShield;
 use Filament\Models\Contracts\FilamentUser;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -26,6 +27,8 @@ use Spatie\Permission\Traits\HasRoles;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\EventBooking> $bookings
  * @property-read int|null $bookings_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ExhibitionBooking> $exhibitions
+ * @property-read int|null $exhibitions_count
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Permission\Models\Permission> $permissions
@@ -98,6 +101,16 @@ class User extends Authenticatable implements FilamentUser
     public function bookings(): HasMany
     {
         return $this->hasMany(EventBooking::class);
+    }
+
+    public function exhibitions(): HasMany
+    {
+        return $this->hasMany(ExhibitionBooking::class);
+    }
+
+    public function canExhibit(): bool
+    {
+        return $this->profile?->type == ProfileType::Exhibitor;
     }
 
 }
