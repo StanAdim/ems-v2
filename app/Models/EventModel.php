@@ -17,7 +17,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Permission\Traits\HasRoles;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $title
@@ -137,10 +137,8 @@ class EventModel extends Model implements HasMedia
 
     public function getMediaUrl($collectionMedia): ?string
     {
-        if ($collectionMedia[0])
-            return $collectionMedia[0]->getUrl();
-
-        return null;
+        $media = $collectionMedia[0] ?? null;
+        return $media?->getUrl();
     }
 
     public function mainBanner(): Attribute
