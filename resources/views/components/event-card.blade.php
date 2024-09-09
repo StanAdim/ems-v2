@@ -14,12 +14,13 @@
 
     @if (Auth::user()->canExhibit())
         <x-primary-button data-modal-target="register-event-modal" data-modal-toggle="register-event-modal"
-            wire:loading.attr="disabled" wire:loading.class="animate-pulse" t
+            wire:loading.attr="disabled" wire:loading.class="animate-pulse"
             class="items-center rounded-md border border-transparent bg-primary px-4 py-2 text-sm font-normal tracking-widest text-white transition duration-150 ease-in-out hover:bg-brand focus:bg-brand focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 active:bg-brand">
             Exhibit
         </x-primary-button>
     @else
-        <x-primary-button wire:loading.attr="disabled" wire:loading.class="animate-pulse" t
+        <x-primary-button data-modal-target="register-event-modal" data-modal-toggle="register-event-modal"
+            wire:loading.attr="disabled" wire:loading.class="animate-pulse"
             class="items-center rounded-md border border-transparent bg-primary px-4 py-2 text-sm font-normal tracking-widest text-white transition duration-150 ease-in-out hover:bg-brand focus:bg-brand focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 active:bg-brand">
             Book
         </x-primary-button>
