@@ -128,7 +128,7 @@
                             <div class="relative w-full">
                                 <input type="text" id="phone-input"
                                     class="z-20 block w-full rounded-e-lg border border-s-0 border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:border-s-gray-700 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500"
-                                    wire:model='phone_number' placeholder="723-456-789" required />
+                                    wire:model='phone_number' x-mask="999-999-999" placeholder="723-456-789" required />
                             </div>
                         </div>
                     </form>
