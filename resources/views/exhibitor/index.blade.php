@@ -1,13 +1,13 @@
 @extends('layouts.event')
 
 @section('content')
-@use('App\Enums\ProfileType')
+    @use('App\Enums\ProfileType')
     <div x-data="{ activePage: 'exhibition' }" class="md:mx-auto">
-        <div x-show="activePage == 'login'">
-            <livewire:user-login registration_action="activePage = 'register'"/>
+        <div x-cloak x-show="activePage == 'login'">
+            <livewire:user-login registration_action="activePage = 'register'" />
         </div>
-        <div x-show="activePage == 'register'">
-            <livewire:user-registration login_action="activePage = 'login'" :type='ProfileType::Exhibitor'/>
+        <div x-cloak x-show="activePage == 'register'">
+            <livewire:user-registration login_action="activePage = 'login'" :type='ProfileType::Exhibitor' />
         </div>
         <div x-show="activePage == 'exhibition'">
             <div class="grid grid-cols-1 gap-1 bg-primary-50"
@@ -52,14 +52,14 @@
 
             <div class="container mx-auto">
                 <p class="my-8 text-center text-xl lg:py-4">
-                    TAIC 2024 will be featured by ICT products exhibition from multinationals,<br>
+                    {{ $event->linkTitle }} will be featured by ICT products exhibition from multinationals,<br>
                     institutions, innovators and local ICT based service companies.
                 </p>
             </div>
 
             <div class="container mx-auto">
                 <div class="my-20 text-center text-5xl font-light text-black">
-                    Why exhibit at TAIC?
+                    Why exhibit at {{ $event->linkTitle }}?
                 </div>
                 <div class="mx-auto grid grid-cols-1 gap-10 py-10 md:grid-cols-3">
                     <?php
@@ -67,7 +67,7 @@
                         [
                             'icon' => 'resources/images/e-why-1.svg',
                             'title' => 'Increased Visibility',
-                            'description' => 'Exhibiting at TAIC-2024 puts your brand in front of a targeted audience of ICT professionals, industry leaders, and potential clients, enhancing your visibility and reputation in the rapidly growing African digital market.',
+                            'description' => "Exhibiting at {$event->linkTitle} puts your brand in front of a targeted audience of ICT professionals, industry leaders, and potential clients, enhancing your visibility and reputation in the rapidly growing African digital market.",
                         ],
                         [
                             'icon' => 'resources/images/e-why-2.svg',

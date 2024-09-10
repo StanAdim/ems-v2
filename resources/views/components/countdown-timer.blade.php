@@ -47,7 +47,7 @@
 
 
     </template>
-    <template x-if="remainingTime <= 0">
+    <template x-if="remainingTime && remainingTime <= 0">
         <div class="overflow-clip">
             <div class="text-lg lg:text-5xl">The Event has ended!</div>
         </div>
