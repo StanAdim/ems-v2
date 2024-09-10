@@ -7,58 +7,59 @@
 @extends('layouts.event')
 
 @section('content')
-<div>
-    <!-- Nothing worth having comes easy. - Theodore Roosevelt -->
-</div>
-<div class="md:mx-auto grid grid-cols-1 gap-1 bg-primary-50" style="background-image: url({{ Vite::asset('resources/images/about-hero.svg') }});background-size:cover; background-repeat:no-repeat; background-position-x: center;
+    <div>
+        <!-- Nothing worth having comes easy. - Theodore Roosevelt -->
+    </div>
+    <div class="grid grid-cols-1 gap-1 bg-primary-50 md:mx-auto"
+        style="background-image: url({{ Vite::asset('resources/images/about-hero.svg') }});background-size:cover; background-repeat:no-repeat; background-position-x: center;
 background-position-y: center;">
-    <div class="grid grid-cols-12 text-center py-10">
-        <div class="col-span-1 place-self-center">
-            <button class="">
-                {{-- <img class="w-8 object-cover" src="{{ Vite::asset('resources/images/icons/arrow_left.svg') }}"
+        <div class="grid grid-cols-12 py-10 text-center">
+            <div class="col-span-1 place-self-center">
+                <button class="">
+                    {{-- <img class="w-8 object-cover" src="{{ Vite::asset('resources/images/icons/arrow_left.svg') }}"
                     alt="" srcset=""> --}}
-            </button>
-        </div>
+                </button>
+            </div>
 
-        <div class="col-span-10 text-left mx-1 place-content-center">
-            {{-- <img class="w-full" src="{{ Vite::asset('resources/images/events_1.png') }}" alt="" srcset=""> --}}
+            <div class="col-span-10 mx-1 place-content-center text-left">
+                {{-- <img class="w-full" src="{{ Vite::asset('resources/images/events_1.png') }}" alt="" srcset=""> --}}
 
-            <div class="lg:my-40 lg:ml-16 lg:w-[35%]">
-                <h1 class="text-3xl md:text-5xl font-black text-white mt-20">
-                    {!! $event->theme !!}
-                </h1>
-                <div class="mt-5 mb-20 mx-1">
-                    <div class="place-content-center inline-flex gap-8 ml-auto justify-end">
-                        <a href="{{route('register')}}">
-                            <button class="ml-auto px-5 py-3 font-medium bg-secondary rounded-lg text-black">Register
+                <div class="lg:my-40 lg:ml-16 lg:w-[35%]">
+                    <h1 class="mt-20 text-3xl font-black text-white md:text-5xl">
+                        {!! $event->theme !!}
+                    </h1>
+                    <div class="mx-1 mb-20 mt-5">
+                        <div class="ml-auto inline-flex place-content-center justify-end gap-8">
+                            <button data-modal-target="register-event-modal" data-modal-toggle="register-event-modal"
+                                class="ml-auto rounded-lg bg-secondary px-5 py-3 font-medium text-black">Register
                                 Now</button>
-                        </a>
-                        <button class="ml-auto px-5 py-3 font-medium ring-1 ring-white rounded-lg text-white">More
-                            Details</button>
+                            <a href="{{ route('event.index', ['event' => $event]) }}"
+                                class="ml-auto rounded-lg px-5 py-3 font-medium text-white ring-1 ring-white">More
+                                Details</a>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="col-span-1 mx-1 place-self-center">
-            <button class="">
-                {{-- <img class="w-10 object-cover" src="{{ Vite::asset('resources/images/icons/arrow_right.svg') }}"
+            <div class="col-span-1 mx-1 place-self-center">
+                <button class="">
+                    {{-- <img class="w-10 object-cover" src="{{ Vite::asset('resources/images/icons/arrow_right.svg') }}"
                     alt="" srcset=""> --}}
-            </button>
+                </button>
+            </div>
         </div>
     </div>
-</div>
 
-<div class="bg-brand">
-    <div class="container mx-auto py-10 grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-0">
-        <div class="md:h-[40rem] mx-2 ">
-            <p class="text-7xl ml-10 font-extralight text-white">
-                {!! $event->aboutTitle !!}
-            </p>
-        </div>
-        <div class="m-4 place-content-evenly text-white text-lg space-y-5 text-justify">
-            {!! $event->aboutDescription !!}
+    <div class="bg-brand">
+        <div class="container mx-auto grid grid-cols-1 gap-10 py-10 md:grid-cols-2 md:gap-0">
+            <div class="mx-2 md:h-[40rem]">
+                <p class="ml-10 text-7xl font-extralight text-white">
+                    {!! $event->aboutTitle !!}
+                </p>
+            </div>
+            <div class="m-4 place-content-evenly space-y-5 text-justify text-lg text-white">
+                {!! $event->aboutDescription !!}
+            </div>
         </div>
     </div>
-</div>
 @endsection

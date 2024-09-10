@@ -22,7 +22,7 @@ background-position-y: center;">
                 <div class="mt-5 mb-10 lg:mb-16 mx-1">
                     <div class="place-content-center inline-flex gap-5 ml-auto justify-end">
                         <button data-modal-target="register-event-modal" data-modal-toggle="register-event-modal" class="ml-auto px-2 xl:px-5 py-3  font-medium bg-secondary rounded-lg text-black">Register Now</button>
-                        <button class="ml-auto px-2 xl:px-5 py-3 font-medium border border-white rounded-lg text-white">More Details</button>
+                        <a href="{{route('event.about', ['event' => $event])}}" class="ml-auto px-2 xl:px-5 py-3 font-medium border border-white rounded-lg text-white">More Details</a>
                     </div>
                 </div>
                 <div class="w-full overflow-clip">

@@ -49,6 +49,7 @@ class EventModelResource extends Resource
                                 DateTimePicker::make('endsOn')->minutesStep(15)->seconds(false)->required(),
                             ]),
                             SpatieMediaLibraryFileUpload::make('event_logo')->collection(EventModel::MEDIA_COLLECTION_EVENT_LOGO),
+                            SpatieMediaLibraryFileUpload::make('call_for_speakers_document')->collection(EventModel::MEDIA_COLLECTION_CALL_FOR_SPEAKERS_DOCUMENT),
                             Repeater::make('fees')->schema([
                                 Select::make('package_type')
                                     ->options(EventModel::getFeesTypesList())
@@ -114,8 +115,7 @@ class EventModelResource extends Resource
                                 ])
                                 ->cloneable()
                                 ->label('Available Booths')
-                                ->columns(12)
-                                ->minItems(3),
+                                ->columns(12),
                         ])
                     ]),
             ])->columns(1);

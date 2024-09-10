@@ -93,6 +93,7 @@ class EventModel extends Model implements HasMedia
     const MEDIA_COLLECTION_PARTICIPATE_BANNER = 'event-participate-banner';
     const MEDIA_COLLECTION_ABOUT_BANNER = 'event-about-banner';
     const MEDIA_COLLECTION_EXHIBITION_LAYOUT_PLAN = 'exhibition-layout-plan';
+    const MEDIA_COLLECTION_CALL_FOR_SPEAKERS_DOCUMENT = 'call-for-speakers-document';
 
     const FEE_REGISTERED = 'registered';
     const FEE_NON_REGISTERED = 'non_registered';
@@ -211,6 +212,18 @@ class EventModel extends Model implements HasMedia
     function getExhibitionLayoutPlanUrl(): ?string
     {
         return $this->getMediaUrl($this->exhibition_layout_plan);
+    }
+
+    public function callForSpeakersDocument(): Attribute
+    {
+        return Attribute::make(
+            fn($value) => $this->getMedia(self::MEDIA_COLLECTION_CALL_FOR_SPEAKERS_DOCUMENT)
+        );
+    }
+
+    function getCallForSpeakersDocumentUrl(): ?string
+    {
+        return $this->getMediaUrl($this->call_for_speakers_document);
     }
 
     public function registerMediaCollections(): void
