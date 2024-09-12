@@ -73,5 +73,12 @@ class EventController extends Controller
         return view('hospitality-and-tours', ['event' => $event]);
     }
 
+    public function help(EventModel $event): View
+    {
+
+        return view('help', ['event' => $event]);
+    }
+
+
 
 }
