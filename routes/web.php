@@ -38,6 +38,7 @@ Route::controller(EventController::class)->prefix('event')->name('event.')->grou
     Route::get('{event}/exhibitor', 'exhibitor')->name('exhibitor');
     Route::get('{event}/sponsor', 'sponsor')->name('sponsor');
     Route::get('{event}/hospitality-tours', 'hospitality_tours')->name('hospitality-tours');
+    Route::get('{event}/help', 'help')->name('help');
 
 });
 

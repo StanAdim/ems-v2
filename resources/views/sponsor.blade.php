@@ -14,11 +14,11 @@
                     Sponsorship<br>
                     Opportunies
                 </h4>
-                {{-- <a href="#sponsorship-packages">
+                <a href="https://wa.me/+255736848444">
                     <button class="px-3 w-full md:w-1/2  py-2 font-semibold rounded-lg bg-secondary">
                         Become a Sponsor
                     </button>
-                </a> --}}
+                </a>
             </div>
             <div class="md:w-[70%] text-lg">
                 <p class="xl:px-10">
@@ -158,9 +158,11 @@
                     </div>
                 </div>
             </div>
-            {{-- <button class="px-5 py-2 my-10 font-semibold rounded-lg bg-secondary">
-                Become a Sponsor
-            </button> --}}
+            <a href="https://wa.me/+255736848444">
+                <button class="px-5 py-2 my-10 font-semibold rounded-lg bg-secondary">
+                    Become a Sponsor
+                </button>
+            </a>
         </div>
     </div>
 @endsection
