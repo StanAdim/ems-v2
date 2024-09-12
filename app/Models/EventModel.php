@@ -17,7 +17,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Permission\Traits\HasRoles;
 
 /**
- *
+ * 
  *
  * @property int $id
  * @property string $title
@@ -41,6 +41,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\EventBooking> $bookings
  * @property-read int|null $bookings_count
  * @property-read mixed $booths_available
+ * @property-read mixed $call_for_speakers_document
  * @property-read mixed $event_logo
  * @property-read mixed $exhibition_layout_plan
  * @property-read mixed $main_banner

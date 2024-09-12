@@ -1,0 +1,3 @@
+<div>
+    {{ $this->attendeesInfolist }}
+</div>

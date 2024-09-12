@@ -2,15 +2,17 @@
 
 namespace App\Models;
 
+use App\Casts\AttendeeModels;
 use App\Contracts\Billable;
 use App\Models\JSON\Booth;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $event_model_id
@@ -22,12 +24,14 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property int $user_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Collection|\App\Models\JSON\Attendee[]|null $attendees
  * @property-read \App\Models\User $bookedBy
  * @property-read \App\Models\EventModel $event
  * @property-read \App\Models\PaymentOrder|null $payment_order
  * @method static \Illuminate\Database\Eloquent\Builder|ExhibitionBooking newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ExhibitionBooking newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ExhibitionBooking query()
+ * @method static \Illuminate\Database\Eloquent\Builder|ExhibitionBooking whereAttendees($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ExhibitionBooking whereBoothName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ExhibitionBooking whereBoothSize($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ExhibitionBooking whereCreatedAt($value)
@@ -52,10 +56,12 @@ class ExhibitionBooking extends Model implements Billable
         'total',
         'payment_order_id',
         'user_id',
+        'attendees',
     ];
 
     protected $casts = [
         'total' => 'float',
+        'attendees' => AttendeeModels::class,
     ];
 
     public function event(): BelongsTo
@@ -125,5 +131,12 @@ class ExhibitionBooking extends Model implements Billable
     {
         $this->payment_order_id = $paymentOrder->id;
         $this->save();
+    }
+
+    public function attendeesCount(): Attribute
+    {
+        return Attribute::make(
+            fn() => $this->attendees->count(),
+        );
     }
 }
