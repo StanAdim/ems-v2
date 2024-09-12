@@ -166,18 +166,16 @@
                     <a href="{{ route('event.sponsor', ['event' => $event]) }}"
                         class="{{ Route::is('event.sponsor') ? 'text-secondary' : 'text-white ' }} hover:underline">Sponsor</a>
                 </li>
+                <li>
+                    <a href="{{ route('event.hospitality-tours', ['event' => $event]) }}"
+                        class="{{ Route::is('event.hospitality-tours') ? 'text-secondary' : 'text-white ' }} hover:underline">Hospitality & Tours</a>
+                </li>
                 {{-- <li>
                     <a href="#" class="text-white hover:underline">Buyer</a>
                 </li>
                 <li>
                     <a href="#" class="text-white hover:underline">Media</a>
                 </li> --}}
-                <li>
-                    <a href="#" class="text-white hover:underline">Hospitality</a>
-                </li>
-                <li>
-                    <a href="#" class="text-white hover:underline">Tours</a>
-                </li>
                 <li>
                     <a href="#" class="text-white hover:underline">Help</a>
                 </li>
