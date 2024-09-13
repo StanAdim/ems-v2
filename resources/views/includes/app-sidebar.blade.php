@@ -43,7 +43,7 @@
             </x-side-bar-link>
 
             @if ($showUserMenu)
-                <x-side-bar-link name="Event Bookings" route='event-booking'
+                {{-- <x-side-bar-link name="Event Bookings" route='event-booking'
                     active="{{ request()->routeIs('event-booking') }}">
                     <svg viewBox="0 0 18 18" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                         <path clip-rule="evenodd" d="M17.4375 5.625H0.5625V4.5H17.4375V5.625Z" />
@@ -53,7 +53,7 @@
                         <path clip-rule="evenodd"
                             d="M1.6875 3.375C1.37684 3.375 1.125 3.62684 1.125 3.9375V14.0625C1.125 14.3732 1.37684 14.625 1.6875 14.625H16.3125C16.6232 14.625 16.875 14.3732 16.875 14.0625V3.9375C16.875 3.62684 16.6232 3.375 16.3125 3.375H1.6875ZM0 3.9375C0 3.00552 0.755519 2.25 1.6875 2.25H16.3125C17.2445 2.25 18 3.00552 18 3.9375V14.0625C18 14.9945 17.2445 15.75 16.3125 15.75H1.6875C0.755519 15.75 0 14.9945 0 14.0625V3.9375Z" />
                     </svg>
-                </x-side-bar-link>
+                </x-side-bar-link> --}}
 
                 <x-side-bar-link name="My Bookings" route='my-booking' active="{{ request()->routeIs('my-booking') }}">
                     <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">

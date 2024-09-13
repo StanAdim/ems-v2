@@ -27,7 +27,7 @@
             @if (Auth::user()->canExhibit())
                 @livewire('dashboard-card', ['title' => 'Exhibited Events', 'description' => 'The numbers of events you have exhibited so far', 'route' => 'exhibition-booking', 'count' => $myExhibitionsCount])
             @else
-                @livewire('dashboard-card', ['title' => 'Booked events', 'description' => 'The numbers of events you have booked so far', 'route' => 'event-booking', 'count' => $myBookingCount])
+                @livewire('dashboard-card', ['title' => 'Booked events', 'description' => 'The numbers of events you have booked so far', 'route' => 'my-booking', 'count' => $myBookingCount])
             @endif
             @livewire('dashboard-card', ['title' => 'Planned events', 'description' => 'Here are the events saved in your calendar', 'route' => 'my-booking', 'count' => $activeEvents])
             @livewire('dashboard-card', ['title' => 'Pending payments', 'description' => 'The number of bookings you have not paid yet.', 'route' => Auth::user()->canExhibit() ? 'exhibition-booking' : 'event-booking', 'count' => $pendingPaymentsCount])
