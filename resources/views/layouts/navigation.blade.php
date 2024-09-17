@@ -74,13 +74,14 @@
                             </div> --}}
                             @endif
 
-                            <div class="w-full border-t-2"></div>
+                            <div class="mx-4 mt-4 mb-8 w-full border-t-2"></div>
 
-                            <x-dropdown-link :href="route('profile.edit')">
+                            <a class="w-full text-sm items-center py-2 bg-primary border border-transparent rounded-md font-semibold text-white tracking-widest hover:bg-brand focus:bg-brand active:bg-brand focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150" href="{{ route('profile.edit') }}">
                                 {{ __('Profile') }}
-                            </x-dropdown-link>
+                            </a>
+
                             @role('panel_user')
-                                <x-dropdown-link :href="route('filament.events.resources.event-models.index')">
+                                <x-dropdown-link class="my-2 rounded-sm" :href="route('filament.events.resources.event-models.index')">
                                     {{ __('Administration Panel') }}
                                 </x-dropdown-link>
                             @endrole
@@ -88,11 +89,11 @@
                             <!-- Authentication -->
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
-
-                                <x-dropdown-link :href="route('logout')"
+                                <x-dropdown-link class="text-red-500 flex justify-center rounded-sm" :href="route('logout')"
                                     onclick="event.preventDefault();
                                                 this.closest('form').submit();">
-                                    {{ __('Log Out') }}
+
+                                    <img src="{{Vite::asset('resources/images/icons/fi-rr-sign-out.svg')}}"> <span>{{ __('Log Out') }}</span>
                                 </x-dropdown-link>
                             </form>
                         </div>
