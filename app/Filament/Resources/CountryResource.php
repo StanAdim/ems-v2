@@ -3,8 +3,8 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Imports\CountryImporter;
-use App\Filament\Resources\NationalityResource\Pages;
-use App\Filament\Resources\NationalityResource\RelationManagers;
+use App\Filament\Resources\CountryResource\Pages;
+use App\Filament\Resources\CountryResource\RelationManagers;
 use App\Models\Country;
 use Filament\Forms;
 use Filament\Forms\Form;
