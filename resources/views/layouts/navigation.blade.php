@@ -25,11 +25,11 @@
 
             <!-- Settings Dropdown -->
             <div class="hidden sm:ms-6 sm:flex sm:items-center">
-                <x-dropdown align="right" width="48">
+                <x-dropdown align="right" width="64">
                     <x-slot name="trigger">
                         <button
-                            class="inline-flex gap-2 items-center rounded-full border bg-white px-6 py-1.5 text-sm font-medium leading-4 text-black transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none">
-                            <x-heroicon-o-user class="w-8 bg-gray-300 border rounded-full p-1"/>
+                            class="inline-flex items-center gap-2 rounded-full border bg-white px-6 py-1.5 text-sm font-medium leading-4 text-black transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none">
+                            <x-heroicon-o-user class="w-8 rounded-full border bg-gray-300 p-1" />
                             <div>{{ Auth::user()->name }}</div>
 
                             <div class="ms-1">
@@ -44,25 +44,58 @@
                     </x-slot>
 
                     <x-slot name="content">
-                        <x-dropdown-link :href="route('profile.edit')">
-                            {{ __('Profile') }}
-                        </x-dropdown-link>
-                        @role('panel_user')
-                            <x-dropdown-link :href="route('filament.events.resources.event-models.index')">
-                                {{ __('Administration Panel') }}
+                        <div class="grid grid-cols-1 justify-items-center py-8 text-center">
+
+                            <x-heroicon-o-user class="w-12 rounded-full border bg-gray-300 p-1" />
+
+                            <div>
+                                <span class="text-xl font-medium">
+                                    {{ Auth::user()->name }}
+                                </span>
+
+                                <span class="text-sm">
+                                    {{ Auth::user()->profile?->position }}
+                                </span>
+                            </div>
+
+                            <span class="text-sm text-primary">
+                                {{ Auth::user()->email }}
+                            </span>
+
+                            @if (Auth::user()->profile)
+                                <div class="text-sm">
+                                    <span class="font-medium">Professional Status</span>
+                                    <span>{{ Auth::user()->profile?->registration_status }}</span>
+                                </div>
+
+                                {{-- <div class="text-sm">
+                                <span class="font-medium">Registration No.</span>
+                                <span>{{ Auth::user()->profile?->registration_status }}</span>
+                            </div> --}}
+                            @endif
+
+                            <div class="w-full border-t-2"></div>
+
+                            <x-dropdown-link :href="route('profile.edit')">
+                                {{ __('Profile') }}
                             </x-dropdown-link>
-                        @endrole
+                            @role('panel_user')
+                                <x-dropdown-link :href="route('filament.events.resources.event-models.index')">
+                                    {{ __('Administration Panel') }}
+                                </x-dropdown-link>
+                            @endrole
 
-                        <!-- Authentication -->
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
+                            <!-- Authentication -->
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
 
-                            <x-dropdown-link :href="route('logout')"
-                                onclick="event.preventDefault();
+                                <x-dropdown-link :href="route('logout')"
+                                    onclick="event.preventDefault();
                                                 this.closest('form').submit();">
-                                {{ __('Log Out') }}
-                            </x-dropdown-link>
-                        </form>
+                                    {{ __('Log Out') }}
+                                </x-dropdown-link>
+                            </form>
+                        </div>
                     </x-slot>
                 </x-dropdown>
             </div>
