@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
  *
  *
  * @property int $id
- * @property int $num_code
+ * @property string $num_code
  * @property string $alpha_2_code
  * @property string $alpha_3_code
  * @property string $en_short_name
@@ -32,4 +32,12 @@ use Illuminate\Database\Eloquent\Model;
 class Country extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'num_code',
+        'alpha_2_code',
+        'alpha_3_code',
+        'en_short_name',
+        'nationality',
+    ];
 }

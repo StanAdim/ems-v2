@@ -13,7 +13,7 @@ return new class extends Migration {
         Schema::create('countries', function (Blueprint $table) {
             $table->id();
 
-            $table->integer('num_code')
+            $table->string('num_code')
                 ->nullable(false)->unique();
             $table->string('alpha_2_code')
                 ->nullable(false)->unique();

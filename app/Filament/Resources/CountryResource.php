@@ -14,6 +14,7 @@ use Filament\Tables\Actions\ImportAction;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Validation\Rules\File;
 
 class CountryResource extends Resource
 {
@@ -81,6 +82,9 @@ class CountryResource extends Resource
             ->headerActions([
                 ImportAction::make()
                     ->importer(CountryImporter::class)
+                    ->fileRules([
+                        File::types(['csv'])->max(1024)
+                    ])
             ]);
     }
 
