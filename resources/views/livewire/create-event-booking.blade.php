@@ -85,7 +85,9 @@
                         <select id="nationality" name="nationality" autocomplete="nationality" wire:model='nationality'
                             class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500">
                             <option selected>Choose a country</option>
-                            <option value="TZ" @selected(true)>Tanzania</option>
+                            @foreach ($nationalityChoices as $nationality)
+                                <option value="{{ $nationality }}">{{ $nationality }}</option>
+                            @endforeach
                         </select>
                         @error('nationality')
                             <x-input-error :messages="$message" class="mt-2" />

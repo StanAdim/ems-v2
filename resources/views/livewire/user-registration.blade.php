@@ -112,7 +112,15 @@
 
                             <div class="grid gap-10 md:grid-cols-2">
                                 <!-- Nationality -->
-                                <x-input-with-label name="nationality" label="Nationality" />
+                                <x-input-with-label name='nationality' label="Nationality">
+                                    <select id="nationality" name="nationality" wire:model='form.nationality'
+                                        class="mt-1 block h-auto w-full rounded-md px-4 py-3 text-lg text-black placeholder-black focus:border-primary-500 focus:ring-primary-500">
+                                        <option value>---</option>
+                                        @foreach ($nationalityChoices as $nationality)
+                                            <option value="{{ $nationality }}">{{ $nationality }}</option>
+                                        @endforeach
+                                    </select>
+                                </x-input-with-label>
 
                                 <!-- Physical Address -->
                                 <x-input-with-label name="address" label="Physical Address" />

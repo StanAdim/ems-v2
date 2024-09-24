@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Livewire;
+use App\Models\Country;
 use App\Models\EventBooking;
 use App\Models\EventModel;
 
@@ -63,6 +64,9 @@ class CreateEventBooking extends Component
     )]
     public $reg_number = '';
 
+    #[Locked]
+    public $nationalityChoices;
+
     public $parentId = null;
 
     public function mount($event)
@@ -72,6 +76,8 @@ class CreateEventBooking extends Component
         $this->attendees = [
             ['name' => '', 'phone' => '', 'email' => '']
         ];
+        $this->nationalityChoices = Country::all()
+            ->map(fn(Country $c) => $c->nationality);
 
     }
 

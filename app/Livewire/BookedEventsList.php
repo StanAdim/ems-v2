@@ -117,7 +117,7 @@ class BookedEventsList extends Component implements HasForms, HasTable, HasInfol
                     //
                 ]),
             ])->headerActions([
-                    CreateAction::make()
+                    /* CreateAction::make()
                         ->model(EventBooking::class)
                         ->label('Create Bookings')
                         ->form([
@@ -191,7 +191,7 @@ class BookedEventsList extends Component implements HasForms, HasTable, HasInfol
                                 ->label('Agree to term & conditions')
                                 ->required(),
                             // ...
-                        ]),
+                        ]), */
                 ]);
     }
 
