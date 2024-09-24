@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $num_code
@@ -40,4 +40,11 @@ class Country extends Model
         'en_short_name',
         'nationality',
     ];
+
+    public static function getNationalities()
+    {
+        return self::all()
+            ->map(fn(self $c) => $c->nationality)
+            ->unique();
+    }
 }

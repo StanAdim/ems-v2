@@ -76,8 +76,7 @@ class CreateEventBooking extends Component
         $this->attendees = [
             ['name' => '', 'phone' => '', 'email' => '']
         ];
-        $this->nationalityChoices = Country::all()
-            ->map(fn(Country $c) => $c->nationality);
+        $this->nationalityChoices = Country::getNationalities();
 
     }
 

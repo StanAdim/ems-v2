@@ -24,8 +24,7 @@ class UserRegistration extends Component
 
     public function mount()
     {
-        $this->nationalityChoices = Country::all()
-            ->map(fn(Country $c) => $c->nationality);
+        $this->nationalityChoices = Country::getNationalities();
     }
 
     public function render()
