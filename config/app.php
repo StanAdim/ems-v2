@@ -169,6 +169,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\Filament\EventsPanelProvider::class,
         App\Providers\RouteServiceProvider::class,
+        App\Providers\TelescopeServiceProvider::class,
         App\Providers\ViewServiceProvider::class,
     ])->toArray(),
 
@@ -191,6 +192,15 @@ return [
         'name' => env('BUSINESS_NAME'),
         'phone' => env('BUSINESS_PHONE'),
         'address' => env('BUSINESS_ADDRESS'),
+    ],
+
+    'payment' => [
+        'middleware' => [
+            'token' => env('PAYMENT_MIDDLEWARE_TOKEN'),
+            'baseUrl' => env('PAYMENT_MIDDLEWARE_BASE_URL'),
+            'billSubmissionUri' => env('PAYMENT_MIDDLEWARE_BILL_SUBMISSION_URI'),
+            'systemCode' => env('PAYMENT_MIDDLEWARE_SYSTEM_CODE'),
+        ],
     ],
 
 ];

@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Casts\AsCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 /**
  *
@@ -24,6 +25,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Illuminate\Support\Carbon|null $expires_on
  * @property string|null $invoice_url
  * @property \Illuminate\Support\Collection|null $customer_details
+ * @property int|null $user_id
+ * @property array|null $middleware_bill_data
+ * @property string|null $uuid
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentOrder newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentOrder newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentOrder query()
@@ -34,10 +38,13 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentOrder whereExpiresOn($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentOrder whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentOrder whereInvoiceUrl($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PaymentOrder whereMiddlewareBillData($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentOrder wherePhoneNumber($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentOrder whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentOrder whereTotalAmount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentOrder whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PaymentOrder whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PaymentOrder whereUuid($value)
  * @mixin \Eloquent
  */
 #[ObservedBy([PaymentOrderObserver::class])]
@@ -51,6 +58,7 @@ class PaymentOrder extends Model
         'status' => PaymentOrderStatus::class,
         'customer_details' => AsCollection::class,
         'total_amount' => 'float',
+        'middleware_bill_data' => 'json',
     ];
 
     protected $fillable = [
@@ -59,15 +67,20 @@ class PaymentOrder extends Model
         'total_amount',
         'expires_on',
         'customer_details',
+        'user_id',
+        'phone_number',
+        'uuid',
     ];
 
-    public static function make(Billable $billable, string $phoneNumber): self
+    public static function make(Billable $billable, string $phoneNumber, int $userId): self
     {
         $payment_order = PaymentOrder::create([
             'description' => $billable->description(),
             'total_amount' => $billable->amount(),
-            'phone_number' => $phoneNumber,
+            'phone_number' => "+255$phoneNumber",
             'customer_details' => $billable->customerDetails(),
+            'user_id' => $userId,
+            'uuid' => Str::uuid(),
         ]);
 
         $billable->updateWithPaymentOrder($payment_order);

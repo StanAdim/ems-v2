@@ -30,7 +30,11 @@ class CreatePaymentOrder extends Component
 
     public function pay()
     {
-        $this->payment_order = PaymentOrder::make($this->billable, $this->phone_number);
+        $this->payment_order = PaymentOrder::make(
+            $this->billable,
+            $this->phone_number,
+            auth()->id() ?? 1
+        );
     }
 
     public function render()

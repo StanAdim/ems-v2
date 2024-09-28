@@ -19,5 +19,16 @@ services:
     ports:
       - 8080:8080
 
+  ngrok:
+    image: ngrok/ngrok:latest
+    command:
+      - "http"
+      - "--url=rhino-present-firmly.ngrok-free.app"
+      - "http://host.docker.internal:8000"
+    environment:
+      NGROK_AUTHTOKEN: ${NGROK_AUTHTOKEN}
+    ports:
+      - 4040:4040
+
 volumes:
   db-data:

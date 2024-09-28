@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Http;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -11,7 +12,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        if ($this->app->environment('local')) {
+            $this->app->register(\Laravel\Telescope\TelescopeServiceProvider::class);
+            $this->app->register(TelescopeServiceProvider::class);
+        }
     }
 
     /**
@@ -19,6 +23,15 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Http::macro('paymentMiddleware', function () {
+            $headers = [
+                /* 'Authorization' => 'Bearer ' . config('app.payment.middleware.token'), */
+                'api-key' => config('app.payment.middleware.token')
+            ];
+
+            return Http::withHeaders($headers)
+                ->acceptJson()
+                ->baseUrl(config('app.payment.middleware.baseUrl'));
+        });
     }
 }

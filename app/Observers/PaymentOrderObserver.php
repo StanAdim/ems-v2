@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Events\PaymentOrderPosted;
 use App\Mail\PaymentOrderInvoice;
 use App\Models\PaymentOrder;
 use Carbon\Carbon;
@@ -58,21 +59,22 @@ class PaymentOrderObserver
         $paymentOrder->invoice_url = $invoice->url();
         $paymentOrder->save();
 
-        foreach ($emails as $recepient) {
-            Mail::to($recepient)
-                ->send(new PaymentOrderInvoice($paymentOrder));
-        }
+        // foreach ($emails as $recepient) {
+        //     Mail::to($recepient)
+        //         ->send(new PaymentOrderInvoice($paymentOrder));
+        // }
     }
     /**
      * Handle the PaymentOrder "created" event.
      */
     public function created(PaymentOrder $paymentOrder): void
     {
-        $paymentOrder->control_no = $this->generateUniqueNumber();
+        // $paymentOrder->control_no = $this->generateUniqueNumber();
         $paymentOrder->expires_on = Carbon::now()->addWeeks(1);
         $paymentOrder->save();
 
         $this->generateInvoiceDocument($paymentOrder);
+        PaymentOrderPosted::dispatch($paymentOrder);
     }
 
     /**
