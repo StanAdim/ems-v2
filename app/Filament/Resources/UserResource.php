@@ -4,9 +4,13 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource\RelationManagers;
-use App\Filament\Resources\UserResource\RelationManagers\ProfileRelationManager;
+use App\Models\Country;
 use App\Models\User;
 use Filament\Forms;
+use Filament\Forms\Components\Fieldset;
+use Filament\Forms\Components\Group;
+use Filament\Forms\Components\Tabs;
+use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -24,24 +28,77 @@ class UserResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('email')
-                    ->email()
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\DateTimePicker::make('email_verified_at'),
-                // Forms\Components\TextInput::make('password')
-                //     ->password()
-                //     ->required()
-                //     ->maxLength(255),
-                // Using Select Component
-                Forms\Components\Select::make('roles')
-                    ->relationship('roles', 'name')
-                    ->multiple()
-                    ->preload()
-                    ->searchable(),
+                Tabs::make()
+                    ->schema([
+                        Tab::make('Account Details')
+                            ->schema([
+                                Forms\Components\TextInput::make('name')
+                                    ->required()
+                                    ->maxLength(255),
+                                Forms\Components\TextInput::make('email')
+                                    ->email()
+                                    ->required()
+                                    ->maxLength(255),
+                                Forms\Components\DateTimePicker::make('email_verified_at'),
+                                // Forms\Components\TextInput::make('password')
+                                //     ->password()
+                                //     ->required()
+                                //     ->maxLength(255),
+                                // Using Select Component
+                                Forms\Components\Select::make('roles')
+                                    ->relationship('roles', 'name')
+                                    ->multiple()
+                                    ->preload()
+                                    ->searchable(),
+                            ]),
+                        Tab::make('Profile')
+                            ->schema([
+                                Group::make()
+                                    ->relationship('profile')
+                                    ->schema([
+                                        Forms\Components\Select::make('registration_status')
+                                            ->options([
+                                                'registered' => 'Registered',
+                                                'non-registered' => 'Non Registered',
+                                            ])
+                                            ->native(false)
+                                            ->required(),
+                                        Forms\Components\TextInput::make('phone_number')
+                                            ->tel()
+                                            ->required()
+                                            ->maxLength(32),
+                                        Forms\Components\TextInput::make('institution_name')
+                                            ->required()
+                                            ->maxLength(128),
+                                        Forms\Components\TextInput::make('position')
+                                            ->required()
+                                            ->maxLength(256),
+
+                                        Forms\Components\Group::make()
+                                            ->schema([
+                                                Forms\Components\Select::make('nationality')
+                                                    ->options(Country::getNationalities())
+                                                    ->required()
+                                                    ->searchable(),
+                                                Forms\Components\TextInput::make('address.region')
+                                                    ->required()
+                                                    ->maxLength(128),
+                                                Forms\Components\TextInput::make('address.district')
+                                                    ->required()
+                                                    ->maxLength(128),
+                                                Forms\Components\TextInput::make('address.physical_address')
+                                                    ->required()
+                                                    ->maxLength(128),
+                                            ])
+                                            ->columns(2)
+                                            ->columnSpanFull(),
+
+                                        Forms\Components\Toggle::make('can_receive_notification')
+                                            ->required(),
+                                    ])
+                                    ->columns(2),
+                            ]),
+                    ])->columnSpanFull()
             ]);
     }
 
@@ -83,7 +140,7 @@ class UserResource extends Resource
     public static function getRelations(): array
     {
         return [
-            ProfileRelationManager::class
+            //
         ];
     }
 
