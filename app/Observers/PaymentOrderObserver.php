@@ -29,51 +29,14 @@ class PaymentOrderObserver
         return $uniqueNumber;
     }
 
-    function generateInvoiceDocument(PaymentOrder $paymentOrder)
-    {
-        $seller = new Party(config('app.business'));
-
-        $firstCustomer = $paymentOrder->customer_details->first();
-        $emails = $paymentOrder->customer_details->map(fn($value) => $value['email']);
-
-        $customer = new Buyer([
-            'name' => $firstCustomer['name'],
-            'custom_fields' => [
-                'email' => $firstCustomer['email'],
-            ],
-        ]);
-
-        $item = InvoiceItem::make($paymentOrder->description)->pricePerUnit($paymentOrder->total_amount);
-        $invoice = Invoice::make($paymentOrder->control_no)
-            ->seller($seller)
-            ->buyer($customer)
-            ->currencySymbol('TSHS')
-            ->currencyCode('TSHS')
-            ->currencyFormat('{SYMBOL} {VALUE}')
-            ->currencyThousandsSeparator(',')
-            ->payUntilDays(7)
-            ->addItem($item);
-
-        $invoice->save('public');
-
-        $paymentOrder->invoice_url = $invoice->url();
-        $paymentOrder->save();
-
-        // foreach ($emails as $recepient) {
-        //     Mail::to($recepient)
-        //         ->send(new PaymentOrderInvoice($paymentOrder));
-        // }
-    }
     /**
      * Handle the PaymentOrder "created" event.
      */
     public function created(PaymentOrder $paymentOrder): void
     {
-        // $paymentOrder->control_no = $this->generateUniqueNumber();
         $paymentOrder->expires_on = Carbon::now()->addWeeks(1);
         $paymentOrder->save();
 
-        $this->generateInvoiceDocument($paymentOrder);
         PaymentOrderPosted::dispatch($paymentOrder);
     }
 

@@ -10,6 +10,10 @@ use Illuminate\Database\Eloquent\Casts\AsCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use LaravelDaily\Invoices\Classes\Buyer;
+use LaravelDaily\Invoices\Classes\InvoiceItem;
+use LaravelDaily\Invoices\Classes\Party;
+use LaravelDaily\Invoices\Facades\Invoice;
 
 /**
  *
@@ -85,6 +89,35 @@ class PaymentOrder extends Model
 
         $billable->updateWithPaymentOrder($payment_order);
         return $payment_order;
+    }
+
+    public function generateInvoiceDocument()
+    {
+        $seller = new Party(config('app.business'));
+
+        $firstCustomer = $this->customer_details->first();
+        $customer = new Buyer([
+            'name' => $firstCustomer['name'],
+            'custom_fields' => [
+                'email' => $firstCustomer['email'],
+            ],
+        ]);
+
+        $item = InvoiceItem::make($this->description)->pricePerUnit($this->total_amount);
+        $invoice = Invoice::make($this->control_no)
+            ->seller($seller)
+            ->buyer($customer)
+            ->currencySymbol('TSHS')
+            ->currencyCode('TSHS')
+            ->currencyFormat('{SYMBOL} {VALUE}')
+            ->currencyThousandsSeparator(',')
+            ->payUntilDays(7)
+            ->addItem($item);
+
+        $invoice->save('public');
+
+        $this->invoice_url = $invoice->url();
+        $this->save();
     }
 
     public function isPaid(): bool

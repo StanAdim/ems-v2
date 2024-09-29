@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Enums\PaymentOrderStatus;
+use App\Events\ControlNoUpdated;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BillControlNumberUpdateRequest;
 use App\Http\Requests\BillPaymentStatusUpdateRequest;
@@ -26,6 +27,8 @@ class BillingController extends Controller
         $paymentOrder->save();
 
         Log::info("Received Control Number, Control No: $controlNumber, Bill UUID: $uuid");
+
+        ControlNoUpdated::dispatch($paymentOrder);
 
         return [
             'status' => 'success',

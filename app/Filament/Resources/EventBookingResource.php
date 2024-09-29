@@ -48,7 +48,12 @@ class EventBookingResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('event.title')
+                Tables\Columns\TextColumn::make('created_at')
+                    ->label('Date')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: false),
+                Tables\Columns\TextColumn::make('event.linkTitle')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('type')
@@ -57,10 +62,14 @@ class EventBookingResource extends Resource
                 Tables\Columns\TextColumn::make('total_amount')
                     ->money('TSHS')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+
+                Tables\Columns\TextColumn::make('payment_order.status')
+                    ->label('Payment Status')
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('payment_order.control_no')
+                    ->label('Payment Control No.')
+                    ->sortable(),
+
                 Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
@@ -76,7 +85,8 @@ class EventBookingResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->defaultSort('created_at', 'desc');
     }
 
     public static function infolist(Infolist $infoList): Infolist
