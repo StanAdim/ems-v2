@@ -93,9 +93,25 @@ class BookingController extends Controller
         return view('booking.event-material', ['slot' => '']);
     }
 
-    public function question_and_answer(): View
+    public function question_and_answer(?EventModel $event = null): View
     {
-        $event = EventModel::latest()->first();
-        return view('booking.question-and-answer', ['slot' => '', 'eventId' => $event->id]);
+        $activeEvents = $event
+            ? collect([])
+            : EventModel::where('endsOn', '>', now())->get();
+
+        return view('booking.question-and-answer', [
+            'slot' => '',
+            'event' => $event,
+            'activeEvents' => $activeEvents->map(function (EventModel $e) {
+                return (object) [
+                    'event' => $e,
+                    'title' => $e->title,
+                    'location' => $e->locationDescription,
+                    'imageUrl' => $e->getMainBannerUrl(),
+                    'model' => $e,
+                    'route' => route('question-and-answer', ['event' => $e->id]),
+                ];
+            })->toArray(),
+        ]);
     }
 }

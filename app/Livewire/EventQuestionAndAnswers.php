@@ -5,9 +5,15 @@ namespace App\Livewire;
 use App\Models\EventModel;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Locked;
+use Livewire\Attributes\Validate;
 use Livewire\Component;
 
-class EventConversations extends Component
+/**
+ * Summary of EventQuestionAndAnswers
+ *
+ * @property EventModel $event
+ */
+class EventQuestionAndAnswers extends Component
 {
     #[Locked]
     public $eventId;
@@ -20,6 +26,6 @@ class EventConversations extends Component
 
     public function render()
     {
-        return view('livewire.event-conversations');
+        return view('livewire.event-question-and-answers');
     }
 }

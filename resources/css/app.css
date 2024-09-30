@@ -17,7 +17,7 @@ button.fi-link.group\/link {
     /* @apply ; */
 }
 
-button.fi-link.group\/link > * {
+button.fi-link.group\/link>* {
     @apply text-white;
 }
 
@@ -28,17 +28,15 @@ button.fi-link.group\/link > * {
     @apply rounded-3xl;
 }
 
-.fi-btn.fi-btn-color-primary.fi-color-primary > .fi-btn-label {
+.fi-btn.fi-btn-color-primary.fi-color-primary>.fi-btn-label {
     @apply text-white;
 }
 
-.fi-pagination-items > .fi-pagination-item button:first-of-type{
+.fi-pagination-items>.fi-pagination-item button:first-of-type {
     /* @apply rounded-l-full; */
 }
 
-.fi-pagination-items > .fi-pagination-item:last-of-type  {
-
-}
+.fi-pagination-items>.fi-pagination-item:last-of-type {}
 
 .fi-input-wrp {
     @apply rounded-3xl;
@@ -53,6 +51,10 @@ button.fi-link.group\/link > * {
     @apply border-none;
 }
 
-.fi-ta-table > thead {
+.fi-ta-table>thead {
     @apply rounded-3xl border-none;
+}
+
+.qna-form>* .fi-input-wrp {
+    @apply rounded-lg;
 }

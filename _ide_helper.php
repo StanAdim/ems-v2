@@ -7626,6 +7626,15 @@ namespace Illuminate\Support\Facades {
                         /** @var \Illuminate\Http\Client\Factory $instance */
                         return $instance->macroCall($method, $parameters);
         }
+                    /**
+         * 
+         *
+         * @see \App\Providers\AppServiceProvider::boot()
+         * @static 
+         */        public static function paymentMiddleware()
+        {
+                        return \Illuminate\Http\Client\Factory::paymentMiddleware();
+        }
             }
             /**
      * 
@@ -22088,6 +22097,24 @@ namespace Illuminate\View {
             }
     }
 
+namespace Illuminate\Http\Client {
+            /**
+     * 
+     *
+     * @mixin \Illuminate\Http\Client\PendingRequest
+     */        class Factory {
+                    /**
+         * 
+         *
+         * @see \App\Providers\AppServiceProvider::boot()
+         * @static 
+         */        public static function paymentMiddleware()
+        {
+                        return \Illuminate\Http\Client\Factory::paymentMiddleware();
+        }
+            }
+    }
+
 
 namespace  {
             class App extends \Illuminate\Support\Facades\App {}
@@ -26009,11 +26036,6 @@ namespace  {
     }
 
 
-namespace Facades\Livewire\Features\SupportFileUploads {
-    /**
-     * @mixin \Livewire\Features\SupportFileUploads\GenerateSignedUploadUrl     */
-    class GenerateSignedUploadUrl extends \Livewire\Features\SupportFileUploads\GenerateSignedUploadUrl {}
-}
 
 
 

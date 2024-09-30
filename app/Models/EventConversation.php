@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $event_model_id
@@ -63,5 +63,10 @@ class EventConversation extends Model
     public function answers(): HasMany
     {
         return $this->hasMany(EventConversation::class, 'parent_conversation_id');
+    }
+
+    public function getFormattedCreatedAt()
+    {
+        return $this->created_at->format('F jS, Y h:i:s A');
     }
 }
