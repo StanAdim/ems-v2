@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::table('payment_orders', function (Blueprint $table) {
             $table->json('middleware_bill_data')->nullable();
-            $table->foreignId('user_id')->constrained();
+            $table->foreignId('user_id')->nullable()->constrained();
         });
     }
 
