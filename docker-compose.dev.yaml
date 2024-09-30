@@ -9,7 +9,7 @@ services:
       MARIADB_ROOT_PASSWORD: welcome
       MARIADB_DATABASE: ictc-ems
     ports:
-      - 3306:3306
+      - 3307:3306
     volumes:
       - db-data:/var/lib/mysql:Z
 
@@ -18,17 +18,6 @@ services:
     restart: always
     ports:
       - 8080:8080
-
-  ngrok:
-    image: ngrok/ngrok:latest
-    command:
-      - "http"
-      - "--url=rhino-present-firmly.ngrok-free.app"
-      - "http://host.docker.internal:8000"
-    environment:
-      NGROK_AUTHTOKEN: ${NGROK_AUTHTOKEN}
-    ports:
-      - 4040:4040
 
 volumes:
   db-data:

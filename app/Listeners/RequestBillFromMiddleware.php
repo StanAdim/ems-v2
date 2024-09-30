@@ -21,6 +21,11 @@ class RequestBillFromMiddleware implements ShouldQueue
         //
     }
 
+    public function viaQueue(): string
+    {
+        return config('app.payment.queue.request_control_numbers');
+    }
+
     /**
      * Handle the event.
      */

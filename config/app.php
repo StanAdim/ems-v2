@@ -201,6 +201,9 @@ return [
             'billSubmissionUri' => env('PAYMENT_MIDDLEWARE_BILL_SUBMISSION_URI'),
             'systemCode' => env('PAYMENT_MIDDLEWARE_SYSTEM_CODE'),
         ],
+        'queue' => [
+            'request_control_numbers' => env('PAYMENT_QUEUE_REQUEST_CONTROL_NUMBERS', 'request-control-numbers'),
+        ],
     ],
 
 ];
