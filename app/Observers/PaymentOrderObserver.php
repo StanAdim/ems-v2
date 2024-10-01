@@ -15,20 +15,6 @@ use Mail;
 class PaymentOrderObserver
 {
 
-    function generateUniqueNumber()
-    {
-        // Prefix
-        $prefix = '992';
-
-        // Generate 10 random digits
-        $randomDigits = mt_rand(1000000000, 9999999999);
-
-        // Combine prefix and random digits
-        $uniqueNumber = $prefix . $randomDigits;
-
-        return $uniqueNumber;
-    }
-
     /**
      * Handle the PaymentOrder "created" event.
      */

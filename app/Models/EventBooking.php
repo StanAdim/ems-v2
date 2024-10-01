@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Contracts\Billable;
+use App\Observers\EventBookingObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Casts\AsCollection;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -40,6 +42,7 @@ use Illuminate\Support\Collection;
  * @method static \Illuminate\Database\Eloquent\Builder|EventBooking whereUserId($value)
  * @mixin \Eloquent
  */
+#[ObservedBy(EventBookingObserver::class)]
 class EventBooking extends Model implements Billable
 {
     use HasFactory;
