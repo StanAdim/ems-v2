@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Models\EventBooking;
 use App\Models\User;
 use App\Models\EventModel;
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -104,5 +105,17 @@ class EventModelPolicy
     public function reorder(User $user): bool
     {
         return $user->can('reorder_event::model');
+    }
+
+    public function askQuestion(User $user, EventModel $eventModel)
+    {
+        return $user
+            ->bookings
+            ->filter(fn($b) => $b->isPaid())
+            ->map(function (EventBooking $booking) {
+                $booking->event;
+            })
+            ->keyBy('id')
+            ->contains($eventModel->id);
     }
 }

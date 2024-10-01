@@ -95,9 +95,12 @@ class BookingController extends Controller
 
     public function question_and_answer(?EventModel $event = null): View
     {
-        $activeEvents = $event
-            ? collect([])
-            : EventModel::where('endsOn', '>', now())->get();
+        $activeEvents = collect([]);
+
+        if ($event) {
+            $this->authorize('askQuestion', $event);
+            $activeEvents = EventModel::where('endsOn', '>', now())->get();
+        }
 
         return view('booking.question-and-answer', [
             'slot' => '',

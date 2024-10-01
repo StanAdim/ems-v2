@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property Collection $attendees
@@ -112,5 +112,10 @@ class EventBooking extends Model implements Billable
     {
         $this->payment_order_id = $paymentOrder->id;
         $this->save();
+    }
+
+    public function isPaid(): bool
+    {
+        return $this->payment_order->isPaid();
     }
 }
