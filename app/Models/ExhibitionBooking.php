@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $event_model_id
@@ -24,7 +24,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property int $user_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Collection|\App\Models\JSON\Attendee[]|null $attendees
+ * @property \Illuminate\Support\Collection|\App\Models\JSON\ExhibitionAttendee[]|null $attendees
  * @property-read mixed $attendees_count
  * @property-read \App\Models\User $bookedBy
  * @property-read \App\Models\EventModel $event

@@ -112,7 +112,8 @@ class PaymentOrder extends Model
             ->currencyFormat('{SYMBOL} {VALUE}')
             ->currencyThousandsSeparator(',')
             ->payUntilDays(7)
-            ->addItem($item);
+            ->addItem($item)
+            ->logo(public_path('vendor/invoices/invoice_logo.png'));
 
         $invoice->save('public');
 

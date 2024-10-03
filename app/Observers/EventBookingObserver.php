@@ -22,10 +22,12 @@ class EventBookingObserver
             ->studly()
             ->upper();
 
+
+        $count = 0;
         $updatedAttendees = $booking
             ->attendees
-            ->mapWithKeys(function (array $a, int $key) use ($eventShortName, $booking) {
-                $id = $booking->id . (++$key);
+            ->map(function (array $a) use ($count, $eventShortName, $booking) {
+                $id = $booking->id . (++$count);
                 $ticket_no = $this->generateTicketNumber($eventShortName, $id);
                 $a['ticket_no'] = $ticket_no;
 

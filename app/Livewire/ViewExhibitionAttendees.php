@@ -3,7 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\ExhibitionBooking;
-use App\Models\JSON\Attendee;
+use App\Models\JSON\ExhibitionAttendee;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Infolists\Components\RepeatableEntry;

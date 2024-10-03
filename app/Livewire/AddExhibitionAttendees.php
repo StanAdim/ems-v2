@@ -3,8 +3,8 @@
 namespace App\Livewire;
 
 use App\Models\ExhibitionBooking;
-use App\Models\JSON\Attendee;
-use App\Models\JSON\AttendeeList;
+use App\Models\JSON\ExhibitionAttendee;
+use App\Models\JSON\ExhibitionAttendeeList;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\On;
@@ -24,7 +24,7 @@ class AddExhibitionAttendees extends Component
     public $submitted = false;
 
     #[Locked]
-    public ?AttendeeList $attendeeList = null;
+    public ?ExhibitionAttendeeList $attendeeList = null;
 
     #[Computed]
     public function exhibitionBooking()
@@ -97,7 +97,7 @@ class AddExhibitionAttendees extends Component
 
         $addedAttendees = collect($validatedData['attendees'])
             ->map(function ($attendee) {
-                $attendeeObj = new Attendee(
+                $attendeeObj = new ExhibitionAttendee(
                     $attendee['name'],
                     $attendee['phone'],
                     $attendee['email'],
@@ -108,7 +108,7 @@ class AddExhibitionAttendees extends Component
                 return $attendeeObj;
             });
 
-        $this->attendeeList = new AttendeeList(
+        $this->attendeeList = new ExhibitionAttendeeList(
             $this->exhibitionBooking->id,
             $addedAttendees
         );
