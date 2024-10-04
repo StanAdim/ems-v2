@@ -16,12 +16,13 @@ use LaravelDaily\Invoices\Classes\Party;
 use LaravelDaily\Invoices\Facades\Invoice;
 
 /**
- *
+ * 
  *
  * @property int $id
  * @property string $description
  * @property string|null $control_no
  * @property float $total_amount
+ * @property float|null $paid_amount
  * @property string|null $phone_number
  * @property PaymentOrderStatus $status
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -29,8 +30,8 @@ use LaravelDaily\Invoices\Facades\Invoice;
  * @property \Illuminate\Support\Carbon|null $expires_on
  * @property string|null $invoice_url
  * @property \Illuminate\Support\Collection|null $customer_details
- * @property int|null $user_id
  * @property array|null $middleware_bill_data
+ * @property int $user_id
  * @property string|null $uuid
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentOrder newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentOrder newQuery()
@@ -43,6 +44,7 @@ use LaravelDaily\Invoices\Facades\Invoice;
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentOrder whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentOrder whereInvoiceUrl($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentOrder whereMiddlewareBillData($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PaymentOrder wherePaidAmount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentOrder wherePhoneNumber($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentOrder whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentOrder whereTotalAmount($value)

@@ -22,7 +22,10 @@ class BillPaymentStatusUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'is_paid' => 'required|boolean',
+            'message' => 'string',
+            'control_number' => 'required|string',
+            'status' => 'required|integer|min:1|max:1',
+            'paid_amount' => 'required|numeric',
         ];
     }
 }
