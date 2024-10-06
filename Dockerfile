@@ -37,11 +37,17 @@ RUN apt-get update && apt-get install -y \
 RUN apt-get install -y libzip-dev \
     && docker-php-ext-install zip
 
-# installs nvm (Node Version Manager)
-RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.0/install.sh | bash
 
-# download and install Node.js (you may need to restart the terminal)
-RUN nvm install 20
+# Install npm
+RUN apt-get install -y wget
+
+RUN wget https://nodejs.org/dist/v20.18.0/node-v20.18.0-linux-x64.tar.xz
+RUN tar xvf node-v20.18.0-linux-x64.tar.xz
+RUN cp -r node-v20.18.0-linux-x64/bin/* /bin/
+RUN cp -r node-v20.18.0-linux-x64/include/* /usr/include/
+RUN cp -r node-v20.18.0-linux-x64/lib/* /usr/lib/
+
+RUN rm -r node-v20.18.0-linux-x64*
 
 EXPOSE 80
 
