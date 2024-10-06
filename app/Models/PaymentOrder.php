@@ -30,8 +30,8 @@ use LaravelDaily\Invoices\Facades\Invoice;
  * @property \Illuminate\Support\Carbon|null $expires_on
  * @property string|null $invoice_url
  * @property \Illuminate\Support\Collection|null $customer_details
+ * @property int|null $user_id
  * @property array|null $middleware_bill_data
- * @property int $user_id
  * @property string|null $uuid
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentOrder newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentOrder newQuery()

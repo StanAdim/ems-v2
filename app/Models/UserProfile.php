@@ -18,6 +18,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @property int $id
  * @property int $user_id
  * @property string $registration_status
+ * @property string|null $registration_number
  * @property string|null $phone_number
  * @property string|null $institution_name
  * @property string|null $position
@@ -50,6 +51,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @method static \Illuminate\Database\Eloquent\Builder|UserProfile whereNationality($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserProfile wherePhoneNumber($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserProfile wherePosition($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|UserProfile whereRegistrationNumber($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserProfile whereRegistrationStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserProfile whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserProfile whereUpdatedAt($value)
@@ -72,6 +74,7 @@ class UserProfile extends Model
         'id',
         'user_id',
         'registration_status',
+        'registration_number',
         'phone_number',
         'institution_name',
         'position',

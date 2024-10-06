@@ -86,7 +86,7 @@
                         </div>
                         <div class="hidden rounded-lg bg-gray-50 p-4 dark:bg-gray-800" id="final-detail"
                             wire:ignore.self role="tabpanel" aria-labelledby="final-details">
-                            <div class="grid gap-10 py-2 md:grid-cols-2">
+                            <div class="grid gap-10 py-2 md:grid-cols-3">
                                 <!-- Registration Status -->
                                 <x-input-with-label name='registration_status' label="Registration Status">
                                     <select id="registration_status" name="registration_status"
@@ -97,6 +97,9 @@
                                         <option value="not-registered">Not Registered</option>
                                     </select>
                                 </x-input-with-label>
+
+                                <!-- Registration Number -->
+                                <x-input-with-label name="registration_number" label="Registration Number" />
 
                                 <!-- Phone Number -->
                                 <x-input-with-label name="phone_number" label="Phone Number" autocomplete="phone"

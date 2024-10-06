@@ -48,7 +48,7 @@
 
                             <x-heroicon-o-user class="w-12 rounded-full border bg-gray-300 p-1" />
 
-                            <div>
+                            <div class="grid grid-cols-1">
                                 <span class="text-xl font-medium">
                                     {{ Auth::user()->name }}
                                 </span>
@@ -63,17 +63,15 @@
                             </span>
 
                             @if (Auth::user()->profile)
-                                <div class="my-2 grid grid-cols-1 text-sm">
+                                <div class="mt-2 my-1 grid grid-cols-1 text-sm">
                                     <span class="font-medium">Professional Status</span>
-                                    <span class="text-gray-700">{{ Auth::user()->profile?->registration_status }}</span>
+                                    <span class="text-gray-700">{{ Auth::user()->profile->registration_status }}</span>
                                 </div>
 
-                                {{-- <div class="mx-12 my-2 mb-8 w-full border-t-2"></div>
-
-                                <div class="my-2 grid grid-cols-1 text-sm">
-                                    <span class="font-medium">Professional Status</span>
-                                    <span class="text-gray-700">{{ Auth::user()->profile?->registration_status }}</span>
-                                </div> --}}
+                                <div class="my-1 grid grid-cols-1 text-sm">
+                                    <span class="font-medium">Professional Number</span>
+                                    <span class="text-gray-700">{{ Auth::user()->profile->registration_number }}</span>
+                                </div>
                             @endif
 
                             <a class="mt-8 mb-2 w-full items-center rounded-md border border-transparent bg-primary py-2 text-sm font-semibold tracking-widest text-white transition duration-150 ease-in-out hover:bg-brand focus:bg-brand focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 active:bg-brand"

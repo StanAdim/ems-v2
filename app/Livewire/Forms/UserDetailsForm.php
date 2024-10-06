@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Forms;
 use App\Enums\ProfileType;
+use App\Rules\EmailPhoneAndMembershipNumberMatchesAnyMember;
 use Livewire\Form;
 use Illuminate\Validation\Rules;
 use App\Models\User;
@@ -24,6 +25,7 @@ class UserDetailsForm extends Form
     public $password_confirmation = '';
     public $phone_number = '';
     public $registration_status = '';
+    public $registration_number = '';
     public $institution_name = '';
     public $position = '';
     public $nationality = '';
@@ -40,10 +42,21 @@ class UserDetailsForm extends Form
         return [
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'phone_number' => ['required_if:type,user'],
+            'phone_number' => ['required_if:type,user', 'numeric'],
             'registration_status' => ['required'],
+            'registration_number' => [
+                'required_if:registration_status,registered',
+                'string',
+                'max:100',
+                'regex:/[A-Z]\d{4}-?[A-Z]{3,4}/',
+                'uppercase',
+                new EmailPhoneAndMembershipNumberMatchesAnyMember(
+                    $this->email,
+                    $this->phone_number
+                ),
+            ],
             'institution_name' => ['required_if:type,user'],
             'position' => ['required_if:type,user'],
             'nationality' => ['required'],
@@ -93,6 +106,7 @@ class UserDetailsForm extends Form
                         'user_id' => $user->id,
                         'phone_number' => $this->phone_number,
                         'registration_status' => $this->registration_status,
+                        'registration_number' => $this->registration_number,
                         'institution_name' => $this->institution_name,
                         'position' => $this->position,
                         'nationality' => $this->nationality,
