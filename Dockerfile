@@ -37,6 +37,11 @@ RUN apt-get update && apt-get install -y \
 RUN apt-get install -y libzip-dev \
     && docker-php-ext-install zip
 
+# installs nvm (Node Version Manager)
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.0/install.sh | bash
+
+# download and install Node.js (you may need to restart the terminal)
+RUN nvm install 20
 
 EXPOSE 80
 
