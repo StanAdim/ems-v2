@@ -37,17 +37,19 @@ RUN apt-get update && apt-get install -y \
 RUN apt-get install -y libzip-dev \
     && docker-php-ext-install zip
 
-
 # Install npm
-RUN apt-get install -y wget
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs \
+    && npm install -g npm
 
-RUN wget https://nodejs.org/dist/v20.18.0/node-v20.18.0-linux-x64.tar.xz
-RUN tar xvf node-v20.18.0-linux-x64.tar.xz
-RUN cp -r node-v20.18.0-linux-x64/bin/* /bin/
-RUN cp -r node-v20.18.0-linux-x64/include/* /usr/include/
-RUN cp -r node-v20.18.0-linux-x64/lib/* /usr/lib/
+COPY package-lock.json package.json ./
+RUN npm install
 
-RUN rm -r node-v20.18.0-linux-x64*
+# Copy existing application code to the container
+COPY . .
+
+RUN composer install --ignore-platform-req=ext-exif --ignore-platform-req=ext-exif --ignore-platform-req=ext-exif
+RUN npm run build
 
 EXPOSE 80
 
