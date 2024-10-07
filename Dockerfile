@@ -57,7 +57,10 @@ RUN npm run build
 RUN php artisan event:cache && \
     php artisan route:cache && \
     php artisan route:cache && \
-    php artisan view:cache
+    php artisan view:cache && \
+    php artisan icons:clear && \
+    php artisan icons:cache && \
+    php artisan livewire:publish --assets
 
 # Link public folder
 RUN php artisan storage:link
