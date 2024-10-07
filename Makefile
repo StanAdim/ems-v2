@@ -4,9 +4,7 @@ staging.setup:
     @make staging.boost
 
 staging.update:
-    cd code
-	git pull origin -ff
-    cd ../
+    cd code && git pull origin -ff
 staging.up:
     # CURRENT_UID=$(id -u):$(id -g)
 	docker-compose up --force-recreate --build -d

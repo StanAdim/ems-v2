@@ -8,8 +8,7 @@ services:
     ports:
       - 2020:80
     volumes:
-      - .:/var/www/html
-      - /tmp:/tmp
+      - storage:/var/www/html/storage:rw
 
     user: ${CURRENT_UID}
 
@@ -64,6 +63,8 @@ services:
 
 volumes:
   mariadbdata:
+    driver: local
+  storagedata:
     driver: local
 
 networks:
