@@ -48,8 +48,17 @@ RUN npm install
 # Copy existing application code to the container
 COPY . .
 
-RUN composer install --ignore-platform-req=ext-exif --ignore-platform-req=ext-exif --ignore-platform-req=ext-exif
+RUN composer install --optimize-autoloader --no-dev --ignore-platform-req=ext-exif --ignore-platform-req=ext-exif --ignore-platform-req=ext-exif
 RUN npm run build
+
+# Cache resources
+RUN php artisan event:cache && \
+    php artisan route:cache && \
+    php artisan route:cache && \
+    php artisan view:cache
+
+# Link public folder
+RUN php artisan storage:link
 
 EXPOSE 80
 
