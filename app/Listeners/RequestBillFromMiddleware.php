@@ -23,7 +23,7 @@ class RequestBillFromMiddleware implements ShouldQueue
 
     public function viaQueue(): string
     {
-        return config('app.payment.queue.request_control_numbers');
+        return config('app.queues.control-numbers');
     }
 
     /**
@@ -46,8 +46,6 @@ class RequestBillFromMiddleware implements ShouldQueue
             'payment_option' => 1,
             'status_code' => 1,
             'expires_at' => $order->expires_on,
-            'payment_order_id' => $order->id,
-            'system_code' => config('app.payment.middleware.systemCode'),
         ];
 
         Log::info("\nRequesting bill from middleware...");

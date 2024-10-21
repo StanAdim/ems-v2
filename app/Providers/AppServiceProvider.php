@@ -25,8 +25,8 @@ class AppServiceProvider extends ServiceProvider
     {
         Http::macro('paymentMiddleware', function () {
             $headers = [
-                /* 'Authorization' => 'Bearer ' . config('app.payment.middleware.token'), */
-                'api-key' => config('app.payment.middleware.token')
+                'Authorization' => 'Bearer ' . config('app.payment.middleware.token'),
+                // 'api-key' => config('app.payment.middleware.token')
             ];
 
             return Http::withHeaders($headers)
