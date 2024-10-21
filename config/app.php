@@ -195,6 +195,7 @@ return [
     ],
 
     'queues' => [
+        'default' => 'default',
         'control-numbers' => 'control-numbers',
     ],
 
