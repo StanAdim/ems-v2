@@ -15,26 +15,26 @@ up:
 	docker compose up --force-recreate --build -d
 
 boost:
-	docker exec staging-reg-events-v2 bash -c "php artisan config:clear"
-	docker exec staging-reg-events-v2 bash -c "php artisan config:cache"
+	docker-compose exec app bash -c "php artisan config:clear"
+	docker-compose exec app bash -c "php artisan config:cache"
 
 stop:
 	docker compose stop
 
 migrate:
-	docker exec staging-reg-events-v2 bash -c "php artisan migrate"
+	docker-compose exec app bash -c "php artisan migrate"
 
 start:
 	docker compose restart
 
 logs:
-	docker logs -f staging-reg-events-v2
+	docker-compose logs -f app
 
 bash:
-	docker exec -it staging-reg-events-v2 bash
+	docker-compose exec app bash
 
 filamentuser:
-	docker exec -it staging-reg-events-v2 php artisan make:filament-user
+	docker-compose exec app php artisan make:filament-user
 
 superadmin:
-	docker exec -it staging-reg-events-v2 php artisan shield:super-admin
+	docker-compose exec app php artisan shield:super-admin
