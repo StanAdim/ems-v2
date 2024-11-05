@@ -17,7 +17,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Permission\Traits\HasRoles;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $title
@@ -257,7 +257,7 @@ class EventModel extends Model implements HasMedia
      */
     public function bookings(): HasMany
     {
-        return $this->hasMany(EventBooking::class);
+        return $this->hasMany(EventBooking::class, 'event_id');
     }
 
     public function getAvailableFeesList()

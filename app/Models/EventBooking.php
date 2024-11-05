@@ -93,8 +93,13 @@ class EventBooking extends Model implements Billable
 
     public function descriptionLines(): array
     {
+        $tiketNumbers = $this
+            ->attendees
+            ->map(fn($a) => $a['ticket_no'])
+            ->toArray();
+
         return [
-            ['Ticket Number', '81845532'],
+            ['Ticket Number(s)', implode(', ', $tiketNumbers)],
             ['Event', $this->event->title],
             ['Ticket Type', $this->type],
         ];
