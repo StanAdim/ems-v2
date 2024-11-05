@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Exports\EventBookingExporter;
 use App\Filament\Resources\EventBookingResource\Pages;
 use App\Filament\Resources\EventBookingResource\RelationManagers;
 use App\Models\EventBooking;
@@ -13,9 +14,12 @@ use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\ViewColumn;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Grouping\Group;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Collection;
 
 class EventBookingResource extends Resource
 {
@@ -76,7 +80,8 @@ class EventBookingResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                SelectFilter::make('event')
+                    ->relationship('event', 'title'),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make()->modal(),
@@ -84,8 +89,15 @@ class EventBookingResource extends Resource
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\ExportBulkAction::make()
+                        ->exporter(EventBookingExporter::class),
                 ]),
             ])
+            ->groups([
+                Group::make('event.title')
+                    ->label('Event')
+            ])
+            ->defaultGroup('event.title')
             ->defaultSort('created_at', 'desc');
     }
 
