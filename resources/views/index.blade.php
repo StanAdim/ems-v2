@@ -30,32 +30,32 @@
 
 
             <!-- <p class="my-5 text-justify">
-                                                                                                        The 8th Tanzania Annual ICT Conference 2024 (TAIC-2024), first Africa Edition, organized by the ICT
-                                                                                                        Commission (ICTC), in collaboration with ELEVATE and the African Union Development Agency-NEPAD
-                                                                                                        (AUDA-NEPAD), is scheduled to take place in Dar es Salaam, Tanzania at the Julius Nyerere International
-                                                                                                        Conference Centre (JNICC) from October 13th to October 17th, 2024. Pre-conference events, including the
-                                                                                                        African AI Competition, are planned for October 13th and 14th, and will be open to public participation.
-                                                                                                    </p>
-                                                                                                    <p class="my-5 text-justify">
-                                                                                                        Building on the success of previous conferences, TAIC-2024 will gather a broad spectrum of participants,
-                                                                                                        including ICT professionals, practitioners, academics, researchers, development partners, industry leaders,
-                                                                                                        and innovators in digital technology. This year’s theme, “Unleashing the Power of Artificial Intelligence
-                                                                                                        and Robotics for Socio-economic Transformation”, focuses on the transformative impact of these technologies
-                                                                                                        across various sectors.
-                                                                                                    </p>
+                                                                                                            The 8th Tanzania Annual ICT Conference 2024 (TAIC-2024), first Africa Edition, organized by the ICT
+                                                                                                            Commission (ICTC), in collaboration with ELEVATE and the African Union Development Agency-NEPAD
+                                                                                                            (AUDA-NEPAD), is scheduled to take place in Dar es Salaam, Tanzania at the Julius Nyerere International
+                                                                                                            Conference Centre (JNICC) from October 13th to October 17th, 2024. Pre-conference events, including the
+                                                                                                            African AI Competition, are planned for October 13th and 14th, and will be open to public participation.
+                                                                                                        </p>
+                                                                                                        <p class="my-5 text-justify">
+                                                                                                            Building on the success of previous conferences, TAIC-2024 will gather a broad spectrum of participants,
+                                                                                                            including ICT professionals, practitioners, academics, researchers, development partners, industry leaders,
+                                                                                                            and innovators in digital technology. This year’s theme, “Unleashing the Power of Artificial Intelligence
+                                                                                                            and Robotics for Socio-economic Transformation”, focuses on the transformative impact of these technologies
+                                                                                                            across various sectors.
+                                                                                                        </p>
 
-                                                                                                    <p class="my-5 text-justify">
-                                                                                                        At a pivotal time when the global economy is embracing digital transformation, Tanzania is strategically
-                                                                                                        advanc- ing its economic policies to exploit the full potential of AI and robotics. This effort is aimed at
-                                                                                                        transitioning into a higher middle-income economy. TAIC-2024 will provide an invaluable platform for sharing
-                                                                                                        innovative ideas, practices, and research findings among ICT profession- als, academia, government and
-                                                                                                        private institutions, and development partners. This gathering is essential for steering Tanzania towards a
-                                                                                                        digitally empowered economy, characterized by enhanced ICT accessibility, affordability, and availability.
-                                                                                                    </p>
+                                                                                                        <p class="my-5 text-justify">
+                                                                                                            At a pivotal time when the global economy is embracing digital transformation, Tanzania is strategically
+                                                                                                            advanc- ing its economic policies to exploit the full potential of AI and robotics. This effort is aimed at
+                                                                                                            transitioning into a higher middle-income economy. TAIC-2024 will provide an invaluable platform for sharing
+                                                                                                            innovative ideas, practices, and research findings among ICT profession- als, academia, government and
+                                                                                                            private institutions, and development partners. This gathering is essential for steering Tanzania towards a
+                                                                                                            digitally empowered economy, characterized by enhanced ICT accessibility, affordability, and availability.
+                                                                                                        </p>
 
-                                                                                                    <p class="my-5 text-4xl font-semibold text-black">
-                                                                                                        <span class="text-primary">The launching of African Youth in</span> Artificial Intelligence and Robotics
-                                                                                                        Competition. -->
+                                                                                                        <p class="my-5 text-4xl font-semibold text-black">
+                                                                                                            <span class="text-primary">The launching of African Youth in</span> Artificial Intelligence and Robotics
+                                                                                                            Competition. -->
 
 
         </div>
@@ -305,9 +305,13 @@
                     $colors = ['fill-primary', 'fill-alt-green', 'fill-secondary'];
                 @endphp
                 @foreach ($reviews as $index => $review)
+                    @php
+                        $bgColor = $colors[$index % 3];
+                    @endphp
                     <div class="inline-flex gap-5">
-                        <img class="mb-auto ml-2 mt-1 place-self-end overflow-clip rounded-full"
-                            src="{{ Vite::asset('resources/images/doreen.svg') }}" alt="">
+                        {{-- <img class="mb-auto ml-2 mt-1 place-self-end overflow-clip rounded-full"
+                            src="{{ Vite::asset('resources/images/doreen.svg') }}" alt=""> --}}
+                        <x-heroicon-o-user class="mb-auto ml-2 mt-1 place-self-end w-12 rounded-full border {{ $bgColor }} p-1" />
                         <div>
                             <h4 class="font-bold">{{ $review->full_name }}</h4>
                             <h5 class="text-xs text-gray-500">{{ $review->company_name }}</h5>
@@ -316,7 +320,7 @@
                                 starsRemaining: {{ 5 - $review->rating }},
                             }" class="inline-flex">
                                 <template x-for="i in starsGiven" :key="i">
-                                    <x-heroicon-o-star class="w-4 rounded-none {{$colors[$index % 3]}} stroke-none" />
+                                    <x-heroicon-o-star class="{{ $bgColor }} w-4 rounded-none stroke-none" />
                                 </template>
                                 <template x-for="i in starsRemaining" :key="i">
                                     <x-heroicon-o-star class="w-4 rounded-none fill-gray-300 stroke-none" />
