@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\EventBooking;
 use App\Models\EventModel;
+use App\Models\EventReview;
 use Closure;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -30,8 +31,32 @@ class EventController extends Controller
     public function index(?EventModel $event = null): View
     {
         $event = $event ?: EventModel::latest()->first();
+
+        $reviews = EventReview::whereStatus(EventReview::STATUS_APPROVED)
+            ->paginate(3)
+            ->withQueryString();
+        $reviewStats = EventReview::whereEventModelId($event->id)
+            ->whereStatus(EventReview::STATUS_APPROVED)
+            ->selectRaw("
+                COUNT(CASE WHEN rating = 5 THEN 1 END) as five_stars,
+                ROUND(LOG(COUNT(CASE WHEN rating = 5 THEN 1 END) + 1), 2) * 100 as five_stars_percent,
+                COUNT(CASE WHEN rating = 4 THEN 1 END) as four_stars,
+                ROUND(LOG(COUNT(CASE WHEN rating = 4 THEN 1 END) + 1), 2) * 100 as four_stars_percent,
+                COUNT(CASE WHEN rating = 3 THEN 1 END) as three_stars,
+                ROUND(LOG(COUNT(CASE WHEN rating = 3 THEN 1 END) + 1), 2) * 100 as three_stars_percent,
+                COUNT(CASE WHEN rating = 2 THEN 1 END) as two_stars,
+                ROUND(LOG(COUNT(CASE WHEN rating = 2 THEN 1 END) + 1), 2) * 100 as two_stars_percent,
+                COUNT(CASE WHEN rating = 1 THEN 1 END) as one_star,
+                ROUND(LOG(COUNT(CASE WHEN rating = 1 THEN 1 END) + 1), 2) * 100 as one_star_percent,
+                ROUND(AVG(rating), 1) as average_rating,
+                COUNT(*) as total_reviews
+            ")
+            ->first();
+
         return view('index', [
             'event' => $event,
+            'reviews' => $reviews,
+            'reviewStats' => $reviewStats,
         ]);
     }
 
