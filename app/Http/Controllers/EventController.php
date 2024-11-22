@@ -46,8 +46,8 @@ class EventController extends Controller
                 ROUND(LOG(COUNT(CASE WHEN rating = 3 THEN 1 END) + 1), 2) * 100 as three_stars_percent,
                 COUNT(CASE WHEN rating = 2 THEN 1 END) as two_stars,
                 ROUND(LOG(COUNT(CASE WHEN rating = 2 THEN 1 END) + 1), 2) * 100 as two_stars_percent,
-                COUNT(CASE WHEN rating = 1 THEN 1 END) as one_star,
-                ROUND(LOG(COUNT(CASE WHEN rating = 1 THEN 1 END) + 1), 2) * 100 as one_star_percent,
+                COUNT(CASE WHEN rating = 1 THEN 1 END) as one_stars,
+                ROUND(LOG(COUNT(CASE WHEN rating = 1 THEN 1 END) + 1), 2) * 100 as one_stars_percent,
                 ROUND(AVG(rating), 1) as average_rating,
                 COUNT(*) as total_reviews
             ")
