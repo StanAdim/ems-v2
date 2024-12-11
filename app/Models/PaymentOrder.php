@@ -22,11 +22,12 @@ use LaravelDaily\Invoices\Facades\Invoice;
  * @property string $description
  * @property string|null $control_no
  * @property float $total_amount
- * @property float|null $paid_amount
+ * @property string|null $paid_amount
  * @property string|null $phone_number
  * @property PaymentOrderStatus $status
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $paid_at
  * @property \Illuminate\Support\Carbon|null $expires_on
  * @property string|null $invoice_url
  * @property \Illuminate\Support\Collection|null $customer_details
@@ -45,6 +46,7 @@ use LaravelDaily\Invoices\Facades\Invoice;
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentOrder whereInvoiceUrl($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentOrder whereMiddlewareBillData($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentOrder wherePaidAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PaymentOrder wherePaidAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentOrder wherePhoneNumber($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentOrder whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentOrder whereTotalAmount($value)
@@ -61,6 +63,7 @@ class PaymentOrder extends Model
 
     protected $casts = [
         'expires_on' => 'datetime',
+        'paid_at' => 'datetime',
         'status' => PaymentOrderStatus::class,
         'customer_details' => AsCollection::class,
         'total_amount' => 'float',
@@ -102,11 +105,15 @@ class PaymentOrder extends Model
             'name' => $firstCustomer['name'],
             'custom_fields' => [
                 'email' => $firstCustomer['email'],
+                'control_no' => $this->control_no,
+                'phone_number' => $this->phone_number,
             ],
         ]);
 
         $item = InvoiceItem::make($this->description)->pricePerUnit($this->total_amount);
-        $invoice = Invoice::make($this->control_no)
+        $invoice = Invoice::make($this->description)
+            ->status($this->isPaid() ? 'paid' : 'not-paid')
+            ->setCustomData(['paid_at' => $this->paid_at?->toDateString()])
             ->seller($seller)
             ->buyer($customer)
             ->currencySymbol('TSHS')

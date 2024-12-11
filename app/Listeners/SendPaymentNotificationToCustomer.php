@@ -2,12 +2,12 @@
 
 namespace App\Listeners;
 
-use App\Events\ControlNoUpdated;
-use App\Mail\PaymentOrderInvoiceMail;
+use App\Events\PaymentOrderPaid;
+use App\Mail\PaymentOrderPaidMail;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Mail;
 
-class SendInvoiceToCustomer implements ShouldQueue
+class SendPaymentNotificationToCustomer implements ShouldQueue
 {
     /**
      * Create the event listener.
@@ -20,7 +20,7 @@ class SendInvoiceToCustomer implements ShouldQueue
     /**
      * Handle the event.
      */
-    public function handle(ControlNoUpdated $event): void
+    public function handle(PaymentOrderPaid $event): void
     {
         $paymentOrder = $event->paymentOrder;
         $paymentOrder->generateInvoiceDocument();
@@ -31,7 +31,7 @@ class SendInvoiceToCustomer implements ShouldQueue
 
         foreach ($emails as $recepient) {
             Mail::to($recepient)
-                ->send(new PaymentOrderInvoiceMail($paymentOrder));
+                ->send(new PaymentOrderPaidMail($paymentOrder));
         }
     }
 }

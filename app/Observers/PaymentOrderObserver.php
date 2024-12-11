@@ -3,7 +3,7 @@
 namespace App\Observers;
 
 use App\Events\PaymentOrderPosted;
-use App\Mail\PaymentOrderInvoice;
+use App\Mail\PaymentOrderInvoiceMail;
 use App\Models\PaymentOrder;
 use Carbon\Carbon;
 use LaravelDaily\Invoices\Classes\Buyer;

@@ -2,14 +2,16 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\EventState;
 use App\Filament\Resources\EventModelResource\Pages;
-use App\Filament\Resources\EventModelResource\RelationManagers;
+use App\Filament\Resources\EventModelResource\RelationManagers\BookingsRelationManager;
+use App\Filament\Resources\EventModelResource\RelationManagers\ExhibitionBookingsRelationManager;
+use App\Filament\Resources\EventModelResource\RelationManagers\ReviewsRelationManager;
 use App\Models\EventModel;
 use ArberMustafa\FilamentLocationPickrField\Forms\Components\LocationPickr;
 use Filament\Forms;
-use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Repeater;
-use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\Split;
@@ -24,14 +26,13 @@ use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use FilamentTiptapEditor\TiptapEditor;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use TomatoPHP\FilamentIcons\Components\IconPicker;
 
 class EventModelResource extends Resource
 {
     protected static ?string $model = EventModel::class;
     protected static ?string $modelLabel = 'Event';
+    protected static ?string $recordTitleAttribute = 'linkTitle';
 
     protected static ?string $navigationIcon = 'heroicon-o-calendar-days';
 
@@ -45,8 +46,9 @@ class EventModelResource extends Resource
                             TextInput::make('title')->required(),
                             TextInput::make('linkTitle')->label('Short Title')->hint('For Displaying in Links')->required(),
                             Split::make([
-                                DateTimePicker::make('startsOn')->minutesStep(15)->seconds(false)->required(),
-                                DateTimePicker::make('endsOn')->minutesStep(15)->seconds(false)->required(),
+                                DatePicker::make('startsOn')->required(),
+                                DatePicker::make('endsOn')->required(),
+                                Select::make('state')->options(EventState::class)->native(false)->required(),
                             ]),
                             SpatieMediaLibraryFileUpload::make('event_logo')->collection(EventModel::MEDIA_COLLECTION_EVENT_LOGO),
                             SpatieMediaLibraryFileUpload::make('call_for_speakers_document')->collection(EventModel::MEDIA_COLLECTION_CALL_FOR_SPEAKERS_DOCUMENT),
@@ -138,7 +140,6 @@ class EventModelResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -146,7 +147,9 @@ class EventModelResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            BookingsRelationManager::class,
+            ExhibitionBookingsRelationManager::class,
+            ReviewsRelationManager::class,
         ];
     }
 

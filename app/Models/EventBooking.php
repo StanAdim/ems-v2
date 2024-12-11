@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\EventBookingAttendeeModels;
 use App\Contracts\Billable;
 use App\Observers\EventBookingObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
@@ -14,10 +15,10 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
 
 /**
- *
+ * 
  *
  * @property int $id
- * @property Collection $attendees
+ * @property \Illuminate\Support\Collection|\App\Models\JSON\EventBookingAttendee[] $attendees
  * @property int $event_id
  * @property float $total_amount
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -48,7 +49,7 @@ class EventBooking extends Model implements Billable
     use HasFactory;
 
     protected $casts = [
-        'attendees' => AsCollection::class,
+        'attendees' => EventBookingAttendeeModels::class,
         'total_amount' => 'float',
     ];
 
@@ -95,7 +96,7 @@ class EventBooking extends Model implements Billable
     {
         $tiketNumbers = $this
             ->attendees
-            ->map(fn($a) => $a['ticket_no'])
+            ->map(fn($a) => $a->ticket_no)
             ->toArray();
 
         return [
@@ -114,7 +115,7 @@ class EventBooking extends Model implements Billable
     }
     public function customerDetails(): Collection
     {
-        return $this->attendees;
+        return collect($this->attendees->toArray());
     }
     public function updateWithPaymentOrder(PaymentOrder $paymentOrder): void
     {

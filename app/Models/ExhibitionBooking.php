@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Casts\AttendeeModels;
+use App\Casts\ExhibitionAttendeeModels;
 use App\Contracts\Billable;
 use App\Models\JSON\Booth;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -62,7 +62,7 @@ class ExhibitionBooking extends Model implements Billable
 
     protected $casts = [
         'total' => 'float',
-        'attendees' => AttendeeModels::class,
+        'attendees' => ExhibitionAttendeeModels::class,
     ];
 
     public function event(): BelongsTo

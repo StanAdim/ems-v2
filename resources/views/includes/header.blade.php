@@ -111,9 +111,11 @@
         </div> --}}
         <div class="ml-auto place-content-center justify-end">
             <div class="flex">
-                <button data-modal-target="register-event-modal" data-modal-toggle="register-event-modal"
-                    class="ml-auto rounded-lg bg-secondary px-5 py-3 font-medium text-black ring-1 ring-secondary">Attend
-                    this event</button>
+                @if ($event->isOpenForRegistration())
+                    <button data-modal-target="register-event-modal" data-modal-toggle="register-event-modal"
+                        class="ml-auto rounded-lg bg-secondary px-5 py-3 font-medium text-black ring-1 ring-secondary">Attend
+                        this event</button>
+                @endif
                 <a class="ml-2 rounded-lg px-5 py-3 font-medium text-white ring-1 ring-white"
                     href="{{ Auth::user() ? route('dashboard') : route('login') }}">
                     {{ Auth::user() ? 'Dashboard' : 'Login' }}
@@ -168,7 +170,8 @@
                 </li>
                 <li>
                     <a href="{{ route('event.hospitality-tours', ['event' => $event]) }}"
-                        class="{{ Route::is('event.hospitality-tours') ? 'text-secondary' : 'text-white ' }} hover:underline">Hospitality & Tours</a>
+                        class="{{ Route::is('event.hospitality-tours') ? 'text-secondary' : 'text-white ' }} hover:underline">Hospitality
+                        & Tours</a>
                 </li>
                 <li>
                     <a href="{{ route('event.help', ['event' => $event]) }}"
@@ -209,7 +212,9 @@
                 </button>
             </div>
 
-            <livewire:create-event-booking :event="$event" parentId='register-event-modal'>
+            @if ($event->isOpenForRegistration())
+                <livewire:create-event-booking :event="$event" parentId='register-event-modal'>
+            @endif
 
         </div>
     </div>

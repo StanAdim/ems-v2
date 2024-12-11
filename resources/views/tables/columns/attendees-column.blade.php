@@ -6,7 +6,15 @@
     @if ($state)
         <ul class="list-disc">
             @foreach ($state as $item)
-                <li>{{ $item['name'] ?? '' }} {{-- ({{ $item['phone_number'] ?? '' }} {{ $item['email'] ?? '' }}) --}}</li>
+                @php
+                    $hasTicketNo = property_exists($item, 'ticket_no');
+                @endphp
+                <li>
+                    {{ $item->name }}
+                    @if ($hasTicketNo)
+                        <span class="font-light italic">{{ $item->ticket_no }}</span>
+                    @endif
+                </li>
             @endforeach
         </ul>
     @else

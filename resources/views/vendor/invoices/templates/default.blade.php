@@ -5,9 +5,96 @@
     <title>{{ $invoice->name }}</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
+    <link href="{{ Vite::asset('resources/fonts/ibm-plex-sans/ibm-plex-sans.css') }}" rel="stylesheet">
+
     <style type="text/css" media="screen">
+        .ibm-plex-sans-thin {
+            font-family: "IBM Plex Sans", sans-serif;
+            font-weight: 100;
+            font-style: normal;
+        }
+
+        .ibm-plex-sans-extralight {
+            font-family: "IBM Plex Sans", sans-serif;
+            font-weight: 200;
+            font-style: normal;
+        }
+
+        .ibm-plex-sans-light {
+            font-family: "IBM Plex Sans", sans-serif;
+            font-weight: 300;
+            font-style: normal;
+        }
+
+        .ibm-plex-sans-regular {
+            font-family: "IBM Plex Sans", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        .ibm-plex-sans-medium {
+            font-family: "IBM Plex Sans", sans-serif;
+            font-weight: 500;
+            font-style: normal;
+        }
+
+        .ibm-plex-sans-semibold {
+            font-family: "IBM Plex Sans", sans-serif;
+            font-weight: 600;
+            font-style: normal;
+        }
+
+        .ibm-plex-sans-bold {
+            font-family: "IBM Plex Sans", sans-serif;
+            font-weight: 700;
+            font-style: normal;
+        }
+
+        .ibm-plex-sans-thin-italic {
+            font-family: "IBM Plex Sans", sans-serif;
+            font-weight: 100;
+            font-style: italic;
+        }
+
+        .ibm-plex-sans-extralight-italic {
+            font-family: "IBM Plex Sans", sans-serif;
+            font-weight: 200;
+            font-style: italic;
+        }
+
+        .ibm-plex-sans-light-italic {
+            font-family: "IBM Plex Sans", sans-serif;
+            font-weight: 300;
+            font-style: italic;
+        }
+
+        .ibm-plex-sans-regular-italic {
+            font-family: "IBM Plex Sans", sans-serif;
+            font-weight: 400;
+            font-style: italic;
+        }
+
+        .ibm-plex-sans-medium-italic {
+            font-family: "IBM Plex Sans", sans-serif;
+            font-weight: 500;
+            font-style: italic;
+        }
+
+        .ibm-plex-sans-semibold-italic {
+            font-family: "IBM Plex Sans", sans-serif;
+            font-weight: 600;
+            font-style: italic;
+        }
+
+        .ibm-plex-sans-bold-italic {
+            font-family: "IBM Plex Sans", sans-serif;
+            font-weight: 700;
+            font-style: italic;
+        }
+
+
         html {
-            font-family: sans-serif;
+            font-family: "IBM Plex Sans", sans-serif;
             line-height: 1.15;
             margin: 0;
         }
@@ -19,7 +106,7 @@
             color: #212529;
             text-align: left;
             background-color: #fff;
-            font-size: 10px;
+            font-size: 12px;
             margin: 36pt;
         }
 
@@ -70,9 +157,16 @@
 
         .table th,
         .table td {
+            padding: 0.32rem;
+            vertical-align: top;
+        }
+
+        .table.table-items th,
+        .table.table-items td {
             padding: 0.75rem;
             vertical-align: top;
         }
+
 
         .table.table-items td {
             border-top: 1px solid #dee2e6;
@@ -81,6 +175,14 @@
         .table thead th {
             vertical-align: bottom;
             border-bottom: 2px solid #dee2e6;
+        }
+
+        .mt-0 {
+            margin-top: 0 !important;
+        }
+
+        .mb-o {
+            margin-bottom: 0 !important;
         }
 
         .mt-5 {
@@ -109,8 +211,12 @@
             text-transform: uppercase !important;
         }
 
+        .order-details tr {
+            margin-top: 0;
+        }
+
         * {
-            font-family: "DejaVu Sans";
+            font-family: "IBM Plex Sans", sans-serif;
         }
 
         body,
@@ -135,8 +241,9 @@
         }
 
         .total-amount {
-            font-size: 12px;
+            font-size: 16px;
             font-weight: 700;
+            color: #0DA3DE;
         }
 
         .border-0 {
@@ -157,6 +264,20 @@
         .logo img {
             height: 100%;
         }
+
+        .footer {
+            width: 85%;
+            text-align: center;
+            border-top: 1px solid #000;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+        }
+
+        .footer p {
+            margin: 0;
+            font-size: 12px;
+        }
     </style>
 </head>
 
@@ -170,37 +291,60 @@
 
     <hr />
 
-
-    <table class="mt-5 table" style="width: 300px">
-        <tbody>
+    <table class="table" style="width: 300px">
+        <thead>
             <tr>
                 <td class="border-0 pl-0" width="50%">
                     <h3>Order Details: </h3>
                 </td>
-                <td class="border-0 pl-0">
-
-                </td>
+                <td class="border-0 pl-0"> </td>
             </tr>
-            <tr>
+        </thead>
+        <tbody>
+            <tr class="pt-0">
                 <td class="border-0 pl-0" width="50%">
                     Control Number:
                 </td>
                 <td class="border-0 pl-0">
-                    123456567890
+                    {{ $invoice->buyer->custom_fields['control_no'] }}
                 </td>
             </tr>
-            <tr>
+            <tr class="mt-0">
                 <td class="border-0 pl-0" width="50%">
                     Payment Reference:
                 </td>
                 <td class="border-0 pl-0">
-                    ICT-123456567890
+                    ICTC-{{ $invoice->buyer->custom_fields['control_no'] }}
+                </td>
+            </tr>
+            <tr>
+                <td class="border-0 pl-0" width="50%">
+                    Payer Name:
+                </td>
+                <td class="border-0 pl-0">
+                    {{ $invoice->buyer->name }}
+                </td>
+            </tr>
+            <tr>
+                <td class="border-0 pl-0" width="50%">
+                    Payer Phone:
+                </td>
+                <td class="border-0 pl-0">
+                    {{ $invoice->buyer->custom_fields['phone_number'] }}
+                </td>
+            </tr>
+            <tr>
+                <td class="border-0 pl-0" width="50%">
+                    Payer Email:
+                </td>
+                <td class="border-0 pl-0">
+                    {{ $invoice->buyer->custom_fields['email'] }}
                 </td>
             </tr>
         </tbody>
     </table>
 
-    <table class="mt-5 table">
+    {{-- <table class="mt-5 table">
         <tbody>
             <tr>
                 <td class="border-0 pl-0" width="70%">
@@ -219,10 +363,10 @@
                 </td>
             </tr>
         </tbody>
-    </table>
+    </table> --}}
 
     {{-- Seller - Buyer --}}
-    <table class="table">
+    {{-- <table class="table">
         <thead>
             <tr>
                 <th class="party-header border-0 pl-0" width="48.5%">
@@ -313,25 +457,14 @@
                 </td>
             </tr>
         </tbody>
-    </table>
+    </table> --}}
 
     {{-- Table --}}
     <table class="table-items table">
         <thead>
             <tr>
-                <th scope="col" class="border-0 pl-0">{{ __('invoices::invoice.description') }}</th>
-                @if ($invoice->hasItemUnits)
-                    <th scope="col" class="border-0 text-center">{{ __('invoices::invoice.units') }}</th>
-                @endif
-                <th scope="col" class="border-0 text-center">{{ __('invoices::invoice.quantity') }}</th>
-                <th scope="col" class="border-0 text-right">{{ __('invoices::invoice.price') }}</th>
-                @if ($invoice->hasItemDiscount)
-                    <th scope="col" class="border-0 text-right">{{ __('invoices::invoice.discount') }}</th>
-                @endif
-                @if ($invoice->hasItemTax)
-                    <th scope="col" class="border-0 text-right">{{ __('invoices::invoice.tax') }}</th>
-                @endif
-                <th scope="col" class="border-0 pr-0 text-right">{{ __('invoices::invoice.sub_total') }}</th>
+                <th scope="col" class="border-0 pl-0">Activity Description</th>
+                <th scope="col" class="border-0 pr-0 text-right">Amount</th>
             </tr>
         </thead>
         <tbody>
@@ -345,23 +478,6 @@
                             <p class="cool-gray">{{ $item->description }}</p>
                         @endif
                     </td>
-                    @if ($invoice->hasItemUnits)
-                        <td class="text-center">{{ $item->units }}</td>
-                    @endif
-                    <td class="text-center">{{ $item->quantity }}</td>
-                    <td class="text-right">
-                        {{ $invoice->formatCurrency($item->price_per_unit) }}
-                    </td>
-                    @if ($invoice->hasItemDiscount)
-                        <td class="text-right">
-                            {{ $invoice->formatCurrency($item->discount) }}
-                        </td>
-                    @endif
-                    @if ($invoice->hasItemTax)
-                        <td class="text-right">
-                            {{ $invoice->formatCurrency($item->tax) }}
-                        </td>
-                    @endif
 
                     <td class="pr-0 text-right">
                         {{ $invoice->formatCurrency($item->sub_total_price) }}
@@ -369,54 +485,8 @@
                 </tr>
             @endforeach
             {{-- Summary --}}
-            @if ($invoice->hasItemOrInvoiceDiscount())
-                <tr>
-                    <td colspan="{{ $invoice->table_columns - 2 }}" class="border-0"></td>
-                    <td class="pl-0 text-right">{{ __('invoices::invoice.total_discount') }}</td>
-                    <td class="pr-0 text-right">
-                        {{ $invoice->formatCurrency($invoice->total_discount) }}
-                    </td>
-                </tr>
-            @endif
-            @if ($invoice->taxable_amount)
-                <tr>
-                    <td colspan="{{ $invoice->table_columns - 2 }}" class="border-0"></td>
-                    <td class="pl-0 text-right">{{ __('invoices::invoice.taxable_amount') }}</td>
-                    <td class="pr-0 text-right">
-                        {{ $invoice->formatCurrency($invoice->taxable_amount) }}
-                    </td>
-                </tr>
-            @endif
-            @if ($invoice->tax_rate)
-                <tr>
-                    <td colspan="{{ $invoice->table_columns - 2 }}" class="border-0"></td>
-                    <td class="pl-0 text-right">{{ __('invoices::invoice.tax_rate') }}</td>
-                    <td class="pr-0 text-right">
-                        {{ $invoice->tax_rate }}%
-                    </td>
-                </tr>
-            @endif
-            @if ($invoice->hasItemOrInvoiceTax())
-                <tr>
-                    <td colspan="{{ $invoice->table_columns - 2 }}" class="border-0"></td>
-                    <td class="pl-0 text-right">{{ __('invoices::invoice.total_taxes') }}</td>
-                    <td class="pr-0 text-right">
-                        {{ $invoice->formatCurrency($invoice->total_taxes) }}
-                    </td>
-                </tr>
-            @endif
-            @if ($invoice->shipping_amount)
-                <tr>
-                    <td colspan="{{ $invoice->table_columns - 2 }}" class="border-0"></td>
-                    <td class="pl-0 text-right">{{ __('invoices::invoice.shipping') }}</td>
-                    <td class="pr-0 text-right">
-                        {{ $invoice->formatCurrency($invoice->shipping_amount) }}
-                    </td>
-                </tr>
-            @endif
             <tr>
-                <td colspan="{{ $invoice->table_columns - 2 }}" class="border-0"></td>
-                <td class="pl-0 text-right">{{ __('invoices::invoice.total_amount') }}</td>
+                <td class="pl-0 text-right"><strong>Total Billed Amount</strong></td>
                 <td class="total-amount pr-0 text-right">
                     {{ $invoice->formatCurrency($invoice->total_amount) }}
                 </td>
@@ -424,7 +494,43 @@
         </tbody>
     </table>
 
-    @if ($invoice->notes)
+    <table class="mt-5 table">
+        <thead>
+            <tr>
+                <th scope="col" class="border-0"><strong>Due Date:</strong></th>
+                <th scope="col" class="border-0"><strong>Issue date:</strong></th>
+                <th scope="col" class="border-0"><strong>Prepared by:</strong></th>
+                <th scope="col" class="border-0"><strong>Printed by:</strong></th>
+                @if ($invoice->status === 'paid')
+                    <th scope="col" class="border-0"><strong>Paid on:</strong></th>
+                @endif
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="border-0">
+                    {{ $invoice->getPayUntilDate() }}
+                </td>
+                <td class="border-0">
+                    {{ $invoice->getDate() }}
+                </td>
+                <td class="border-0">
+                    {{ $invoice->seller->name }}
+                </td>
+                <td class="border-0">
+                    {{ $invoice->buyer->name }}
+                </td>
+                @if ($invoice->status === 'paid')
+                    <td class="border-0">
+                        {{ $invoice->getCustomData()['paid_at'] }}
+                    </td>
+                @endif
+            </tr>
+        </tbody>
+    </table>
+
+
+    {{--  @if ($invoice->notes)
         <p>
             {{ __('invoices::invoice.notes') }}: {!! $invoice->notes !!}
         </p>
@@ -435,9 +541,52 @@
     </p>
     <p>
         {{ __('invoices::invoice.pay_until') }}: {{ $invoice->getPayUntilDate() }}
-    </p>
+    </p> --}}
 
-    <script type="text/php">
+    <table class="mt-5 table">
+        <tbody>
+            <tr>
+                <th>Jinsi ya kulipa:</th>
+                <th>How to pay:</th>
+            </tr>
+            <tr>
+                <td>
+                    <strong>1. Kupitia Benki: </strong> <br />
+                    Fika tawi lolote au wakala wa Benki ya CRDB,NMB,BOT. Nambari ya kumbukumbu ni
+                    {{ $invoice->buyer->custom_fields['control_no'] }}
+                </td>
+                <td>
+                    <strong>1. Via Bank:</strong> <br />
+                    Visit any Branch or Bank agent of CRDB,NMB,BOT. Reference number is
+                    {{ $invoice->buyer->custom_fields['control_no'] }}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <strong>2. Kupitia mitandao ya Simu</strong><br>
+                    Ingia kwenye simu ya mtandao husika <br />
+                    Chagua 4 (Lipa Bili) <br />
+                    Chagua 5 (Malipo ya Serikali) <br />
+                    Ingiza <strong>{{ $invoice->buyer->custom_fields['control_no'] }}</strong> kama nambari ya
+                    kumbukumbu
+                </td>
+                <td>
+                    <strong>2. Via Mobile Network Operators (MNOs)</strong><br>
+                    Go to the respective USSD menu of the MNO <br />
+                    Select 4 (Make Payment) <br />
+                    Select 5 (Government Payment) <br />
+                    Enter <strong>{{ $invoice->buyer->custom_fields['control_no'] }}</strong> as Reference number
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>www.ictc.go.tz</p>
+        </footer>
+
+        <script type="text/php">
             if (isset($pdf) && $PAGE_COUNT > 1) {
                 $text = "{{ __('invoices::invoice.page') }} {PAGE_NUM} / {PAGE_COUNT}";
                 $size = 10;

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- *
+ * 
  *
  * @property int $id
  * @property int $user_id
@@ -25,6 +25,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|EventReview newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|EventReview newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|EventReview query()
+ * @method static \Illuminate\Database\Eloquent\Builder|EventReview whereComment($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EventReview whereCompanyName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EventReview whereCompanyRole($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EventReview whereCreatedAt($value)
@@ -32,9 +33,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|EventReview whereFullName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EventReview whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EventReview whereRating($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|EventReview whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EventReview whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EventReview whereUserId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|EventReview whereStatus($value)
  * @mixin \Eloquent
  */
 class EventReview extends Model

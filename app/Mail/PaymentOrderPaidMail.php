@@ -11,7 +11,7 @@ use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 use Number;
 
-class PaymentOrderInvoice extends Mailable implements ShouldQueue
+class PaymentOrderPaidMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
@@ -29,7 +29,7 @@ class PaymentOrderInvoice extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Payment Order Invoice for ' . $this->paymentOrder->description,
+            subject: 'Your Payment Order for ' . $this->paymentOrder->description . ' has been paid',
         );
     }
 
@@ -39,13 +39,12 @@ class PaymentOrderInvoice extends Mailable implements ShouldQueue
     public function content(): Content
     {
         return new Content(
-            markdown: 'mail.payment-order.invoice',
+            markdown: 'mail.payment-order.paid',
             with: [
                 'description' => $this->paymentOrder->description,
                 'controlNumber' => $this->paymentOrder->control_no,
-                'expiresOn' => $this->paymentOrder->expires_on->format('F j, Y'),
-                'attachementLink' => $this->paymentOrder->invoice_url,
                 'totalPrice' => 'TZS ' . Number::format($this->paymentOrder->total_amount),
+                'attachementLink' => $this->paymentOrder->invoice_url,
             ]
         );
     }

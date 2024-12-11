@@ -16,4 +16,9 @@ class ViewEventModel extends ViewRecord
             Actions\EditAction::make(),
         ];
     }
+
+    public function hasCombinedRelationManagerTabsWithContent(): bool
+    {
+        return true;
+    }
 }

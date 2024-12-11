@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\EventBooking;
+use App\Models\JSON\EventBookingAttendee;
 use Str;
 
 class EventBookingObserver
@@ -26,10 +27,10 @@ class EventBookingObserver
         $count = 0;
         $updatedAttendees = $booking
             ->attendees
-            ->map(function (array $a) use ($count, $eventShortName, $booking) {
+            ->map(function (EventBookingAttendee $a) use ($count, $eventShortName, $booking) {
                 $id = $booking->id . (++$count);
                 $ticket_no = $this->generateTicketNumber($eventShortName, $id);
-                $a['ticket_no'] = $ticket_no;
+                $a->ticket_no = $ticket_no;
 
                 return $a;
             });

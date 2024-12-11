@@ -52,14 +52,19 @@ class BillingController extends Controller
             throw new BadRequestHttpException("Bill control_number  mismatch. Please Check if the control number you are sending is correct. Data: {$validated}");
         }
 
+        $wasNotInitiallyPaid = $paymentOrder->status !== PaymentOrderStatus::Paid;
+
         $paymentOrder->status = PaymentOrderStatus::Paid;
         $paymentOrder->paid_amount = $validated['paid_amount'];
+        $paymentOrder->paid_at = now();
         $paymentOrder->save();
 
         Log::info("Updated Payment Status, Bill UUID: $uuid");
 
-        PaymentOrderPaid::dispatch($paymentOrder);
-
+        if ($wasNotInitiallyPaid) {
+            PaymentOrderPaid::dispatch($paymentOrder);
+        }
+        
         return [
             'status' => 'success',
         ];

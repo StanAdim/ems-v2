@@ -3,16 +3,14 @@
 namespace App\Models;
 
 use App\Casts\BoothConfigurationCast;
+use App\Enums\EventState;
 use BezhanSalleh\FilamentShield\Traits\HasPanelShield;
-use Illuminate\Database\Eloquent\Casts\AsCollection;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
-use Spatie\MediaLibrary\MediaCollections\MediaCollection;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Permission\Traits\HasRoles;
 
@@ -37,6 +35,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Collection|\App\Models\JSON\Booth[]|null $exhibition_booths
+ * @property EventState $state
  * @property-read mixed $about_banner
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\EventBooking> $bookings
  * @property-read int|null $bookings_count
@@ -44,6 +43,8 @@ use Spatie\Permission\Traits\HasRoles;
  * @property-read mixed $call_for_speakers_document
  * @property-read mixed $event_logo
  * @property-read mixed $exhibition_layout_plan
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ExhibitionBooking> $exhibition_bookings
+ * @property-read int|null $exhibition_bookings_count
  * @property-read mixed $main_banner
  * @property-read \Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection<int, Media> $media
  * @property-read int|null $media_count
@@ -52,6 +53,8 @@ use Spatie\Permission\Traits\HasRoles;
  * @property-read int|null $permissions_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\EventConversation> $questions
  * @property-read int|null $questions_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\EventReview> $reviews
+ * @property-read int|null $reviews_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Permission\Models\Role> $roles
  * @property-read int|null $roles_count
  * @property-read mixed $theme_banner
@@ -74,6 +77,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @method static \Illuminate\Database\Eloquent\Builder|EventModel whereLocation($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EventModel whereLocationDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EventModel whereStartsOn($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|EventModel whereState($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EventModel whereSubThemes($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EventModel whereTheme($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EventModel whereTitle($value)
@@ -117,6 +121,7 @@ class EventModel extends Model implements HasMedia
         'layout',
         'fees',
         'exhibition_booths',
+        'state',
     ];
 
     protected $casts = [
@@ -126,6 +131,7 @@ class EventModel extends Model implements HasMedia
         'endsOn' => 'datetime',
         'fees' => 'json',
         'exhibition_booths' => BoothConfigurationCast::class,
+        'state' => EventState::class,
     ];
 
     protected $attributes = [
@@ -260,6 +266,26 @@ class EventModel extends Model implements HasMedia
         return $this->hasMany(EventBooking::class, 'event_id');
     }
 
+    /**
+     * Get all of the exhibition bookings for the EventModel
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function exhibition_bookings(): HasMany
+    {
+        return $this->hasMany(ExhibitionBooking::class, 'event_model_id');
+    }
+
+    /**
+     * Get all of the reviews for the EventModel
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(EventReview::class, 'event_model_id');
+    }
+
     public function getAvailableFeesList()
     {
         $fees = [];
@@ -293,6 +319,17 @@ class EventModel extends Model implements HasMedia
     {
         return Attribute::make(
             get: fn() => $this->exhibition_booths->where('booking_id', '==', null)
+        );
+    }
+
+    public function isOpenForRegistration(): bool
+    {
+        return in_array(
+            $this->state,
+            [
+                EventState::Registration,
+                EventState::ParticipationAndRegistration,
+            ]
         );
     }
 

@@ -30,12 +30,16 @@ background-position-y: center;">
                     </h1>
                     <div class="mx-1 mb-20 mt-5">
                         <div class="ml-auto inline-flex place-content-center justify-end gap-8">
-                            <button data-modal-target="register-event-modal" data-modal-toggle="register-event-modal"
-                                class="ml-auto rounded-lg bg-secondary px-5 py-3 font-medium text-black">Register
-                                Now</button>
+                            @if ($event->isOpenForRegistration())
+                                <button data-modal-target="register-event-modal" data-modal-toggle="register-event-modal"
+                                    class="ml-auto rounded-lg bg-secondary px-5 py-3 font-medium text-black">
+                                    Register Now
+                                </button>
+                            @endif
                             <a href="{{ route('event.index', ['event' => $event]) }}"
-                                class="ml-auto rounded-lg px-5 py-3 font-medium text-white ring-1 ring-white">More
-                                Details</a>
+                                class="ml-auto rounded-lg px-5 py-3 font-medium text-white ring-1 ring-white">
+                                More Details
+                            </a>
                         </div>
                     </div>
                 </div>

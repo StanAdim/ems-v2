@@ -1,60 +1,41 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\Resources\EventModelResource\RelationManagers;
 
-use App\Filament\Resources\EventReviewResource\Pages;
-use App\Filament\Resources\EventReviewResource\RelationManagers;
 use App\Models\EventReview;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Infolists\Components\TextEntry;
-use Filament\Resources\Resource;
+use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class EventReviewResource extends Resource
+class ReviewsRelationManager extends RelationManager
 {
-    protected static ?string $model = EventReview::class;
+    protected static string $relationship = 'reviews';
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    public function canCreate(): bool
+    {
+        return false;
+    }
 
-    public static function form(Form $form): Form
+    public function form(Form $form): Form
     {
         return $form
             ->schema([
-                // Forms\Components\Select::make('user_id')
-                //     ->relationship('user', 'name')
-                //     ->required(),
-                // Forms\Components\Select::make('event_model_id')
-                //     ->relationship('event', 'title')
-                //     ->required(),
-                // Forms\Components\TextInput::make('rating')
-                //     ->required()
-                //     ->numeric(),
-                // Forms\Components\TextInput::make('full_name')
-                //     ->required()
-                //     ->maxLength(256),
-                // Forms\Components\TextInput::make('company_name')
-                //     ->required()
-                //     ->maxLength(256),
-                // Forms\Components\TextInput::make('company_role')
-                //     ->required()
-                //     ->maxLength(256),
-                // Forms\Components\TextInput::make('comment')
-                //     ->required()
-                //     ->maxLength(512),
-                // Forms\Components\TextInput::make('status')
-                //     ->required()
-                //     ->maxLength(256),
+                Forms\Components\TextInput::make('user.name')
+                    ->required()
+                    ->maxLength(255),
             ]);
     }
 
-    public static function table(Table $table): Table
+    public function table(Table $table): Table
     {
         return $table
+            ->recordTitleAttribute('user.name')
             ->columns([
                 Tables\Columns\TextColumn::make('user.name')
                     ->numeric()
@@ -97,7 +78,6 @@ class EventReviewResource extends Resource
                         1 => 'One Star',
                     ])
                     ->multiple(),
-
             ])
             ->actions([
                 Tables\Actions\ViewAction::make()
@@ -110,23 +90,7 @@ class EventReviewResource extends Resource
             ]);
     }
 
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
-    }
-
-    public static function getPages(): array
-    {
-        return [
-            'index' => Pages\ListEventReviews::route('/'),
-            'create' => Pages\CreateEventReview::route('/create'),
-            'edit' => Pages\EditEventReview::route('/{record}/edit'),
-        ];
-    }
-
-    public static function infolist(\Filament\Infolists\Infolist $infolist): \Filament\Infolists\Infolist
+    public function infolist(\Filament\Infolists\Infolist $infolist): \Filament\Infolists\Infolist
     {
         return $infolist
             ->schema([

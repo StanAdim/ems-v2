@@ -18,7 +18,7 @@ class PaymentOrderPaid
     /**
      * Create a new event instance.
      */
-    public function __construct(PaymentOrder $paymentOrder)
+    public function __construct(public PaymentOrder $paymentOrder)
     {
         //
     }

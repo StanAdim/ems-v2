@@ -14,9 +14,9 @@ class EditEventModel extends EditRecord
 
     protected function getHeaderActions(): array
     {
-        return [
+        $actions = [
             Actions\ViewAction::make(),
-            Actions\DeleteAction::make(),
+            // Actions\DeleteAction::make(),
             Actions\ReplicateAction::make()
                 ->excludeAttributes([
                     'startsOn',
@@ -39,5 +39,7 @@ class EditEventModel extends EditRecord
                     ]);
                 }),
         ];
+
+        return $actions;
     }
 }
