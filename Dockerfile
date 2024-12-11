@@ -46,9 +46,7 @@ COPY package-lock.json package.json ./
 RUN npm install
 
 # Copy existing application code to the container
-COPY --chown=www-data:www-data . .
-
-USER www-data
+COPY  . .
 
 RUN composer install --optimize-autoloader --no-dev --ignore-platform-req=ext-exif --ignore-platform-req=ext-exif --ignore-platform-req=ext-exif
 RUN npm run build
@@ -68,4 +66,3 @@ RUN php artisan storage:link
 RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
 EXPOSE 80
-
