@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Requests\Auth\OtpRequest;
 use App\Models\EventModel;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\RedirectResponse;
@@ -19,7 +19,7 @@ class AuthenticatedSessionController extends Controller
     public function create(?EventModel $event = null): View
     {
         $event = $event ?: EventModel::latest()->first();
-        return view('auth.login',[
+        return view('auth.login', [
             'event' => $event,
         ]);
     }
@@ -36,5 +36,24 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerateToken();
 
         return redirect('/');
+    }
+
+    public function validateOtp(string $email, ?string $otp = null): View
+    {
+        return view(
+            'auth.validate-otp',
+            [
+                'email' => $email,
+                'otp' => $otp
+            ]
+        );
+    }
+
+    public function loginWithOtp(string $email, OtpRequest $request): RedirectResponse
+    {
+        $request->authenticate($email);
+        session()->regenerate();
+
+        return redirect(RouteServiceProvider::HOME);
     }
 }

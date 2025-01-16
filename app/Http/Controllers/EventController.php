@@ -30,7 +30,11 @@ class EventController extends Controller
 
     public function index(?EventModel $event = null): View
     {
-        $event = $event ?: EventModel::latest()->first();
+        $event = $event ?: EventModel::where('endsOn','>', now())->latest()->first();
+        if (!$event) {
+            redirect(route('event.index'));
+        }
+
 
         $reviews = EventReview::whereStatus(EventReview::STATUS_APPROVED)
             ->paginate(3)

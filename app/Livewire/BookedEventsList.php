@@ -250,7 +250,7 @@ class BookedEventsList extends Component implements HasForms, HasTable, HasInfol
                                 'foreigner' => 'Foreigner',
                                 // add more statuses here
                             ])->default(['registered'])
-                            ->placeholder('Select Status'),
+                            ->placeholder('Choose Status'),
 
                         TextInput::make('registration_number')
                             ->label('Registration Number')

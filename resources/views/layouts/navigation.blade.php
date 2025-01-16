@@ -63,18 +63,21 @@
                             </span>
 
                             @if (Auth::user()->profile)
-                                <div class="mt-2 my-1 grid grid-cols-1 text-sm">
-                                    <span class="font-medium">Professional Status</span>
+                                <div class="my-1 mt-2 grid grid-cols-1 text-sm">
+                                    <span class="font-medium">Professional Registration Status</span>
                                     <span class="text-gray-700">{{ Auth::user()->profile->registration_status }}</span>
                                 </div>
 
-                                <div class="my-1 grid grid-cols-1 text-sm">
-                                    <span class="font-medium">Professional Number</span>
-                                    <span class="text-gray-700">{{ Auth::user()->profile->registration_number }}</span>
-                                </div>
+                                @if (Auth::user()->profile->registration_number)
+                                    <div class="my-1 grid grid-cols-1 text-sm">
+                                        <span class="font-medium">Professional Number</span>
+                                        <span
+                                            class="text-gray-700">{{ Auth::user()->profile->registration_number }}</span>
+                                    </div>
+                                @endif
                             @endif
 
-                            <a class="mt-8 mb-2 w-full items-center rounded-md border border-transparent bg-primary py-2 text-sm font-semibold tracking-widest text-white transition duration-150 ease-in-out hover:bg-brand focus:bg-brand focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 active:bg-brand"
+                            <a class="mb-2 mt-8 w-full items-center rounded-md border border-transparent bg-primary py-2 text-sm font-semibold tracking-widest text-white transition duration-150 ease-in-out hover:bg-brand focus:bg-brand focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 active:bg-brand"
                                 href="{{ route('profile.edit') }}">
                                 {{ __('Profile') }}
                             </a>
@@ -88,7 +91,8 @@
                             <!-- Authentication -->
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
-                                <x-dropdown-link class="my-2 flex justify-center rounded-sm text-red-500" :href="route('logout')"
+                                <x-dropdown-link class="my-2 flex justify-center rounded-sm text-red-500"
+                                    :href="route('logout')"
                                     onclick="event.preventDefault();
                                                 this.closest('form').submit();">
 

@@ -105,10 +105,10 @@
             </div>
 
             @if ($event->isOpenForRegistration())
-                <button data-modal-target="register-event-modal" data-modal-toggle="register-event-modal"
+                <a href="{{ route('register_for_event', ['event' => $event]) }}"
                     class="mx-auto mb-10 rounded-lg bg-secondary px-4 py-3 font-medium text-black md:px-10">
                     Participate
-                </button>
+                </a>
             @endif
 
 
@@ -169,9 +169,9 @@
                                         class="align-top text-sm font-light">TZS</sup>{{ $amount }}</p>
                             </div>
                             @if ($event->isOpenForRegistration())
-                                <button data-modal-target="register-event-modal" data-modal-toggle="register-event-modal"
+                                <a href="{{ route('register_for_event', ['event' => $event]) }}"
                                     class="mx-auto mb-10 rounded-lg bg-alt-green px-8 py-3 font-medium text-black md:px-20">Register
-                                    Now</button>
+                                    Now</a>
                             @endif
                         </div>
                     @break
@@ -188,9 +188,9 @@
                                         class="align-top text-sm font-light">TZS</sup>{{ $amount }}</p>
                             </div>
                             @if ($event->isOpenForRegistration())
-                                <button data-modal-target="register-event-modal" data-modal-toggle="register-event-modal"
+                                <a href="{{ route('register_for_event', ['event' => $event]) }}"
                                     class="mx-auto mb-10 rounded-lg bg-primary px-8 py-3 font-medium text-black md:px-20">Register
-                                    Now</button>
+                                    Now</a>
                             @endif
                         </div>
                     @break
@@ -205,9 +205,9 @@
                                         class="align-top text-sm font-light">TZS</sup>{{ $amount }}</p>
                             </div>
                             @if ($event->isOpenForRegistration())
-                                <button data-modal-target="register-event-modal" data-modal-toggle="register-event-modal"
+                                <a href="{{ route('register_for_event', ['event' => $event]) }}"
                                     class="mx-auto mb-10 rounded-lg bg-secondary px-8 py-3 font-medium text-black md:px-20">Register
-                                    Now</button>
+                                    Now</a>
                             @endif
                         </div>
                     @break
@@ -238,7 +238,7 @@
             <div class="grid grid-cols-3 py-10">
                 <div></div>
 
-                <h4 class="text-center text-4xl font-bold">What people say about {{ $event->linkTitle }}</h4>
+                <h4 class="text-center text-3xl md:text-4xl font-bold">Testimonials from Past Stakeholders</h4>
 
                 <div class="justify-self-end">
                     @auth

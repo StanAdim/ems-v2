@@ -117,4 +117,12 @@ class BookingController extends Controller
             })->toArray(),
         ]);
     }
+
+    public function register_for_event(EventModel $event): View
+    {
+        return view('booking.register-for-event', [
+            'event' => $event,
+            'slot' => '',
+        ]);
+    }
 }

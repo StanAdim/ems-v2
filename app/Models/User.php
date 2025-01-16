@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Enums\ProfileType;
 use BezhanSalleh\FilamentShield\Traits\HasPanelShield;
 use Filament\Models\Contracts\FilamentUser;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -15,7 +16,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $name
@@ -25,6 +26,8 @@ use Spatie\Permission\Traits\HasRoles;
  * @property string|null $remember_token
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $otp_token
+ * @property \Illuminate\Support\Carbon|null $otp_expires_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\EventBooking> $bookings
  * @property-read int|null $bookings_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ExhibitionBooking> $exhibitions
@@ -49,6 +52,8 @@ use Spatie\Permission\Traits\HasRoles;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereEmailVerifiedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereOtpExpiresAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereOtpToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereRememberToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
@@ -56,7 +61,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @method static \Illuminate\Database\Eloquent\Builder|User withoutRole($roles, $guard = null)
  * @mixin \Eloquent
  */
-class User extends Authenticatable implements FilamentUser
+class User extends Authenticatable implements FilamentUser, MustVerifyEmail
 {
     use HasApiTokens, HasFactory, Notifiable, HasRoles, HasPanelShield;
 
@@ -88,6 +93,7 @@ class User extends Authenticatable implements FilamentUser
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'otp_expires_at' => 'datetime',
         'password' => 'hashed',
     ];
 
@@ -111,6 +117,13 @@ class User extends Authenticatable implements FilamentUser
     public function canExhibit(): bool
     {
         return $this->profile?->type == ProfileType::Exhibitor;
+    }
+
+    public function resetOtpToken()
+    {
+        $this->otp_token = null;
+        $this->otp_expires_at = null;
+        $this->save();
     }
 
 }

@@ -125,6 +125,7 @@ return [
     'key' => env('APP_KEY'),
 
     'cipher' => 'AES-256-CBC',
+    'enforce_otp' => env('APP_ENFORCE_OTP'),
 
     /*
     |--------------------------------------------------------------------------

@@ -78,10 +78,10 @@
                 </div>
 
                 <div class="flex h-2/6 place-content-between pb-8">
-                    <x-primary-button data-modal-hide="{{ $parentId }}"
+                    <x-primary-link-button href="{{ route('event.about', ['event' => $this->event]) }}"
                         class="border border-gray-500 bg-white !py-2 px-12 !text-sm !font-normal !text-gray-500">
                         Cancel
-                    </x-primary-button>
+                    </x-primary-link-button>
                     <x-primary-button wire:loading.attr="disabled" wire:loading.class="animate-pulse" type="submit"
                         class="items-center rounded-md border border-transparent bg-primary px-12 py-2 text-sm font-normal tracking-widest text-white transition duration-150 ease-in-out hover:bg-brand focus:bg-brand focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 active:bg-brand">
                         Continue

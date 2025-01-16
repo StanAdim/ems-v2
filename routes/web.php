@@ -57,5 +57,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/exhibition-booking', [BookingController::class, 'exhibition_booking'])->name('exhibition-booking');
     Route::get('/event-material', [BookingController::class, 'event_material'])->name('event-material');
     Route::get('/question-and-answer/{event?}', [BookingController::class, 'question_and_answer'])->name('question-and-answer');
+    Route::get('/register-for-event/{event?}', [BookingController::class, 'register_for_event'])->name('register_for_event');
 });
 require __DIR__ . '/auth.php';

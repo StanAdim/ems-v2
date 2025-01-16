@@ -103,7 +103,7 @@
                         <select id="registration-status" autocomplete="registration-status"
                             wire:model="registrationStatus" wire:change="updateUserRegistrationStatus"
                             class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500">
-                            <option value="" selected>Select Status</option>
+                            <option value="" selected>Choose Status</option>
                             @foreach ($event->getAvailableFeesList() as $key => $fee)
                                 <option value="{{ $key }}">{{ $fee['title'] }}</option>
                             @endforeach
@@ -148,10 +148,10 @@
                 </div>
 
                 <div class="flex place-content-end gap-10">
-                    <x-primary-button data-modal-hide="{{ $parentId }}"
+                    <x-primary-link-button href="{{ route('event.about', ['event' => $this->event]) }}"
                         class="border border-gray-500 bg-white !py-2 !text-sm !font-normal !text-gray-500">
                         Cancel
-                    </x-primary-button>
+                    </x-primary-link-button>
                     <x-primary-button wire:loading.attr="disabled" wire:loading.class="animate-pulse" type="submit"
                         class="items-center rounded-md border border-transparent bg-primary px-4 py-2 text-sm font-normal tracking-widest text-white transition duration-150 ease-in-out hover:bg-brand focus:bg-brand focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 active:bg-brand">
                         Proceed to Pay

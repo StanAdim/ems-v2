@@ -112,9 +112,9 @@
         <div class="ml-auto place-content-center justify-end">
             <div class="flex">
                 @if ($event->isOpenForRegistration())
-                    <button data-modal-target="register-event-modal" data-modal-toggle="register-event-modal"
+                    <a href="{{ route('register_for_event', ['event' => $event]) }}"
                         class="ml-auto rounded-lg bg-secondary px-5 py-3 font-medium text-black ring-1 ring-secondary">Attend
-                        this event</button>
+                        this event</a>
                 @endif
                 <a class="ml-2 rounded-lg px-5 py-3 font-medium text-white ring-1 ring-white"
                     href="{{ Auth::user() ? route('dashboard') : route('login') }}">
@@ -193,7 +193,7 @@
 </nav>
 
 <hr class="bg-white text-white">
-<div id="register-event-modal" tabindex="-1" aria-hidden="register-event-modal" data-modal-backdrop="static"
+{{-- <div id="register-event-modal" tabindex="-1" aria-hidden="register-event-modal" data-modal-backdrop="static"
     class="fixed left-0 right-0 top-0 z-50 hidden h-[calc(100%-1rem)] max-h-full w-full items-center justify-center overflow-y-auto overflow-x-hidden md:inset-0">
     <div class="relative max-h-full w-full max-w-2xl p-4">
         <!-- Modal content -->
@@ -218,7 +218,7 @@
 
         </div>
     </div>
-</div>
+</div> --}}
 
 
 <!-- Register Event Modal -->
