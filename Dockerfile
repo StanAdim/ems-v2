@@ -6,20 +6,19 @@ WORKDIR /var/www/html
 RUN a2enmod rewrite
 
 # Linux Library
-RUN apt-get update -y && \
-    apt-get install -y \
-        git \
-        vim \
-        curl \
-        libicu-dev \
-        libmariadb-dev \
-        unzip zip \
-        zlib1g-dev \
-        libpng-dev \
-        libjpeg-dev \
-        libfreetype6-dev \
-        libjpeg62-turbo-dev \
-        libpng-dev
+RUN apt-get update -y && apt-get install -y \
+    git \
+    vim \
+    curl \
+    libicu-dev \
+    libmariadb-dev \
+    unzip zip \
+    zlib1g-dev \
+    libpng-dev \
+    libjpeg-dev \
+    libfreetype6-dev \
+    libjpeg62-turbo-dev \
+    libpng-dev
 
 # Composer
 COPY --from=composer:2.2.6 /usr/bin/composer /usr/bin/composer
@@ -47,10 +46,8 @@ COPY package-lock.json package.json ./
 RUN npm install
 
 # Copy existing application code to the container
-COPY . .
-
-# Override default apache configuration
-COPY default-apache.conf /etc/apache2/sites-available/000-default.conf
+COPY --chown=www-data:www-data . .
+USER www-data
 
 RUN composer install --optimize-autoloader --no-dev --ignore-platform-req=ext-exif --ignore-platform-req=ext-exif --ignore-platform-req=ext-exif
 RUN npm run build
@@ -67,16 +64,6 @@ RUN php artisan event:cache && \
 # Link public folder
 RUN php artisan storage:link
 
-# Limit access to public directory only to www-data
-RUN chown -R www-data:www-data public
-
 RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
-# Run as www-data
-USER www-data
-
-# Enforce the document root
-ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
-
 EXPOSE 80
-
