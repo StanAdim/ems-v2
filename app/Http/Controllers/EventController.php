@@ -30,16 +30,17 @@ class EventController extends Controller
 
     public function index(?EventModel $event = null): View
     {
-        $event = $event ?: EventModel::where('endsOn','>', now())->latest()->first();
+        $event = $event ?: EventModel::where('endsOn', '>', now())->latest()->first();
         if (!$event) {
             redirect(route('event.index'));
         }
 
 
-        $reviews = EventReview::whereStatus(EventReview::STATUS_APPROVED)
+        $reviews = EventReview::whereEventModelId($event?->id)
+            ->whereStatus(EventReview::STATUS_APPROVED)
             ->paginate(3)
             ->withQueryString();
-        $reviewStats = EventReview::whereEventModelId($event->id)
+        $reviewStats = EventReview::whereEventModelId($event?->id)
             ->whereStatus(EventReview::STATUS_APPROVED)
             ->selectRaw("
                 COUNT(CASE WHEN rating = 5 THEN 1 END) as five_stars,
