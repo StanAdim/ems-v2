@@ -46,15 +46,7 @@ COPY package-lock.json package.json ./
 RUN npm install
 
 # Copy existing application code to the container
-COPY . .
-
-# Override default apache configuration
-COPY default-apache.conf /etc/apache2/sites-available/000-default.conf
-
-# Limit access to public directory only to www-data
-RUN chown -R www-data:www-data public
-
-# Run as www-data
+COPY --chown=www-data:www-data . .
 USER www-data
 
 RUN composer install --optimize-autoloader --no-dev --ignore-platform-req=ext-exif --ignore-platform-req=ext-exif --ignore-platform-req=ext-exif
@@ -74,8 +66,4 @@ RUN php artisan storage:link
 
 RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
-# Enforce the document root
-ENV APACHE_DOCUMENT_ROOT /var/www/html/public
-
 EXPOSE 80
-
