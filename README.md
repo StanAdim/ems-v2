@@ -37,3 +37,7 @@ Before starting the installation process, ensure you have:
 8. Start the php development server: `php artisan serve`
 9. Run migrations: `php artisan migrate`
 10. Start the queues: `php artisan queue:work --queue=default,control-numbers --tries=1`
+
+### Generating [CHANGELOG.md](CHANGELOG.md)
+1. Install `auto-changelog` globally: `npm install -g auto-changelog`
+2. Run `auto-changelog --template keepachangelog` in the project directory to generate the `CHANGELOG.md` file.

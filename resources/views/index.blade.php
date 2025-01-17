@@ -67,7 +67,7 @@
             <h4 class="mb-5 text-4xl font-light text-secondary">
                 MAIN THEME:
             </h4>
-            <p class="mb-5 text-2xl font-bold text-white md:text-6xl">
+            <p class="mb-5 text-2xl font-bold text-white md:text-4xl xl:text-6xl">
                 {{ $event->theme }}
             </p>
 
@@ -92,10 +92,10 @@
                     ];
                 @endphp
                 <div class="col-span-3 grid grid-cols-1 text-white">
-                    <div class="flex grid-cols-2 flex-wrap align-top md:grid md:gap-10 lg:grid-cols-3">
+                    <div class="flex grid-cols-2 flex-wrap align-top md:grid xl:gap-10 lg:grid-cols-3">
                         @foreach ($event->subThemes as $subTheme)
-                            <div class="m-2 grid max-w-sm gap-1 p-6">
-                                @svg($subTheme['icon'], 'w-24 h-24 text-secondary')
+                            <div class="m-2 grid max-w-sm gap-1 p-1 xl:p-6">
+                                @svg($subTheme['icon'], 'w-12 md:w-24 h-12 md:h-24 text-secondary')
                                 <p class="mb-3 text-lg">{{ $subTheme['message'] }}</p>
                             </div>
                         @endforeach
@@ -122,8 +122,8 @@
     </div>
 
     <div class="container mx-auto grid grid-cols-1 gap-10 py-10 md:gap-0 xl:grid-cols-2">
-        <div class="mx-auto flex w-[70%] flex-col space-y-4 rounded-lg p-5 text-lg">
-            <span class="text-5xl font-semibold text-primary">
+        <div class="mx-auto flex w-[70%] flex-col space-y-4 rounded-lg p-2 md:p-5 text-lg">
+            <span class="text-3xl md:text-5xl font-semibold text-primary">
                 Drive Progress with your Ideas
             </span>
             <span>The tech world is constantly evolving, and your voice can be a catalyst for change. Join TAIC as a
@@ -162,10 +162,10 @@
                     @case($event::FEE_REGISTERED)
                         <div class="grid grid-cols-1 gap-10">
                             <div class="grid grid-cols-1 bg-alt-green py-10">
-                                <div class="mx-auto my-5 w-56 place-content-center"><img class="w-full"
+                                <div class="mx-auto my-5 w-24 md:w-56 place-content-center"><img class="w-full"
                                         src="{{ Vite::asset('resources/images/fee-1.svg') }}" alt="" srcset=""></div>
                                 <p class="my-2 text-center text-2xl text-white">For registered ict<br> Professionals.</p>
-                                <p class="mb-4 text-center text-5xl font-extrabold text-white"><sup
+                                <p class="mb-4 text-center text-4xl md:text-5xl font-extrabold text-white"><sup
                                         class="align-top text-sm font-light">TZS</sup>{{ $amount }}</p>
                             </div>
                             @if ($event->isOpenForRegistration())
@@ -179,12 +179,12 @@
                     @case($event::FEE_NON_REGISTERED)
                         <div class="grid grid-cols-1 gap-10">
                             <div class="grid grid-cols-1 bg-primary py-10">
-                                <div class="mx-auto my-5 w-56 place-content-center"><img class="w-full"
+                                <div class="mx-auto my-5 w-24 md:w-56 place-content-center"><img class="w-full"
                                         src="{{ Vite::asset('resources/images/fee-2.svg') }}" alt="" srcset=""></div>
                                 <p class="my-2 text-center text-2xl text-white">Per person for Non-<br> Registered ICT
                                     Professionals.
                                 </p>
-                                <p class="mb-4 text-center text-5xl font-extrabold text-white"><sup
+                                <p class="mb-4 text-center text-4xl md:text-5xl font-extrabold text-white"><sup
                                         class="align-top text-sm font-light">TZS</sup>{{ $amount }}</p>
                             </div>
                             @if ($event->isOpenForRegistration())
@@ -198,10 +198,10 @@
                     @case($event::FEE_FOREIGNER)
                         <div class="grid grid-cols-1 gap-10">
                             <div class="grid grid-cols-1 bg-secondary py-10">
-                                <div class="mx-auto my-5 w-56 place-content-center"><img class="w-full"
+                                <div class="mx-auto my-5 w-24 md:w-56 place-content-center"><img class="w-full"
                                         src="{{ Vite::asset('resources/images/fee-3.svg') }}" alt="" srcset=""></div>
                                 <p class="my-2 text-center text-2xl text-black">Foreign participants.<br><br></p>
-                                <p class="mb-4 text-center text-5xl font-extrabold text-black"><sup
+                                <p class="mb-4 text-center text-4xl md:text-5xl font-extrabold text-black"><sup
                                         class="align-top text-sm font-light">TZS</sup>{{ $amount }}</p>
                             </div>
                             @if ($event->isOpenForRegistration())
@@ -222,7 +222,7 @@
     </div>
 
     <div class="container mx-auto grid grid-cols-1 py-10">
-        <div class="mb-4 text-center text-5xl font-light text-primary">
+        <div class="mb-4 text-center text-3xl md:text-5xl font-light text-primary">
             Location
         </div>
         <div class="mx-1 w-full px-8">
@@ -234,13 +234,13 @@
     </div>
 
     <div>
-        <div class="container mx-auto py-10">
-            <div class="grid grid-cols-3 py-10">
-                <div></div>
+        <div class="container mx-auto py-5 md:py-10">
+            <div class="grid grid-cols-1 md:grid-cols-3 py-10">
+                <div class="hidden md:flex"></div>
 
-                <h4 class="text-center text-3xl md:text-4xl font-bold">Testimonials from Past Stakeholders</h4>
+                <h4 class="text-center text-2xl px-3 md:px-0 md:text-4xl font-bold">Testimonials from Past Stakeholders</h4>
 
-                <div class="justify-self-end">
+                <div class="justify-self-center pt-2 md:pt-0 md:justify-self-end">
                     @auth
                         <button data-modal-target="review-modal" data-modal-toggle="review-modal"
                             class="rounded-lg bg-primary px-2 py-3 font-medium text-white xl:px-5" type="button">

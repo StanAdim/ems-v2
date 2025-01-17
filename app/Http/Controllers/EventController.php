@@ -28,11 +28,11 @@ class EventController extends Controller
         );
     }
 
-    public function index(?EventModel $event = null): View
+    public function index(?EventModel $event = null)
     {
         $event = $event ?: EventModel::where('endsOn', '>', now())->latest()->first();
         if (!$event) {
-            redirect(route('event.index'));
+            return redirect(route('login'));
         }
 
 
