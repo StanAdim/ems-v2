@@ -68,9 +68,8 @@ RUN php artisan event:cache && \
 RUN php artisan storage:link
 
 # Limit access to public directory only to www-data
-RUN chown -R www-data:www-data public
-
 RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/public /var/www/html/bootstrap/cache
 
 # Run as www-data
 #USER www-data
