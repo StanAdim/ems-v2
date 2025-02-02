@@ -1,9 +1,11 @@
 <x-mail::message>
 # Hi there,
 
-A payment order for {{ $description }} with amount {{ $totalPrice }} has been paid using control number {{ $controlNumber }}.
+A payment order for {{ $description }} with amount {{ $totalPrice }} has been paid @if ($controlNumber)
+using control number {{ $controlNumber }}
+@endif.
 
-You can attend to the event when it begins.
+You will be sent your tickets soon.
 
 <x-mail::button :url="$attachementLink">Download Receipt</x-mail::button>
 

@@ -46,6 +46,7 @@ class UserRegistration extends Component
             "first_name",
             "last_name",
             "email",
+            "gender",
             "password",
             "password_confirmation"
         ];

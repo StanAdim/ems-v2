@@ -71,6 +71,7 @@ class MakeEventExhibitionBooking extends Component
             [
                 'booth_name' => $booth->name,
                 'booth_size' => $booth->size,
+                'booth_attendee_fee' => $booth->attendee_price,
                 'total' => $booth->price,
             ]
         );

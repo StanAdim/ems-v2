@@ -23,6 +23,7 @@ class BoothConfigurationCast implements CastsAttributes
                 $item['name'],
                 $item['size'],
                 $item['price'],
+                $item['attendee_price'] ?? 0,
                 $item['booking_id'] ?? null,
             );
         });

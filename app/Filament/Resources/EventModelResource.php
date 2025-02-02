@@ -7,10 +7,11 @@ use App\Filament\Resources\EventModelResource\Pages;
 use App\Filament\Resources\EventModelResource\RelationManagers\BookingsRelationManager;
 use App\Filament\Resources\EventModelResource\RelationManagers\ExhibitionBookingsRelationManager;
 use App\Filament\Resources\EventModelResource\RelationManagers\ReviewsRelationManager;
+use App\Filament\Resources\EventModelResource\RelationManagers\TicketsRelationManager;
 use App\Models\EventModel;
 use ArberMustafa\FilamentLocationPickrField\Forms\Components\LocationPickr;
-use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
@@ -112,8 +113,17 @@ class EventModelResource extends Resource
                                         ->numeric()
                                         ->mask(RawJs::make('$money($input)'))
                                         ->stripCharacters(',')
-                                        ->columnSpan(6)
+                                        ->columnSpan(3)
                                         ->required(),
+                                    TextInput::make('attendee_price')
+                                        ->label('Booth Attendee Price')
+                                        ->numeric()
+                                        ->mask(RawJs::make('$money($input)'))
+                                        ->stripCharacters(',')
+                                        ->columnSpan(3)
+                                        ->default(450_000)
+                                        ->required(),
+                                    Hidden::make('booking_id')
                                 ])
                                 ->cloneable()
                                 ->label('Available Booths')
@@ -150,6 +160,7 @@ class EventModelResource extends Resource
             BookingsRelationManager::class,
             ExhibitionBookingsRelationManager::class,
             ReviewsRelationManager::class,
+            TicketsRelationManager::class,
         ];
     }
 

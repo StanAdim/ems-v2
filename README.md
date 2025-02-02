@@ -40,4 +40,12 @@ Before starting the installation process, ensure you have:
 
 ### Generating [CHANGELOG.md](CHANGELOG.md)
 1. Install `auto-changelog` globally: `npm install -g auto-changelog`
-2. Run `auto-changelog --template keepachangelog` in the project directory to generate the `CHANGELOG.md` file.
+2. Run: `./release.sh v1.0.0` where `v1.0.0` is the version number
+
+
+# After Setting Up
+## Running Migrations
+- `php artisan migrate`
+
+## Setting Up Initial Roles
+- `php artisan db:seed RolesSeeder`

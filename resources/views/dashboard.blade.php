@@ -18,11 +18,11 @@
             </div>
         </div>
     </div> --}}
-    <div class="container mx-auto mt-10">
-        <h2 class="text-3xl font-medium">Welcome, {{ auth()->user()->name }}</h2>
+    <div class="container mx-auto mt-1 xl:mt-10 px-4">
+        <h2 class="text-xl xl:text-3xl font-medium">Welcome, {{ auth()->user()->name }}</h2>
     </div>
-    <div class="container mx-auto">
-        <div class="grid grid-cols-2 gap-10 lg:grid-cols-4">
+    <div class="container mx-auto px-4">
+        <div class="grid grid-cols-2 gap-2 xl:gap-8 lg:grid-cols-4">
             {{-- @livewire('dashboard-card') --}}
             @if (Auth::user()->canExhibit())
                 @livewire('dashboard-card', ['title' => 'Exhibited Events', 'description' => 'The numbers of events you have exhibited so far', 'route' => 'exhibition-booking', 'count' => $myExhibitionsCount])
@@ -37,9 +37,9 @@
     </div>
     <div class="snap-y container mx-auto mt-10 rounded-lg bg-white p-5 px-10">
         <div class="my-10 justify-start">
-            <h4 class="text-3xl font-medium">Upcoming Events</h4>
+            <h4 class="text-xl xl:text-3xl font-medium">Upcoming Events</h4>
         </div>
-        <div class="grid grid-cols-2 gap-10 xl:grid-cols-4">
+        <div class="grid grid-cols-1 gap2 xl:gap-10 xl:grid-cols-4">
             @foreach ($upcomingEvents as $event)
                 <x-event-card title="{{ $event['title'] }}" location="{{ $event['location'] }}"
                     imageUrl="{{ $event['imageUrl'] }}" route="{{ $event['route'] }}" :event="$event['model']" />

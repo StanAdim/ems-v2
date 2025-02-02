@@ -7,12 +7,13 @@
     </div>
     <a href="{{ route('event.index', $event->id) }}" target="_blank">
         <div class="lg:px-6 lg:py-4">
-            <div class="mb-2 text-xl font-medium">{{ $title }}</div>
-            <p class="text-sm text-gray-700">
+            <div class="mb-2 text-sm md:text-xl font-medium">{{ $title }}</div>
+            <p class="text-xs md:text-sm text-gray-700">
                 {{ $location }}
             </p>
         </div>
     </a>
+    <div class="h-2"></div>
 
     @if ($event->isOpenForRegistration())
         <x-primary-link-button href="{{ route('register_for_event', ['event' => $event]) }}"

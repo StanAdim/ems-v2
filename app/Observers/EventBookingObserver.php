@@ -19,10 +19,10 @@ class EventBookingObserver
      */
     public function created(EventBooking $booking): void
     {
+        $booking->refresh();
         $eventShortName = Str::of($booking->event->linkTitle)
             ->studly()
             ->upper();
-
 
         $count = 0;
         $updatedAttendees = $booking

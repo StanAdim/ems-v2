@@ -1,29 +1,39 @@
 <?php
 
 namespace App\Models\JSON;
-use App\Contracts\Billable;
 use App\Models\ExhibitionBooking;
 use App\Models\PaymentOrder;
+use App\Models\User;
 use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Livewire\Wireable;
 
 
 class ExhibitionAttendee implements Arrayable, Wireable
 {
-    function __construct(
-        public ?string $name,
-        public ?string $phone,
-        public ?string $email,
+    public function __construct(
+        public ?string $user_id,
         public ?int $exhibition_booking_id,
+        public ?string $name,
+        public ?string $nationality,
+        public ?string $reg_status,
+        public ?string $reg_number,
         public ?float $booking_price,
         public ?int $payment_order_id = null,
+        public ?int $ticket_id = null,
     ) {
     }
 
     public function booking(): ExhibitionBooking
     {
         return ExhibitionBooking::whereId($this->exhibition_booking_id)->first();
+    }
+
+    /**
+     * @return \App\Models\User
+     */
+    public function user()
+    {
+        return User::whereId($this->user_id)->first();
     }
 
     public function paymentOrder(): PaymentOrder
@@ -35,12 +45,14 @@ class ExhibitionAttendee implements Arrayable, Wireable
     public function toArray(): array
     {
         return [
-            'name' => $this->name,
-            'phone' => $this->phone,
-            'email' => $this->email,
+            'user_id' => $this->user_id,
             'exhibition_booking_id' => $this->exhibition_booking_id,
-            'payment_order_id' => $this->payment_order_id,
+            'name' => $this->name,
+            'nationality' => $this->nationality,
+            'reg_status' => $this->reg_status,
+            'reg_number' => $this->reg_number,
             'booking_price' => $this->booking_price,
+            'payment_order_id' => $this->payment_order_id,
         ];
     }
 
@@ -52,11 +64,13 @@ class ExhibitionAttendee implements Arrayable, Wireable
     public static function fromArray($value)
     {
         return new self(
-            $value['name'],
-            $value['phone'],
-            $value['email'],
+            $value['user_id'],
             $value['exhibition_booking_id'],
-            $value['booking_price'] ?? 0,
+            $value['name'],
+            $value['nationality'],
+            $value['reg_status'],
+            $value['reg_number'],
+            $value['booking_price'],
             $value['payment_order_id'] ?? null,
         );
     }

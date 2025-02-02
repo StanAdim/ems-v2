@@ -21,6 +21,7 @@ class UserDetailsForm extends Form
     public $last_name = '';
 
     public $email = '';
+    public $gender = '';
     public $password = '';
     public $password_confirmation = '';
     public $phone_number = '';
@@ -43,6 +44,7 @@ class UserDetailsForm extends Form
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:' . User::class],
+            'gender' => ['required', 'string'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'phone_number' => ['required_if:type,user', 'numeric'],
             'registration_status' => ['required'],
@@ -87,6 +89,7 @@ class UserDetailsForm extends Form
                     $this->last_name
                 ]),
                 'email' => $this->email,
+                'gender' => $this->gender,
                 'password' => Hash::make($this->password),
             ]);
 
@@ -104,6 +107,7 @@ class UserDetailsForm extends Form
                 UserProfile::create(
                     [
                         'user_id' => $user->id,
+                        'gender' => $this->gender,
                         'phone_number' => $this->phone_number,
                         'registration_status' => $this->registration_status,
                         'registration_number' => $this->registration_number,

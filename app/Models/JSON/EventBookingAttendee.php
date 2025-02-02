@@ -2,6 +2,7 @@
 
 namespace App\Models\JSON;
 use App\Models\EventBooking;
+use App\Models\User;
 use Illuminate\Contracts\Support\Arrayable;
 use Livewire\Wireable;
 
@@ -9,11 +10,16 @@ use Livewire\Wireable;
 class EventBookingAttendee implements Arrayable, Wireable
 {
     function __construct(
-        public ?string $name,
-        public ?string $phone,
-        public ?string $email,
+        public int $user_id,
+        public string $name,
+        public ?string $institution,
+        public string $nationality,
+        public string $reg_status,
+        public ?string $reg_number,
+        public float $price,
         public ?string $ticket_no,
         public ?int $event_booking_id,
+
     ) {
     }
 
@@ -22,13 +28,26 @@ class EventBookingAttendee implements Arrayable, Wireable
         return EventBooking::whereId($this->event_booking_id)->first();
     }
 
+    /**
+     * @return \App\Models\User
+     */
+    public function user()
+    {
+        return User::whereId($this->user_id)->first();
+    }
+
     public function toArray(): array
     {
         return [
+            'user_id' => $this->user_id,
             'name' => $this->name,
-            'phone' => $this->phone,
-            'email' => $this->email,
+            'institution' => $this->institution,
+            'nationality' => $this->nationality,
+            'reg_status' => $this->reg_status,
+            'reg_number' => $this->reg_number,
+            'price' => $this->price,
             'ticket_no' => $this->ticket_no,
+            'email' => $this->user()->email,
             'event_booking_id' => $this->event_booking_id,
         ];
     }
@@ -41,11 +60,15 @@ class EventBookingAttendee implements Arrayable, Wireable
     public static function fromArray($value)
     {
         return new self(
+            $value['user_id'],
             $value['name'],
-            $value['phone'],
-            $value['email'],
+            $value['institution'] ?? null,
+            $value['nationality'],
+            $value['reg_status'],
+            $value['reg_number'] ?? null,
+            $value['price'],
             $value['ticket_no'] ?? null,
-            $value['event_booking_id'],
+            $value['event_booking_id'] ?? null
         );
     }
 

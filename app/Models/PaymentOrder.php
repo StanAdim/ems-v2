@@ -7,6 +7,7 @@ use App\Enums\PaymentOrderStatus;
 use App\Observers\PaymentOrderObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Casts\AsCollection;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
@@ -16,7 +17,7 @@ use LaravelDaily\Invoices\Classes\Party;
 use LaravelDaily\Invoices\Facades\Invoice;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $description
@@ -34,6 +35,11 @@ use LaravelDaily\Invoices\Facades\Invoice;
  * @property int|null $user_id
  * @property array|null $middleware_bill_data
  * @property string|null $uuid
+ * @property string $model_class
+ * @property string $model_id
+ * @property-read float $amount_to_pay
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Coupon> $coupons
+ * @property-read int|null $coupons_count
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentOrder newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentOrder newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentOrder query()
@@ -45,6 +51,8 @@ use LaravelDaily\Invoices\Facades\Invoice;
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentOrder whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentOrder whereInvoiceUrl($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentOrder whereMiddlewareBillData($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PaymentOrder whereModelClass($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PaymentOrder whereModelId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentOrder wherePaidAmount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentOrder wherePaidAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentOrder wherePhoneNumber($value)
@@ -79,9 +87,14 @@ class PaymentOrder extends Model
         'user_id',
         'phone_number',
         'uuid',
+        'model_class',
+        'model_id',
+        'paid_amount',
     ];
 
-    public static function make(Billable $billable, string $phoneNumber, int $userId): self
+    protected $appends = ['amount_to_pay'];
+
+    public static function make(Billable $billable, string $phoneNumber, int $userId, $couponCodes = []): self
     {
         $payment_order = PaymentOrder::create([
             'description' => $billable->description(),
@@ -90,8 +103,24 @@ class PaymentOrder extends Model
             'customer_details' => $billable->customerDetails(),
             'user_id' => $userId,
             'uuid' => Str::uuid(),
+            'model_class' => $billable->modelClass(),
+            'model_id' => $billable->modelId(),
         ]);
 
+        foreach ($couponCodes as $code) {
+            $amountCoveredByCoupon = Coupon::apply(
+                $code,
+                $payment_order->total_amount,
+                $payment_order
+            );
+            $payment_order->paid_amount += $amountCoveredByCoupon;
+
+            if ($payment_order->paid_amount >= $payment_order->total_amount)
+                break; // No need to apply any other coupons
+
+        }
+
+        $payment_order->save();
         $billable->updateWithPaymentOrder($payment_order);
         return $payment_order;
     }
@@ -133,6 +162,16 @@ class PaymentOrder extends Model
     public function isPaid(): bool
     {
         return $this->status === PaymentOrderStatus::Paid;
+    }
+
+    public function coupons()
+    {
+        return $this->hasMany(Coupon::class);
+    }
+
+    public function amountToPay(): Attribute
+    {
+        return Attribute::make(fn($value): float => $this->total_amount - $this->paid_amount);
     }
 
 }

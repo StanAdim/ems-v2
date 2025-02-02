@@ -6,6 +6,7 @@ use App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource\RelationManagers;
 use App\Models\Country;
 use App\Models\User;
+use App\Models\UserProfile;
 use Filament\Forms;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Group;
@@ -35,10 +36,20 @@ class UserResource extends Resource
                                 Forms\Components\TextInput::make('name')
                                     ->required()
                                     ->maxLength(255),
-                                Forms\Components\TextInput::make('email')
-                                    ->email()
-                                    ->required()
-                                    ->maxLength(255),
+                                Forms\Components\Group::make()
+                                    ->schema([
+                                        Forms\Components\TextInput::make('email')
+                                            ->email()
+                                            ->required()
+                                            ->maxLength(255),
+                                        Forms\Components\Select::make('gender')
+                                            ->options([
+                                                'Male' => 'Male',
+                                                'Female' => 'Female',
+                                            ])->required()
+                                    ])
+                                    ->columns(2),
+
                                 Forms\Components\DateTimePicker::make('email_verified_at'),
                                 Forms\Components\TextInput::make('password')
                                     ->password()
@@ -58,10 +69,7 @@ class UserResource extends Resource
                                     ->relationship('profile')
                                     ->schema([
                                         Forms\Components\Select::make('registration_status')
-                                            ->options([
-                                                'registered' => 'Registered',
-                                                'non-registered' => 'Non Registered',
-                                            ])
+                                            ->options(UserProfile::getRegistrationStatuses())
                                             ->native(false)
                                             ->required(),
                                         Forms\Components\TextInput::make('phone_number')

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\Country;
+use App\Models\UserProfile;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,8 +18,17 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
+        $nationalityChoices = Country::getNationalities();
+        $oldNationality = UserProfile::where('user_id', $request->user()->id)->first()->nationality;
+        $registrationStatuses = UserProfile::getRegistrationStatuses();
+        $oldRegistrationStatus = UserProfile::where('user_id', $request->user()->id)->first()->registration_status;
+
         return view('profile.edit', [
             'user' => $request->user(),
+            'nationalityChoices' => $nationalityChoices,
+            'oldNationality' => $oldNationality,
+            'registrationStatuses' => $registrationStatuses,
+            'oldRegistrationStatus' => $oldRegistrationStatus,
         ]);
     }
 
@@ -27,12 +38,17 @@ class ProfileController extends Controller
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
         $request->user()->fill($request->validated());
+        $userProfile = UserProfile::where('user_id', $request->user()->id)->first();
 
         if ($request->user()->isDirty('email')) {
             $request->user()->email_verified_at = null;
         }
 
         $request->user()->save();
+        $userProfile->nationality = $request->nationality;
+        $userProfile->registration_status = $request->registration_status;
+        $userProfile->save();
+
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }

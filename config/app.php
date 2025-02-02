@@ -126,6 +126,7 @@ return [
 
     'cipher' => 'AES-256-CBC',
     'enforce_otp' => env('APP_ENFORCE_OTP'),
+    'local_nationality' => env('APP_LOCAL_NATIONALITY'),
 
     /*
     |--------------------------------------------------------------------------
@@ -168,7 +169,7 @@ return [
         App\Providers\AuthServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
-        App\Providers\Filament\EventsPanelProvider::class,
+        App\Providers\Filament\AdminPanelProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\TelescopeServiceProvider::class,
         App\Providers\ViewServiceProvider::class,

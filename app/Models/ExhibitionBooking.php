@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property string $order_number
  * @property string $booth_name
  * @property string $booth_size
+ * @property float $booth_attendee_fee
  * @property float $total
  * @property int|null $payment_order_id
  * @property int $user_id
@@ -33,6 +34,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static \Illuminate\Database\Eloquent\Builder|ExhibitionBooking newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ExhibitionBooking query()
  * @method static \Illuminate\Database\Eloquent\Builder|ExhibitionBooking whereAttendees($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ExhibitionBooking whereBoothAttendeeFee($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ExhibitionBooking whereBoothName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ExhibitionBooking whereBoothSize($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ExhibitionBooking whereCreatedAt($value)
@@ -62,6 +64,7 @@ class ExhibitionBooking extends Model implements Billable
 
     protected $casts = [
         'total' => 'float',
+        'booth_attendee_fee' => 'float',
         'attendees' => ExhibitionAttendeeModels::class,
     ];
 
@@ -132,6 +135,30 @@ class ExhibitionBooking extends Model implements Billable
     {
         $this->payment_order_id = $paymentOrder->id;
         $this->save();
+    }
+
+    public static function modelClass(): string
+    {
+        return self::class;
+    }
+
+    public function modelId(): string
+    {
+        return $this->id;
+    }
+
+    public static function onPaid(PaymentOrder $paymentOrder): void
+    {
+        $booking = self::find($paymentOrder->model_id);
+
+        $code = Ticket::generateTicketNo($booking->event->linkTitle . '-EXH-', 3);
+        $code = preg_replace('/\p{Z}+/u', '', $code);
+        Ticket::make(
+            $code,
+            $booking->event,
+            $booking->bookedBy,
+            $paymentOrder
+        );
     }
 
     public function attendeesCount(): Attribute

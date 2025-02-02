@@ -5,6 +5,9 @@ namespace App\Livewire;
 use App\Models\ExhibitionBooking;
 use App\Models\JSON\ExhibitionAttendee;
 use App\Models\JSON\ExhibitionAttendeeList;
+use App\Models\Ticket;
+use App\Models\User;
+use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\On;
@@ -32,27 +35,67 @@ class AddExhibitionAttendees extends Component
         return ExhibitionBooking::find($this->exhibitionBookingId);
     }
 
-    #[Validate('integer|min:1')]
-    public $count = 0; // To track the number of attendees
+    #[Locked]
+    public $totalPrice = 0;
+
+    #[Locked]
+    public $emails = []; // To store the attendee emails
 
     #[Validate(
         rule: [
-            // 'attendees' => 'array:name,phone,email|min:1',
-            'attendees.*.name' => 'required|string|max:255',
-            'attendees.*.phone' => 'required|string|max:15',
-            'attendees.*.email' => 'required|email',
+            'required',
+            'email',
+            'exists:users,email',
         ],
-        attribute: [
-            'attendees.*.name' => 'Name',
-            'attendees.*.phone' => 'Phone',
-            'attendees.*.email' => 'Email',
+        attribute: 'Email',
+        message: [
+            'email.exists' => 'No user registered with this email please check your email'
         ]
     )]
-    public $attendees = []; // To store the attendee details
+    public $email = '';
 
-    #[Validate('required|numeric')]
-    public $totalPrice = 0;
-    public $ticketCounts = 0;
+    /**
+     * @param bool $withId
+     * @return \Illuminate\Support\Collection|\App\Models\User[]
+     */
+    #[Computed]
+    public function attendees($withId = false, $withEmailAsKeys = true)
+    {
+        $users = User::whereIn('email', $this->emails)->get();
+
+        $mappingFunction = function (User $user) use ($withId, $withEmailAsKeys) {
+            $profile = $user->profile;
+            $data = [
+                'name' => $user->name,
+                'institution' => $profile?->institution_name ?? 'Testing',
+                'nationality' => $profile?->nationality,
+                'reg_status' => $profile?->registration_status,
+                'reg_number' => $profile?->registration_number,
+                'price' => $this->exhibitionBooking()->booth_attendee_fee ?? PHP_INT_MAX, // Just in case someone does something fishy
+            ];
+
+            if ($withId) {
+                $data['user_id'] = $user->id;
+            }
+
+            return $withEmailAsKeys
+                ? [$user->email => $data]
+                : $data;
+        };
+
+        return $withEmailAsKeys
+            ? $users->mapWithKeys($mappingFunction)
+            : $users->map($mappingFunction);
+    }
+
+    /**
+     * @return int
+     */
+    #[Computed]
+    public function ticketCount()
+    {
+        return count($this->emails);
+    }
 
     public function mount(int $exhibitionBookingId)
     {
@@ -67,19 +110,33 @@ class AddExhibitionAttendees extends Component
 
     public function addAttendee()
     {
-        $this->count++;
-        $this->ticketCounts++;
-        $this->attendees[] = ['name' => '', 'phone' => '', 'email' => ''];
+        ['email' => $validatedEmail] = $this->validateOnly('email');
+        if (in_array($validatedEmail, $this->emails)) {
+            throw ValidationException::withMessages([
+                'email' => 'This email has already been added',
+            ]);
+        }
+
+        $user = User::whereEmail($validatedEmail)->first();
+        $emailHasTicket = Ticket::whereEventModelId($this->exhibitionBooking()->event_model_id)
+            ->whereUserId($user->id)
+            ->exists();
+        if ($emailHasTicket) {
+            throw ValidationException::withMessages([
+                'email' => 'This user has already booked a ticket for this event',
+            ]);
+        }
+
+        $this->emails[] = $validatedEmail;
+        $this->reset('email');
         $this->dispatch('update-attendees');
     }
 
     public function removeAttendee($index)
     {
-        if ($this->count > 1) {
-            unset($this->attendees[$index]);
-            $this->attendees = array_values($this->attendees); // Reindex the array
-            $this->count--;
-            $this->ticketCounts--;
+        if (count($this->emails) > 0) {
+            unset($this->emails[$index]);
+            $this->emails = array_values($this->emails); // Reindex the array
             $this->dispatch('update-attendees');
         }
     }
@@ -87,22 +144,31 @@ class AddExhibitionAttendees extends Component
     #[On('update-attendees')]
     public function updateTotalPrice()
     {
-        $this->totalPrice = 450_000 * $this->ticketCounts;
+        $this->totalPrice = $this
+            ->attendees()
+            ->reduce(function (?int $carry, array $value) {
+                return $carry + $value['price'];
+            });
     }
 
     public function store()
     {
-        $this->updateTotalPrice();
-        $validatedData = $this->validate();
+        if ($this->ticketCount() < 1)
+            throw ValidationException::withMessages(['email' => 'You must add atleast one person to book an event']);
 
-        $addedAttendees = collect($validatedData['attendees'])
+        $this->updateTotalPrice();
+
+        $addedAttendees = $this
+            ->attendees(withId: true, withEmailAsKeys: false)
             ->map(function ($attendee) {
                 $attendeeObj = new ExhibitionAttendee(
-                    $attendee['name'],
-                    $attendee['phone'],
-                    $attendee['email'],
+                    $attendee['user_id'],
                     $this->exhibitionBookingId,
-                    450_000,
+                    $attendee['name'],
+                    $attendee['nationality'],
+                    $attendee['reg_status'],
+                    $attendee['reg_number'],
+                    $attendee['price'],
                 );
 
                 return $attendeeObj;

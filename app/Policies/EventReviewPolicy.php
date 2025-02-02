@@ -2,18 +2,20 @@
 
 namespace App\Policies;
 
-use App\Models\EventReview;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
+use App\Models\EventReview;
+use Illuminate\Auth\Access\HandlesAuthorization;
 
 class EventReviewPolicy
 {
+    use HandlesAuthorization;
+
     /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
     {
-        return true;
+        return $user->can('view_any_event::review');
     }
 
     /**
@@ -21,7 +23,7 @@ class EventReviewPolicy
      */
     public function view(User $user, EventReview $eventReview): bool
     {
-        return true;
+        return $user->can('view_event::review');
     }
 
     /**
@@ -29,7 +31,7 @@ class EventReviewPolicy
      */
     public function create(User $user): bool
     {
-        return true;
+        return $user->can('create_event::review');
     }
 
     /**
@@ -37,7 +39,7 @@ class EventReviewPolicy
      */
     public function update(User $user, EventReview $eventReview): bool
     {
-        return $eventReview->user_id === $user->id || $user->hasRole('super_admin');
+        return $user->can('update_event::review');
     }
 
     /**
@@ -45,22 +47,62 @@ class EventReviewPolicy
      */
     public function delete(User $user, EventReview $eventReview): bool
     {
-        return $eventReview->user_id === $user->id || $user->hasRole('super_admin');
+        return $user->can('delete_event::review');
     }
 
     /**
-     * Determine whether the user can restore the model.
+     * Determine whether the user can bulk delete.
      */
-    public function restore(User $user, EventReview $eventReview): bool
+    public function deleteAny(User $user): bool
     {
-        $user->hasRole('super_admin');
+        return $user->can('delete_any_event::review');
     }
 
     /**
-     * Determine whether the user can permanently delete the model.
+     * Determine whether the user can permanently delete.
      */
     public function forceDelete(User $user, EventReview $eventReview): bool
     {
-        $user->hasRole('super_admin');
+        return $user->can('force_delete_event::review');
+    }
+
+    /**
+     * Determine whether the user can permanently bulk delete.
+     */
+    public function forceDeleteAny(User $user): bool
+    {
+        return $user->can('force_delete_any_event::review');
+    }
+
+    /**
+     * Determine whether the user can restore.
+     */
+    public function restore(User $user, EventReview $eventReview): bool
+    {
+        return $user->can('restore_event::review');
+    }
+
+    /**
+     * Determine whether the user can bulk restore.
+     */
+    public function restoreAny(User $user): bool
+    {
+        return $user->can('restore_any_event::review');
+    }
+
+    /**
+     * Determine whether the user can replicate.
+     */
+    public function replicate(User $user, EventReview $eventReview): bool
+    {
+        return $user->can('replicate_event::review');
+    }
+
+    /**
+     * Determine whether the user can reorder.
+     */
+    public function reorder(User $user): bool
+    {
+        return $user->can('reorder_event::review');
     }
 }

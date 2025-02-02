@@ -16,4 +16,9 @@ interface Billable
      */
     public function customerDetails(): Collection;
     public function updateWithPaymentOrder(PaymentOrder $paymentOrder): void;
+
+    public static function modelClass(): string;
+    public function modelId(): string;
+
+    public static function onPaid(PaymentOrder $paymentOrder): void;
 }

@@ -24,6 +24,45 @@
         </div>
 
         <div>
+            <x-input-label for="gender" :value="__('Gender')" />
+            <select name="gender" id="gender" class="mt-1 block w-full h-auto py-3 px-4 text-lg text-black rounded-md placeholder-black focus:border-primary-500 focus:ring-primary-500" required autofocus autocomplete="gender">
+                <option value="">--Select--</option>
+                <option value="Male" {{ old('gender', $user->gender) == 'Male' ? 'selected' : '' }}>Male</option>
+                <option value="Female" {{ old('gender', $user->gender) == 'Female' ? 'selected' : '' }}>Female</option>
+            </select>
+            {{-- <x-text-input id="gender" name="gender" type="text" class="mt-1 block w-full" :value="old('gender', $user->gender)" required autofocus autocomplete="gender" /> --}}
+            <x-input-error class="mt-2" :messages="$errors->get('gender')" />
+        </div>
+
+        <div>
+             <!-- Registration Status -->
+             <x-input-with-label name='registration_status' label="Professional Registration Status">
+                <select id="registration_status" name="registration_status"
+                    wire:model='form.registration_status'
+                    class="mt-1 block h-auto w-full rounded-md px-4 py-3 text-lg text-black placeholder-black focus:border-primary-500 focus:ring-primary-500">
+                    <option value>---</option>
+                    @foreach ($registrationStatuses as $value => $label )
+                    <option value="{{ $value }}" {{old('registration_status', $value) == $oldRegistrationStatus ? 'selected' : ''}} >{{ $label }}</option>
+                    @endforeach
+                </select>
+            </x-input-with-label>
+        </div>
+
+        <div>
+            <!-- Nationality -->
+            {{-- @dd($oldNationality); --}}
+            <x-input-with-label name='nationality' label="Nationality" :value="__($user->nationality)">
+                <select id="nationality" name="nationality"
+                    class="mt-1 block h-auto w-full rounded-md px-4 py-3 text-lg text-black placeholder-black focus:border-primary-500 focus:ring-primary-500">
+                    <option value>---</option>
+                    @foreach ($nationalityChoices as $nationality)
+                        <option value="{{ $nationality }}" {{ old('nationality', $nationality) == $oldNationality ? 'selected' : '' }}>{{ $nationality }}</option>
+                    @endforeach
+                </select>
+            </x-input-with-label>
+        </div>
+
+        <div>
             <x-input-label for="email" :value="__('Email')" />
             <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email', $user->email)" required autocomplete="username" />
             <x-input-error class="mt-2" :messages="$errors->get('email')" />

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\EventState;
 use App\Enums\PaymentOrderStatus;
 use App\Models\EventModel;
 use Illuminate\View\View;
@@ -99,7 +100,10 @@ class BookingController extends Controller
 
         if ($event) {
             $this->authorize('askQuestion', $event);
-            $activeEvents = EventModel::where('endsOn', '>', now())->get();
+        } else {
+            $activeEvents = EventModel::where('endsOn', '>', now())
+                ->whereIn('state', [EventState::Participation, EventState::ParticipationAndRegistration])
+                ->get();
         }
 
         return view('booking.question-and-answer', [
@@ -115,6 +119,7 @@ class BookingController extends Controller
                     'route' => route('question-and-answer', ['event' => $e->id]),
                 ];
             })->toArray(),
+            'numOfEvents' => $activeEvents->count(),
         ]);
     }
 

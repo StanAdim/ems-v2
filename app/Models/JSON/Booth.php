@@ -15,6 +15,7 @@ class Booth implements Arrayable
         public ?string $name,
         public ?string $size,
         public ?string $price,
+        public ?string $attendee_price,
         public ?string $booking_id,
     ) {
     }
@@ -37,6 +38,7 @@ class Booth implements Arrayable
             'name' => $this->name,
             'size' => $this->size,
             'price' => $this->price,
+            'attendee_price' => $this->attendee_price,
             'booking_id' => $this->booking_id,
         ];
     }

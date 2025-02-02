@@ -2,12 +2,14 @@
 
 namespace App\Filament\Resources\EventModelResource\RelationManagers;
 
+use App\Filament\Exports\EventReviewExporter;
 use App\Models\EventReview;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
+use Filament\Tables\Actions\ExportAction;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -40,9 +42,9 @@ class ReviewsRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('user.name')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('event.title')
-                    ->numeric()
-                    ->sortable(),
+                // Tables\Columns\TextColumn::make('event.title')
+                //     ->numeric()
+                //     ->sortable(),
                 Tables\Columns\TextColumn::make('rating')
                     ->numeric()
                     ->sortable(),
@@ -87,6 +89,11 @@ class ReviewsRelationManager extends RelationManager
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
+            ])
+            ->headerActions([
+                ExportAction::make('export')
+                    ->label('Export Reviews')
+                    ->exporter(EventReviewExporter::class),
             ]);
     }
 

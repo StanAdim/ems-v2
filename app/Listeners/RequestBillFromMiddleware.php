@@ -2,6 +2,8 @@
 
 namespace App\Listeners;
 
+use App\Enums\PaymentOrderStatus;
+use App\Events\PaymentOrderPaid;
 use App\Events\PaymentOrderPosted;
 use ErrorException;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -31,6 +33,20 @@ class RequestBillFromMiddleware implements ShouldQueue
      */
     public function handle(PaymentOrderPosted $event): void
     {
+
+        $paymentOrder = $event->paymentOrder;
+        if ($paymentOrder->total_amount == 0 || $paymentOrder->total_amount == $paymentOrder->paid_amount) {
+            Log::info("Skipping bill request for zero amount order.");
+            $paymentOrder->status = PaymentOrderStatus::Paid;
+            $paymentOrder->paid_amount = $paymentOrder->paid_amount ?: 0;
+            $paymentOrder->paid_at = now();
+            $paymentOrder->save();
+
+            PaymentOrderPaid::dispatch($paymentOrder);
+
+            return;
+        }
+
         $order = $event->paymentOrder;
         $customer = $order->customer_details->first();
 

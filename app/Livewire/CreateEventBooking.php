@@ -1,135 +1,203 @@
 <?php
 
 namespace App\Livewire;
-use App\Models\Country;
 use App\Models\EventBooking;
 use App\Models\EventModel;
 
 
-use App\Rules\MembershipRegistrationNumber;
+use App\Models\Ticket;
+use App\Models\User;
+use Illuminate\Validation\ValidationException;
+use Livewire\Attributes\Computed;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\On;
+use Livewire\Attributes\Url;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 
 class CreateEventBooking extends Component
 {
+    public const BOOKING_TYPE_SINGLE = 'single';
+    public const BOOKING_TYPE_GROUP = 'group';
+
     #[Locked]
     public EventModel $event;
+
     #[Locked]
     public EventBooking $booking;
+
+    #[Url(history: true)]
+    public $bookingType;
+
     #[Locked]
-    public $singleTicketPrice = 0;
-
-    #[Validate('required|numeric')]
     public $totalPrice = 0;
-    public $ticketCounts = 1;
 
-    #[Validate('required|string')]
-    public $registrationStatus = '';
-
-    #[Validate('integer|min:1')]
-    public $count = 1; // To track the number of attendees
+    #[Locked]
+    public $emails = []; // To store the attendee details
 
     #[Validate(
         rule: [
-            // 'attendees' => 'array:name,phone,email|size:1',
-            'attendees.*.name' => 'required|string|max:255',
-            'attendees.*.phone' => 'required|string|max:15',
-            'attendees.*.email' => 'required|email',
+            'required',
+            'email',
+            'exists:users,email',
         ],
-        attribute: [
-            'attendees.*.name' => 'Name',
-            'attendees.*.phone' => 'Phone',
-            'attendees.*.email' => 'Email',
+        attribute: 'Email',
+        message: [
+            'email.exists' => 'No user registered with this email please check your email'
         ]
     )]
-    public $attendees = []; // To store the attendee details
+    public $email = '';
 
-    #[Validate('nullable|string|max:255')]
-    public $institution_name = '';
-
-    #[Validate('required|string|max:100')]
-    public $nationality = '';
-
-    #[Validate([
-        'required_if:registrationStatus,registered',
-        'string',
-        'max:100',
-        'regex:/[A-Z]\d{4}-?[A-Z]{3,4}/',
-        'uppercase',
-        new MembershipRegistrationNumber,
-    ],
-        'Registration Number'
+    #[Validate(
+        rule: [
+            'required',
+        ],
+        attribute: 'Terms and Conditions',
+        message: [
+            'required' => 'You must agree to the terms and conditions to book an event'
+        ]
     )]
-    public $reg_number = '';
+    public $agreeTerms = null;
 
-    #[Locked]
-    public $nationalityChoices;
+    /**
+     * @param bool $withId
+     * @return \Illuminate\Support\Collection|\App\Models\User[]
+     */
+    #[Computed]
+    public function attendees($withId = false, $withEmailAsKeys = true)
+    {
+        $users = User::whereIn('email', $this->emails)->get();
 
-    public $parentId = null;
+        $mappingFunction = function (User $user) use ($withId, $withEmailAsKeys) {
+            $profile = $user->profile;
+            $data = [
+                'name' => $user->name,
+                'institution' => $profile?->institution_name ?? 'Testing',
+                'nationality' => $profile?->nationality,
+                'reg_status' => $profile?->registration_status,
+                'reg_number' => $profile?->registration_number,
+                'price' => $this->event->getEventPackageForUser($user)['amount'] ?? PHP_INT_MAX, // Just in case someone does something fishy
+            ];
+
+            if ($withId) {
+                $data['user_id'] = $user->id;
+            }
+
+            return $withEmailAsKeys
+                ? [$user->email => $data]
+                : $data;
+        };
+
+        return $withEmailAsKeys
+            ? $users->mapWithKeys($mappingFunction)
+            : $users->map($mappingFunction);
+    }
+
+    /**
+     * @return int
+     */
+    #[Computed]
+    public function ticketCount()
+    {
+        return count($this->emails);
+    }
 
     public function mount($event)
     {
         $this->$event = $event;
-        // Initialize with one attendee input
-        $this->attendees = [
-            ['name' => '', 'phone' => '', 'email' => '']
-        ];
-        $this->nationalityChoices = Country::getNationalities();
+        $this->emails = [];
 
     }
 
     public function addAttendee()
     {
-        $this->count++;
-        $this->ticketCounts++;
-        $this->attendees[] = ['name' => '', 'phone' => '', 'email' => ''];
+        ['email' => $validatedEmail] = $this->validateOnly('email');
+        if (in_array($validatedEmail, $this->emails)) {
+            throw ValidationException::withMessages([
+                'email' => 'This email has already been added',
+            ]);
+        }
+
+        $user = User::whereEmail($validatedEmail)->first();
+        if (!$this->event->getEventPackageForUser($user)) {
+            throw ValidationException::withMessages([
+                'email' => 'The user with this email can not participate in this event',
+            ]);
+        }
+
+        $emailHasTicket = Ticket::whereEventModelId($this->event->id)
+            ->whereUserId($user->id)
+            ->exists();
+        if ($emailHasTicket) {
+            throw ValidationException::withMessages([
+                'email' => 'This user has already booked a ticket for this event',
+            ]);
+        }
+
+        $this->emails[] = $validatedEmail;
+        $this->reset('email');
         $this->dispatch('update-attendees');
     }
 
     public function removeAttendee($index)
     {
-        if ($this->count > 1) {
-            unset($this->attendees[$index]);
-            $this->attendees = array_values($this->attendees); // Reindex the array
-            $this->count--;
-            $this->ticketCounts--;
+        if (count($this->emails) > 0) {
+            unset($this->emails[$index]);
+            $this->emails = array_values($this->emails); // Reindex the array
             $this->dispatch('update-attendees');
         }
     }
 
-    public function updateUserRegistrationStatus()
-    {
-        $this->singleTicketPrice = $this->event->getAvailableFeesList()[$this->registrationStatus]['amount'];
-        $this->dispatch('update-registration-status');
-
-    }
-
     #[On('update-attendees')]
-    #[On('update-registration-status')]
     public function updateTotalPrice()
     {
-        $this->totalPrice = $this->singleTicketPrice * $this->ticketCounts;
+        $this->totalPrice = $this
+            ->attendees()
+            ->reduce(function (?int $carry, array $value) {
+                return $carry + $value['price'];
+            });
     }
 
+    public function chooseBookingType($type)
+    {
+        $this->bookingType = $type;
+
+        // If the booking type is single, then add the current user's email to the list
+        $this->emails = $this->bookingType === self::BOOKING_TYPE_SINGLE
+            ? [auth()->user()->email]
+            : [];
+    }
+
+    public function isSingleBooking()
+    {
+        return $this->bookingType === self::BOOKING_TYPE_SINGLE;
+    }
 
     public function render()
     {
         return view('livewire.create-event-booking');
     }
 
+    public function search()
+    {
+        $this->validateOnly('email');
+    }
+
     public function store()
     {
+        if ($this->ticketCount() < 1)
+            throw ValidationException::withMessages(['email' => 'You must add atleast one person to book an event']);
+
+        $this->validateOnly('agreeTerms');
+
         $this->updateTotalPrice();
-        $validatedData = $this->validate();
 
         $this->booking = EventBooking::create([
-            'attendees' => $validatedData['attendees'],
+            'attendees' => $this->attendees(withId: true, withEmailAsKeys: false),
             'user_id' => auth()->id(),
             'event_id' => $this->event->id,
-            'total_amount' => $validatedData['totalPrice'],
-            'attendee_count' => count($validatedData['attendees']),
+            'total_amount' => $this->totalPrice,
+            'attendee_count' => $this->ticketCount(),
         ]);
     }
 }

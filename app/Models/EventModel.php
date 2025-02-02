@@ -15,7 +15,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Permission\Traits\HasRoles;
 
 /**
- *
+ * 
  *
  * @property int $id
  * @property string $title
@@ -58,6 +58,8 @@ use Spatie\Permission\Traits\HasRoles;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Permission\Models\Role> $roles
  * @property-read int|null $roles_count
  * @property-read mixed $theme_banner
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Ticket> $tickets
+ * @property-read int|null $tickets_count
  * @method static \Database\Factories\EventModelFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|EventModel newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|EventModel newQuery()
@@ -101,7 +103,7 @@ class EventModel extends Model implements HasMedia
     const MEDIA_COLLECTION_CALL_FOR_SPEAKERS_DOCUMENT = 'call-for-speakers-document';
 
     const FEE_REGISTERED = 'registered';
-    const FEE_NON_REGISTERED = 'non_registered';
+    const FEE_NON_REGISTERED = 'non-registered';
     const FEE_FOREIGNER = 'foreigner';
 
 
@@ -315,6 +317,11 @@ class EventModel extends Model implements HasMedia
         return $this->hasMany(EventConversation::class)->where('parent_conversation_id', '=', null);
     }
 
+    public function tickets(): HasMany
+    {
+        return $this->hasMany(Ticket::class);
+    }
+
     protected function boothsAvailable(): Attribute
     {
         return Attribute::make(
@@ -333,4 +340,23 @@ class EventModel extends Model implements HasMedia
         );
     }
 
+    /**
+     * Summary of getPriceForUser
+     * @param User $user
+     * @return array|null
+     */
+    public function getEventPackageForUser($user)
+    {
+        $statusMapping = match ($user->profile?->registration_status) {
+            UserProfile::STATUS_NOT_REGISTERED => self::FEE_NON_REGISTERED,
+            UserProfile::STATUS_REGISTERED => self::FEE_REGISTERED,
+            default => null,
+        };
+
+        if ($statusMapping && $user->profile?->nationality !== config('app.local_nationality')) {
+            $statusMapping = self::FEE_FOREIGNER;
+        }
+
+        return $this->getAvailableFeesList()[$statusMapping] ?? null;
+    }
 }

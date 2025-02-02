@@ -4,18 +4,17 @@ namespace App\Models;
 
 use App\Casts\EventBookingAttendeeModels;
 use App\Contracts\Billable;
+use App\Models\JSON\EventBookingAttendee;
 use App\Observers\EventBookingObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
-use Illuminate\Database\Eloquent\Casts\AsCollection;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property \Illuminate\Support\Collection|\App\Models\JSON\EventBookingAttendee[] $attendees
@@ -94,13 +93,16 @@ class EventBooking extends Model implements Billable
 
     public function descriptionLines(): array
     {
-        $tiketNumbers = $this
+        $bookedFor = $this
             ->attendees
-            ->map(fn($a) => $a->ticket_no)
+            ->map(function (EventBookingAttendee $a) {
+                $user = $a->user();
+                return "$user->name ($user->email)";
+            })
             ->toArray();
 
         return [
-            ['Ticket Number(s)', implode(', ', $tiketNumbers)],
+            ['Booked For', implode(', ', $bookedFor)],
             ['Event', $this->event->title],
             ['Ticket Type', $this->type],
         ];
@@ -121,6 +123,38 @@ class EventBooking extends Model implements Billable
     {
         $this->payment_order_id = $paymentOrder->id;
         $this->save();
+    }
+
+    public static function modelClass(): string
+    {
+        return self::class;
+    }
+
+    public function modelId(): string
+    {
+        return $this->id;
+    }
+
+    public static function onPaid(PaymentOrder $paymentOrder): void
+    {
+        $booking = self::find($paymentOrder->model_id);
+        $users = $booking
+            ->attendees
+            ->map(function (EventBookingAttendee $attendee) {
+                return $attendee->user();
+            });
+
+        $code = Ticket::generateTicketNo($booking->event->linkTitle . ' - ', 10);
+        $code = preg_replace('/\p{Z}+/u', '', $code);
+        foreach ($users as $index => $user) {
+            Ticket::make(
+                "$code-" . str_pad($index + 1, 2, '0', STR_PAD_LEFT),
+                $booking->event,
+                $user,
+                $paymentOrder
+            );
+
+        }
     }
 
     public function isPaid(): bool

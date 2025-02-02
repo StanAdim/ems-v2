@@ -31,6 +31,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @property ProfileType $type
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $gender
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Permission\Models\Permission> $permissions
  * @property-read int|null $permissions_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Permission\Models\Role> $roles
@@ -46,6 +47,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @method static \Illuminate\Database\Eloquent\Builder|UserProfile whereCompanyRegistrationNumber($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserProfile whereCompanyServiceCategory($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserProfile whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|UserProfile whereGender($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserProfile whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserProfile whereInstitutionName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserProfile whereNationality($value)
@@ -65,6 +67,9 @@ class UserProfile extends Model
 {
     use HasFactory, HasRoles, HasPanelShield;
 
+    public const STATUS_NOT_REGISTERED = 'not-registered';
+    public const STATUS_REGISTERED = 'registered';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -73,6 +78,7 @@ class UserProfile extends Model
     protected $fillable = [
         'id',
         'user_id',
+        'gender',
         'registration_status',
         'registration_number',
         'phone_number',
@@ -94,11 +100,22 @@ class UserProfile extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function guardName() { return ['web']; }
+    public function guardName()
+    {
+        return ['web'];
+    }
 
     protected $casts = [
         'type' => ProfileType::class,
         'address' => 'json',
     ];
+
+    public static function getRegistrationStatuses()
+    {
+        return [
+            self::STATUS_NOT_REGISTERED => 'Not Registered',
+            self::STATUS_REGISTERED => 'Registered',
+        ];
+    }
 
 }

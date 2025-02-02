@@ -1,4 +1,5 @@
 @use('App\Enums\ProfileType')
+@use('App\Models\UserProfile')
 <div class="bg-gray-300">
     <form wire:submit='save'>
         <input type="hidden" name="type" value="{{ $type }}">
@@ -9,7 +10,8 @@
                     <div
                         class="grid grid-cols-1 items-center justify-between rounded-t border-b px-4 py-1 dark:border-gray-600 md:px-5">
                         <h3 class="mx-auto text-xl font-semibold text-primary">
-                            Register for {{ $this->event_title ?: '' }}
+                            {{-- Register for {{ $this->event_title ?: '' }} --}}
+                            Event Management System
                         </h3>
                         <p class="text-md mx-auto my-3">
                             To reserve your seat on the ICT Commission events, create your account
@@ -62,18 +64,31 @@
                                 <!-- Last Name -->
                                 <x-input-with-label name='last_name' label="Last Name" required />
 
-                                <!-- Email Address -->
-                                <x-input-with-label name='email' type="email" label="Email" required />
+                                {{-- Gender --}}
+                                <x-input-with-label name='gender' label="Gender">
+                                    <select id="gender" name="gender"
+                                        wire:model='form.gender'
+                                        class="mt-1 block h-auto w-full rounded-md px-4 py-3 text-lg text-black placeholder-black focus:border-primary-500 focus:ring-primary-500">
+                                        <option value>---</option>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                    </select>
+                                </x-input-with-label>
 
+                            </div>
+
+                            <div class="grid gap-10 py-2 md:grid-cols-2">
+                                 <!-- Email Address -->
+                                 <x-input-with-label name='email' type="email" label="Email" required />
+                                <!-- Password -->
+                                <x-input-with-label name="password" label="Password" type="password" />
                             </div>
 
                             <div class="grid gap-10 md:grid-cols-2">
-                                <!-- Password -->
-                                <x-input-with-label name="password" label="Password" type="password" />
                                 <!-- Confirm Password -->
-                                <x-input-with-label name="password_confirmation" label="Repeat Password"
-                                    type="password" />
-                            </div>
+                               <x-input-with-label name="password_confirmation" label="Repeat Password"
+                                   type="password" />
+                           </div>
 
                             <div class="mt-4 flex items-center justify-end">
                                 <button type="button"
@@ -88,18 +103,19 @@
                             wire:ignore.self role="tabpanel" aria-labelledby="final-details">
                             <div class="grid gap-10 py-2 md:grid-cols-3">
                                 <!-- Registration Status -->
-                                <x-input-with-label name='registration_status' label="Registration Status">
+                                <x-input-with-label name='registration_status' label="Professional Registration Status">
                                     <select id="registration_status" name="registration_status"
                                         wire:model='form.registration_status'
                                         class="mt-1 block h-auto w-full rounded-md px-4 py-3 text-lg text-black placeholder-black focus:border-primary-500 focus:ring-primary-500">
                                         <option value>---</option>
-                                        <option value="registered">Registered</option>
-                                        <option value="not-registered">Not Registered</option>
+                                        @foreach (UserProfile::getRegistrationStatuses() as $value => $label )
+                                        <option value="{{ $value }}">{{ $label }}</option>
+                                        @endforeach
                                     </select>
                                 </x-input-with-label>
 
                                 <!-- Registration Number -->
-                                <x-input-with-label name="registration_number" label="Registration Number" />
+                                <x-input-with-label name="registration_number" label="Professional Registration Number" />
 
                                 <!-- Phone Number -->
                                 <x-input-with-label name="phone_number" label="Phone Number" autocomplete="phone"
