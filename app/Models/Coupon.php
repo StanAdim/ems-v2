@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Str;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property int|null $event_model_id
@@ -131,7 +131,7 @@ class Coupon extends Model
     public static function apply($code, $amount, $paymentOrder = null)
     {
         $coupon = Coupon::whereCode($code)->first();
-        if ($coupon->isValid()) {
+        if ($coupon?->isValid()) {
             $discount = $coupon->calculateDiscount($amount);
 
             if ($paymentOrder) {

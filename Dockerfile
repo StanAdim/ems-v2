@@ -19,7 +19,11 @@ RUN apt-get update -y && \
         libjpeg-dev \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
-        libpng-dev
+        libpng-dev \
+        supervisor
+
+RUN mkdir -p /var/log/supervisor
+COPY supervisord.conf.d /etc/supervisor/conf.d
 
 # Composer
 COPY --from=composer:2.2.6 /usr/bin/composer /usr/bin/composer
@@ -68,8 +72,9 @@ RUN php artisan event:cache && \
 RUN php artisan storage:link
 
 # Limit access to public directory only to www-data
+RUN chown -R www-data:www-data public
+
 RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/public /var/www/html/bootstrap/cache
 
 # Run as www-data
 #USER www-data

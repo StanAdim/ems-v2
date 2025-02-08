@@ -212,7 +212,7 @@
                                     <div class="my-2 flex items-center justify-end">
                                         <button type="button" onclick="document.getElementById('initial-details').click()"
                                             class="inline-block rounded-xl border border-gray-500 px-4 py-2">Previous</button>
-                                        <x-primary-button class="ms-4 rounded-xl">
+                                        <x-primary-button wire:loading.attr="disabled" wire:loading.class="animate-pulse" class="ms-4 rounded-xl">
                                             {{ __('Finish') }}
                                         </x-primary-button>
                                     </div>

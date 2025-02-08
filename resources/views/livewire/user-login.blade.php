@@ -120,7 +120,7 @@
                 </div>
 
                 <div class="mt-4 grid grid-cols-1">
-                    <x-primary-button class="h-auto bg-primary py-2 text-lg font-medium">
+                    <x-primary-button wire:loading.attr="disabled" wire:loading.class="animate-pulse" class="h-auto bg-primary py-2 text-lg font-medium">
                         {{ __('Login') }}
                     </x-primary-button>
                 </div>
