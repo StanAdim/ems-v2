@@ -46,6 +46,7 @@ class EventModelResource extends Resource
                         Tab::make('Event Details')->schema([
                             TextInput::make('title')->required(),
                             TextInput::make('linkTitle')->label('Short Title')->hint('For Displaying in Links')->required(),
+                            TextInput::make('edition'),
                             Split::make([
                                 DatePicker::make('startsOn')->required(),
                                 DatePicker::make('endsOn')->required(),

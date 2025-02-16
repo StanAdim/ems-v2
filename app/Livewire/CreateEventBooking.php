@@ -130,7 +130,9 @@ class CreateEventBooking extends Component
             ->exists();
         if ($emailHasTicket) {
             throw ValidationException::withMessages([
-                'email' => 'This user has already booked a ticket for this event',
+                'email' => auth()->user()->id == $user->id
+                    ? 'You already have a ticket for this event'
+                    : 'This user has already booked a ticket for this event',
             ]);
         }
 
@@ -162,10 +164,20 @@ class CreateEventBooking extends Component
     {
         $this->bookingType = $type;
 
-        // If the booking type is single, then add the current user's email to the list
-        $this->emails = $this->bookingType === self::BOOKING_TYPE_SINGLE
-            ? [auth()->user()->email]
-            : [];
+        // If the booking type not single, ignore validations
+        if ($this->bookingType !== self::BOOKING_TYPE_SINGLE) {
+            $this->resetErrorBag('email');
+            $this->reset('email');
+            return;
+        }
+
+        $this->email = auth()->user()->email;
+        try {
+            $this->addAttendee();
+        } catch (\Throwable $e) {
+            $this->bookingType = null;
+            throw $e;
+        }
     }
 
     public function isSingleBooking()

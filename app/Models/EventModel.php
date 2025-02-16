@@ -15,7 +15,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Permission\Traits\HasRoles;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $title
@@ -124,6 +124,7 @@ class EventModel extends Model implements HasMedia
         'fees',
         'exhibition_booths',
         'state',
+        'edition',
     ];
 
     protected $casts = [

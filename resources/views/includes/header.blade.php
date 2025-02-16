@@ -61,7 +61,7 @@
                 {{ $event->title }}
             </p>
             <p class="grid grid-cols-1 place-content-center text-4xl font-semibold text-primary">
-                <span>8th</span><span class="text-sm font-light text-secondary">Edition</span>
+                {!! $event->edition  !!}
             </p>
         </div>
         <div class="grid grid-cols-1 place-content-center lg:col-span-2">

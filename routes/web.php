@@ -5,6 +5,7 @@ use App\Http\Controllers\BookingController;
 use App\Http\Controllers\EventBookingController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SubscriberController;
 use App\Models\EventBooking;
 use App\Models\EventModel;
 use App\Models\PaymentOrder;
@@ -30,6 +31,14 @@ Route::get('', function () {
 
     return redirect(route('login'));
 })->name('site_index');
+
+Route::controller(SubscriberController::class)
+    ->prefix('subscriber')
+    ->name('subscriber.')
+    ->group(function () {
+        Route::post('/', 'store')->name('subscribe');
+        Route::get('/unsubscribe/{email}', 'unsubscribe')->name('unsubscribe');
+    });
 
 Route::controller(EventController::class)->prefix('event')->name('event.')->group(function () {
     Route::get('{event?}/', 'index')->name('index');

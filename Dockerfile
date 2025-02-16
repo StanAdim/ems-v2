@@ -77,7 +77,7 @@ RUN chown -R www-data:www-data public
 RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
 # Run as www-data
-#USER www-data
+# USER www-data
 
 # Enforce the document root
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
