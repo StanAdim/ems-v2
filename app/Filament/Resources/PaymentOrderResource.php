@@ -51,6 +51,13 @@ class PaymentOrderResource extends Resource
                 Tables\Columns\TextColumn::make('total_amount')
                     ->numeric()
                     ->sortable(),
+                Tables\Columns\TextColumn::make('customer_details')
+                    ->state(function (PaymentOrder $record) {
+                        $names = $record->customer_details?->map(fn($c) => $c['name']);
+                        $names = $names ?: collect([]);
+                        return implode('</br>', $names->toArray());
+                    })
+                    ->html(),
                 Tables\Columns\TextColumn::make('status')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
@@ -66,7 +73,7 @@ class PaymentOrderResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -86,8 +93,6 @@ class PaymentOrderResource extends Resource
     {
         return [
             'index' => Pages\ListPaymentOrders::route('/'),
-            'create' => Pages\CreatePaymentOrder::route('/create'),
-            'edit' => Pages\EditPaymentOrder::route('/{record}/edit'),
         ];
     }
 }

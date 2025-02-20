@@ -2,7 +2,6 @@
 
 namespace App\Livewire;
 
-use App\Enums\BookingType;
 use App\Enums\PaymentOrderStatus;
 use App\Filament\Resources\EventBookingResource;
 use App\Models\EventBooking;
@@ -25,6 +24,9 @@ use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Concerns\InteractsWithInfolists;
 use Filament\Infolists\Contracts\HasInfolists;
 use Filament\Infolists\Infolist;
+use Filament\Infolists\Components\Actions\Action as InfoListAction;
+use Filament\Infolists\Components\Section as InfoListSection;
+use Filament\Support\Enums\ActionSize;
 use Filament\Tables;
 use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\DeleteAction as ActionsDeleteAction;
@@ -33,6 +35,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ViewColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
+use Filament\Tables\Filters\MultiSelectFilter;
 use Filament\Tables\Table;
 use Livewire\Component;
 use Illuminate\Contracts\View\View;
@@ -48,7 +51,7 @@ class BookedEventsList extends Component implements HasForms, HasTable, HasInfol
     use InteractsWithTable;
 
     protected static string $resource = EventBookingResource::class;
-    public ?BookingType $bookingType = null;
+    public ?string $bookingType = null;
 
     public static function canCreate(): bool
     {
@@ -57,16 +60,9 @@ class BookedEventsList extends Component implements HasForms, HasTable, HasInfol
 
     public function table(Table $table): Table
     {
-        $query = EventBooking::query()->where('user_id', Auth::user()->id);
-        switch ($this->bookingType) {
-            case BookingType::Single:
-                $query->where('attendee_count', '==', 1);
-                break;
-
-            case BookingType::Group:
-                $query->where('attendee_count', '>', 1);
-                break;
-        }
+        $query = EventBooking::query()
+            ->where('user_id', Auth::user()->id)
+            ->whereType($this->bookingType);
 
         return $table
             ->query($query)
@@ -74,17 +70,20 @@ class BookedEventsList extends Component implements HasForms, HasTable, HasInfol
                 Tables\Columns\TextColumn::make('event.title')
                     ->searchable()
                     ->sortable(),
-                ViewColumn::make('attendees')->view('tables.columns.attendees-column'),
+                ViewColumn::make('attendees')
+                    ->view('tables.columns.attendees-column')
+                    ->searchable(),
 
                 Tables\Columns\TextColumn::make('total_amount')
                     ->numeric()
                     ->sortable(),
 
-                TextColumn::make('type'),
+                TextColumn::make('type')
+                    ->state(fn(EventBooking $record) => $record::getTypeList()[$record->type]),
                 TextColumn::make('payment_order.status')
                     ->label('Status')
                     ->badge()
-                    ->color(fn (PaymentOrderStatus $state): string => match ($state) {
+                    ->color(fn(PaymentOrderStatus $state): string => match ($state) {
                         PaymentOrderStatus::Paid => 'success',
                         PaymentOrderStatus::Pending => 'warning',
                         default => 'danger',
@@ -98,195 +97,73 @@ class BookedEventsList extends Component implements HasForms, HasTable, HasInfol
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                // Tables\Columns\TextColumn::make('payment_id')
-                //     ->numeric()
-                //     ->sortable(),
             ])
             ->filters([
-                //
+                MultiSelectFilter::make('events')
+                    ->relationship('event', 'linkTitle')
+                    ->searchable()
+                    ->preload(),
             ])
             ->actions([
-                // Tables\Actions\EditAction::make(),
-                ViewAction::make()->modal()->form($this->formSchema()),
-
-                // ActionsDeleteAction::make()
-                //
+                ViewAction::make()
+                    ->modal()
+                    ->infolist(self::infolistSchema())
+                    ->size(ActionSize::Small),
+                ActionsDeleteAction::make()
+                    ->requiresConfirmation()
+                    ->visible(function (EventBooking $record) {
+                        return !$record->payment_order?->isPaid();
+                    })->size(ActionSize::Small),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     //
                 ]),
-            ])->headerActions([
-                    /* CreateAction::make()
-                        ->model(EventBooking::class)
-                        ->label('Create Bookings')
-                        ->form([
-                            Hidden::make('user_id')
-                                ->default(Auth::id()),
-                            Select::make('event_id')
-                                ->relationship('event', 'title')
-                                ->required()
-                                ->live(),
-                            TextInput::make('total_amount')
-                                ->required(),
-
-                            Repeater::make('attendees')
-                                ->label('Attendees Details')
-                                ->schema([
-                                    TextInput::make('name')
-                                        ->label('Name')
-                                        ->required(),
-
-                                    TextInput::make('phone_number')
-                                        ->label('Phone Number')
-                                        ->required(),
-
-                                    TextInput::make('email')
-                                        ->label('Email')
-                                        ->email()
-                                        ->required(),
-                                ])
-                                ->createItemButtonLabel('Add Attendee')
-                                ->columns(3)
-                                ->defaultItems(1)
-                                ->collapsible(true), // Starts with one attendee row by default
-
-                            Section::make('Extra Attendees Details')
-                                ->schema([
-                                    TextInput::make('organization')
-                                        ->label('Organization/Company')
-                                        ->placeholder('Organization/Company'),
-
-                                    Select::make('nationality')
-                                        ->label('Nationality')
-                                        ->options([
-                                            'tanzania' => 'Tanzania',
-                                            'kenya' => 'Kenya',
-                                            // add more countries here
-                                        ])
-                                        ->placeholder('Choose a country'),
-
-                                    Select::make('registration_status')
-                                        ->label('Registration Status')
-                                        ->options(function (Get $get) {
-                                            $eventId = $get('event_id');
-                                            if (!$eventId)
-                                                return [];
-
-                                            $event = EventModel::whereId($eventId)->first();
-                                            $availableFees = [];
-                                            foreach ($event->getAvailableFeesList() as $type => $fee) {
-                                                $availableFees[$type] = $fee['title'];
-                                            }
-                                            return $availableFees;
-                                        })->default(['registered'])
-                                        ->placeholder('Select Status'),
-
-                                    TextInput::make('registration_number')
-                                        ->label('Registration Number')
-                                        ->placeholder('1274793-123'),
-                                ])->columns(2),
-
-                            Checkbox::make('agree_to_terms')
-                                ->label('Agree to term & conditions')
-                                ->required(),
-                            // ...
-                        ]), */
-                ]);
+            ]);
     }
-
-    public static function formSchema(): array
-    {
-        return
-            [
-                Hidden::make('user_id')
-                    ->default(Auth::id()),
-                Select::make('event_id')
-                    ->relationship('event', 'title')
-                    ->required(),
-                TextInput::make('total_amount')
-                    ->required(),
-
-                Repeater::make('attendees')
-                    ->label('Attendees Details')
-                    ->schema([
-                        TextInput::make('name')
-                            ->label('Name')
-                            ->required(),
-
-                        TextInput::make('phone_number')
-                            ->label('Phone Number')
-                            ->required(),
-
-                        TextInput::make('email')
-                            ->label('Email')
-                            ->email()
-                            ->required(),
-                    ])
-                    ->createItemButtonLabel('Add Attendee')
-                    ->columns(3)
-                    ->defaultItems(1)
-                    ->collapsible(true), // Starts with one attendee row by default
-
-                Section::make('Extra Attendees Details')
-                    ->schema([
-                        TextInput::make('organization')
-                            ->label('Organization/Company')
-                            ->placeholder('Organization/Company'),
-
-                        Select::make('nationality')
-                            ->label('Nationality')
-                            ->options([
-                                'tanzania' => 'Tanzania',
-                                'kenya' => 'Kenya',
-                                // add more countries here
-                            ])
-                            ->placeholder('Choose a country'),
-
-                        Select::make('registration_status')
-                            ->label('Registration Status')
-                            ->options([
-                                'not registered' => 'Not Registered',
-                                'foreigner' => 'Foreigner',
-                                // add more statuses here
-                            ])->default(['registered'])
-                            ->placeholder('Choose Status'),
-
-                        TextInput::make('registration_number')
-                            ->label('Registration Number')
-                            ->placeholder('1274793-123'),
-                    ])->columns(2),
-
-                Checkbox::make('agree_to_terms')
-                    ->label('Agree to term & conditions')
-                    ->required(),
-                // ...
-            ];
-    }
-
-    protected function viewForm(EventBooking $record): Form
-    {
-        return $this->form($record);
-    }
-
-
-    // public static function getInfolist() : array {
-    //     return [];
-    // }
 
     public static function infolist(Infolist $infoList): Infolist
     {
         return $infoList
-            ->schema([
-                RepeatableEntry::make('attendees')
-                    ->schema([
-                        TextEntry::make('name'),
-                        TextEntry::make('phone'),
-                        TextEntry::make('email'),
-                    ])->columns(3),
-                TextEntry::make('total_amount')->money('TSHS'),
-                TextEntry::make('created_at')->dateTime(),
-            ])->columns(1);
+            ->schema(self::infolistSchema())
+            ->columns(1);
+    }
+
+    public static function infolistSchema(): array
+    {
+        return [
+            InfoListSection::make('Details')
+                ->columns(2)
+                ->schema([
+                    TextEntry::make('type')->state(function (EventBooking $record) {
+                        return $record::getTypeList()[$record->type];
+                    }),
+                    TextEntry::make('created_at')->dateTime(),
+                ]),
+            InfoListSection::make('Attendees')
+                ->schema([
+                    RepeatableEntry::make('attendees')
+                        ->schema([
+                            TextEntry::make('name'),
+                            TextEntry::make('institution'),
+                            TextEntry::make('nationality'),
+                            TextEntry::make('reg_status')->label('Registration Status'),
+                            TextEntry::make('reg_number')->label('Registration Number'),
+                            TextEntry::make('price')->money('TSHS'),
+                            TextEntry::make('ticket_no'),
+                        ])
+                        ->label('')
+                        ->columns(4),
+                ]),
+            InfoListSection::make('Payment Information')
+                ->columns(3)
+                ->schema([
+                    TextEntry::make('payment_order.description'),
+                    TextEntry::make('payment_order.total_amount')->money('TSHS'),
+                    TextEntry::make('payment_order.status')->label('Payment Status'),
+                    TextEntry::make('payment_order.control_no')->label('Payment Control No.'),
+                ]),
+        ];
     }
 
     public function render(): View

@@ -59,6 +59,9 @@ class BookingsRelationManager extends RelationManager
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: false),
                 Tables\Columns\TextColumn::make('type')
+                    ->state(function (EventBooking $record) {
+                        return $record::getTypeList()[$record->type];
+                    })
                     ->sortable(),
                 ViewColumn::make('attendees')
                     ->view('tables.columns.attendees-column')
@@ -127,7 +130,9 @@ class BookingsRelationManager extends RelationManager
                 Section::make('Details')
                     ->columns(2)
                     ->schema([
-                        TextEntry::make('type'),
+                        TextEntry::make('type')->state(function (EventBooking $record) {
+                            return $record::getTypeList()[$record->type];
+                        }),
                         TextEntry::make('created_at')->dateTime(),
                     ]),
                 Section::make('Attendees')
@@ -135,8 +140,11 @@ class BookingsRelationManager extends RelationManager
                         RepeatableEntry::make('attendees')
                             ->schema([
                                 TextEntry::make('name'),
-                                TextEntry::make('phone'),
-                                TextEntry::make('email'),
+                                TextEntry::make('institution'),
+                                TextEntry::make('nationality'),
+                                TextEntry::make('reg_status')->label('Registration Status'),
+                                TextEntry::make('reg_number')->label('Registration Number'),
+                                TextEntry::make('price'),
                                 TextEntry::make('ticket_no'),
                             ])
                             ->label('')

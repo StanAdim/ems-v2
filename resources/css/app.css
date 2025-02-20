@@ -9,7 +9,7 @@
 }
 
 .fi-btn-label {
-    @apply text-primary;
+    /* @apply text-primary; */
 }
 
 button.fi-link.group\/link {

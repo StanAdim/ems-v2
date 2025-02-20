@@ -24,7 +24,7 @@ class CreatePaymentOrder extends Component
     public ?PaymentOrder $payment_order;
 
     #[Validate('required|string')]
-    public string $phone_number;
+    public ?string $phone_number = null;
 
     #[Validate([
         // 'exists:coupons,code',
@@ -38,6 +38,11 @@ class CreatePaymentOrder extends Component
     protected $casts = [
         'booking.attendees' => 'array',
     ];
+
+    public function mount()
+    {
+        $this->phone_number = $this->phone_number ?: auth()->user()?->profile?->phone_number;
+    }
 
     public function applyCoupon()
     {

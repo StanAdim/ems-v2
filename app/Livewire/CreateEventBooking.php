@@ -17,9 +17,6 @@ use Livewire\Component;
 
 class CreateEventBooking extends Component
 {
-    public const BOOKING_TYPE_SINGLE = 'single';
-    public const BOOKING_TYPE_GROUP = 'group';
-
     #[Locked]
     public EventModel $event;
 
@@ -165,7 +162,7 @@ class CreateEventBooking extends Component
         $this->bookingType = $type;
 
         // If the booking type not single, ignore validations
-        if ($this->bookingType !== self::BOOKING_TYPE_SINGLE) {
+        if ($this->bookingType !== EventBooking::TYPE_SINGLE) {
             $this->resetErrorBag('email');
             $this->reset('email');
             return;
@@ -182,7 +179,7 @@ class CreateEventBooking extends Component
 
     public function isSingleBooking()
     {
-        return $this->bookingType === self::BOOKING_TYPE_SINGLE;
+        return $this->bookingType === EventBooking::TYPE_SINGLE;
     }
 
     public function render()
@@ -210,6 +207,7 @@ class CreateEventBooking extends Component
             'event_id' => $this->event->id,
             'total_amount' => $this->totalPrice,
             'attendee_count' => $this->ticketCount(),
+            'type' => $this->bookingType,
         ]);
     }
 }

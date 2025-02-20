@@ -1,5 +1,4 @@
 @extends('layouts.app')
-@use ('App\Enums\BookingType')
 @php
     $title = 'Group Bookings';
 @endphp
@@ -10,7 +9,7 @@
             <h4 class="text-3xl font-medium">List of group bookings</h4>
         </div>
         <div class="">
-            @livewire('booked-events-list', ['bookingType' => BookingType::Group])
+            @livewire('booked-events-list', ['bookingType' => 'group'])
         </div>
 
     </div>

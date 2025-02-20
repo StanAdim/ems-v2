@@ -20,7 +20,7 @@ class PaymentOrderObserver
      */
     public function created(PaymentOrder $paymentOrder): void
     {
-        $paymentOrder->expires_on = Carbon::now()->addWeeks(1);
+        $paymentOrder->expires_on = Carbon::now()->addMonths(10);
         $paymentOrder->save();
 
         PaymentOrderPosted::dispatch($paymentOrder);

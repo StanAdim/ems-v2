@@ -24,10 +24,10 @@ use Illuminate\Support\Collection;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property int|null $user_id
  * @property int $attendee_count
+ * @property string $type
  * @property int|null $payment_order_id
  * @property-read \App\Models\EventModel $event
  * @property-read \App\Models\PaymentOrder|null $payment_order
- * @property-read mixed $type
  * @method static \Illuminate\Database\Eloquent\Builder|EventBooking newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|EventBooking newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|EventBooking query()
@@ -38,6 +38,7 @@ use Illuminate\Support\Collection;
  * @method static \Illuminate\Database\Eloquent\Builder|EventBooking whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EventBooking wherePaymentOrderId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EventBooking whereTotalAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|EventBooking whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EventBooking whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EventBooking whereUserId($value)
  * @mixin \Eloquent
@@ -46,6 +47,9 @@ use Illuminate\Support\Collection;
 class EventBooking extends Model implements Billable
 {
     use HasFactory;
+
+    public const TYPE_SINGLE = 'single';
+    public const TYPE_GROUP = 'group';
 
     protected $casts = [
         'attendees' => EventBookingAttendeeModels::class,
@@ -67,6 +71,7 @@ class EventBooking extends Model implements Billable
         'created_at',
         'updated_at',
         'attendee_count',
+        'type',
     ];
 
     /**
@@ -82,13 +87,6 @@ class EventBooking extends Model implements Billable
     public function payment_order(): BelongsTo
     {
         return $this->belongsTo(PaymentOrder::class);
-    }
-
-    protected function type(): Attribute
-    {
-        return Attribute::make(
-            get: fn($value) => $this->attendee_count > 1 ? 'Group' : 'Single',
-        );
     }
 
     public function descriptionLines(): array
@@ -160,5 +158,13 @@ class EventBooking extends Model implements Billable
     public function isPaid(): bool
     {
         return $this->payment_order->isPaid();
+    }
+
+    public static function getTypeList()
+    {
+        return [
+            self::TYPE_SINGLE => 'Single',
+            self::TYPE_GROUP => 'Group',
+        ];
     }
 }
