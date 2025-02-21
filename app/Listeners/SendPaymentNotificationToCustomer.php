@@ -23,7 +23,7 @@ class SendPaymentNotificationToCustomer implements ShouldQueue
     public function handle(PaymentOrderPaid $event): void
     {
         $paymentOrder = $event->paymentOrder;
-        $paymentOrder->generateInvoiceDocument();
+        $paymentOrder->generateDocumentFor('receipt');
 
         $emails = $paymentOrder
             ->customer_details

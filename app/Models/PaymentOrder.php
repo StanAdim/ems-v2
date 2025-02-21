@@ -31,6 +31,7 @@ use LaravelDaily\Invoices\Facades\Invoice;
  * @property \Illuminate\Support\Carbon|null $paid_at
  * @property \Illuminate\Support\Carbon|null $expires_on
  * @property string|null $invoice_url
+ * @property string|null $receipt_url
  * @property \Illuminate\Support\Collection|null $customer_details
  * @property int|null $user_id
  * @property array|null $middleware_bill_data
@@ -56,6 +57,7 @@ use LaravelDaily\Invoices\Facades\Invoice;
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentOrder wherePaidAmount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentOrder wherePaidAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentOrder wherePhoneNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PaymentOrder whereReceiptUrl($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentOrder whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentOrder whereTotalAmount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentOrder whereUpdatedAt($value)
@@ -125,7 +127,12 @@ class PaymentOrder extends Model
         return $payment_order;
     }
 
-    public function generateInvoiceDocument()
+    /**
+     * Summary of generateDocumentFor
+     * @param string $type - one of 'invoice' or 'receipt'
+     * @return void
+     */
+    public function generateDocumentFor($type = 'invoice')
     {
         $seller = new Party(config('app.business'));
 
@@ -140,7 +147,7 @@ class PaymentOrder extends Model
         ]);
 
         $item = InvoiceItem::make($this->description)->pricePerUnit($this->total_amount);
-        $invoice = Invoice::make($this->description)
+        $invoice = Invoice::make($this->description . $type)
             ->status($this->isPaid() ? 'paid' : 'not-paid')
             ->setCustomData(['paid_at' => $this->paid_at?->toDateString()])
             ->seller($seller)
@@ -155,7 +162,15 @@ class PaymentOrder extends Model
 
         $invoice->save('public');
 
-        $this->invoice_url = $invoice->url();
+        switch ($type) {
+            case 'invoice':
+                $this->invoice_url = $invoice->url();
+                break;
+            case 'receipt':
+                $this->receipt_url = $invoice->url();
+                break;
+        }
+
         $this->save();
     }
 

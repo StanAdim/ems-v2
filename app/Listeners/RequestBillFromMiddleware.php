@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use App\Enums\PaymentOrderStatus;
+use App\Events\ControlNoUpdated;
 use App\Events\PaymentOrderPaid;
 use App\Events\PaymentOrderPosted;
 use ErrorException;
@@ -33,7 +34,9 @@ class RequestBillFromMiddleware implements ShouldQueue
      */
     public function handle(PaymentOrderPosted $event): void
     {
-
+        // ControlNoUpdated::dispatch($event->paymentOrder); // to manually trigger invoice generation
+        // PaymentOrderPaid::dispatch($event->paymentOrder); // to manually trigger receipt generation
+        
         $paymentOrder = $event->paymentOrder;
         if ($paymentOrder->total_amount == 0 || $paymentOrder->total_amount == $paymentOrder->paid_amount) {
             Log::info("Skipping bill request for zero amount order.");

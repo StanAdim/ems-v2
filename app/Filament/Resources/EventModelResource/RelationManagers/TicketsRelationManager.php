@@ -20,6 +20,11 @@ class TicketsRelationManager extends RelationManager
         return false;
     }
 
+    public static function canViewForRecord($ownerRecord, $pageClass): bool
+    {
+        return true;
+    }
+
     public function form(Form $form): Form
     {
         return $form

@@ -23,7 +23,7 @@ class SendInvoiceToCustomer implements ShouldQueue
     public function handle(ControlNoUpdated $event): void
     {
         $paymentOrder = $event->paymentOrder;
-        $paymentOrder->generateInvoiceDocument();
+        $paymentOrder->generateDocumentFor();
 
         $emails = $paymentOrder
             ->customer_details

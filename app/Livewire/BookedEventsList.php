@@ -29,8 +29,9 @@ use Filament\Infolists\Components\Section as InfoListSection;
 use Filament\Support\Enums\ActionSize;
 use Filament\Tables;
 use Filament\Tables\Actions\CreateAction;
-use Filament\Tables\Actions\DeleteAction as ActionsDeleteAction;
+use Filament\Tables\Actions\DeleteAction as TableDeleteAction;
 use Filament\Tables\Actions\ViewAction;
+use Filament\Tables\Actions\Action as TableAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ViewColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
@@ -78,6 +79,12 @@ class BookedEventsList extends Component implements HasForms, HasTable, HasInfol
                     ->numeric()
                     ->sortable(),
 
+                Tables\Columns\TextColumn::make('payment_order.control_no')
+                    ->label('Control No.')
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: false)
+                    ->sortable(),
+
                 TextColumn::make('type')
                     ->state(fn(EventBooking $record) => $record::getTypeList()[$record->type]),
                 TextColumn::make('payment_order.status')
@@ -105,11 +112,29 @@ class BookedEventsList extends Component implements HasForms, HasTable, HasInfol
                     ->preload(),
             ])
             ->actions([
+                TableAction::make('invoice')
+                    ->url(function (EventBooking $record) {
+                        return $record->payment_order?->invoice_url;
+                    })
+                    ->visible(function (EventBooking $record) {
+                        return $record->payment_order?->invoice_url !== null;
+                    })
+                    ->icon('heroicon-o-document-arrow-down')
+                    ->openUrlInNewTab(),
+                TableAction::make('receipt')
+                    ->url(function (EventBooking $record) {
+                        return $record->payment_order?->receipt_url;
+                    })
+                    ->visible(function (EventBooking $record) {
+                        return $record->payment_order?->receipt_url !== null;
+                    })
+                    ->icon('heroicon-o-document-arrow-down')
+                    ->openUrlInNewTab(),
                 ViewAction::make()
                     ->modal()
                     ->infolist(self::infolistSchema())
                     ->size(ActionSize::Small),
-                ActionsDeleteAction::make()
+                TableDeleteAction::make()
                     ->requiresConfirmation()
                     ->visible(function (EventBooking $record) {
                         return !$record->payment_order?->isPaid();
