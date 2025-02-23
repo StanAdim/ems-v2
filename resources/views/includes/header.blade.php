@@ -41,7 +41,7 @@
         </a>
 
         <div
-            class="text-nowrap mt-2 inline-flex place-content-center justify-center gap-2 py-2 align-middle md:gap-4 lg:justify-end">
+            class="mt-2 inline-flex place-content-center justify-center gap-2 text-nowrap py-2 align-middle md:gap-4 lg:justify-end">
             @foreach ($latestEvents as $latestEvent)
                 <a href="{{ $latestEvent['url'] }}"
                     class="{{ $event && $event?->id == $latestEvent['id'] ? 'text-secondary' : 'text-white' }} my-auto text-xs underline sm:text-base lg:text-xl">
@@ -61,7 +61,10 @@
                 {{ $event->title }}
             </p>
             <p class="grid grid-cols-1 place-content-center text-4xl font-semibold text-primary">
-                {!! $event->edition  !!}
+                @if ($event->edition)
+                    <span>{!! $event->edition !!}</span>
+                    <span class="text-sm font-light text-secondary">Edition</span>
+                @endif
             </p>
         </div>
         <div class="grid grid-cols-1 place-content-center lg:col-span-2">
@@ -148,7 +151,7 @@
     <div class="container mx-auto hidden w-full px-4 py-3 md:block md:w-auto" id="navbar-default">
         <div class="flex md:place-content-center md:text-center">
             <ul
-                class="mt-0 grid grid-cols-1 space-x-8 overflow-hidden text-sm font-normal rtl:space-x-reverse md:flex lg:text-lg">
+                class="mt-0 grid grid-cols-1 space-x-8 overflow-hidden text-sm font-normal md:flex lg:text-lg rtl:space-x-reverse">
                 <li>
                     <a href="{{ route('event.about', ['event' => $event]) }}"
                         class="{{ Route::is('event.about') ? 'text-secondary' : 'text-white ' }} ms-8 hover:underline">About</a>

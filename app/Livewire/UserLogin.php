@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Events\UserIsLoggingIn;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\EventModel;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Validate;
@@ -20,7 +21,13 @@ class UserLogin extends Component
     public $remember = false;
     public function render()
     {
-        return view('livewire.user-login');
+        $currentEvent = EventModel::whereNotIn('state',['ended','created'])->where('endsOn', '>', now())->latest()->first();
+        $allEvents = EventModel::whereNotIn('state',['created'])->get();
+
+        if (!$currentEvent) {
+            return view('livewire.user-login', compact('allEvents'));
+        }
+        return view('livewire.user-login', compact('currentEvent'));
     }
 
     public function login()

@@ -86,9 +86,15 @@ class EventController extends Controller
         ]);
     }
 
-    public function login(): View
+    public function login(?EventModel $event = null): View
     {
-        return view('participant.login');
+        $currentEvent = $event ?: EventModel::where('endsOn', '>', now())->latest()->first();
+        $allEvents = EventModel::all();
+
+        if (!$currentEvent) {
+            return view('participant.login', ['allEvents', $allEvents]);
+        }
+        return view('participant.login', ['currentEvent' => $currentEvent]);
     }
 
     public function sponsor(EventModel $event): View

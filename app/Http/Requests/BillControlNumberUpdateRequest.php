@@ -24,6 +24,7 @@ class BillControlNumberUpdateRequest extends FormRequest
         return [
             'message' => 'string',
             'control_number' => 'required|string',
+            'data' => 'json',
         ];
     }
 }

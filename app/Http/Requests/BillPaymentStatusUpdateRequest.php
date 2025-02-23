@@ -26,6 +26,7 @@ class BillPaymentStatusUpdateRequest extends FormRequest
             'control_number' => 'required|string',
             'status' => 'required|integer|min:1|max:1',
             'paid_amount' => 'required|numeric',
+            'data' => 'json',
         ];
     }
 }

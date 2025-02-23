@@ -26,6 +26,7 @@ class BillingController extends Controller
 
         $controlNumber = $validated['control_number'];
         $paymentOrder->control_no = $controlNumber;
+        $paymentOrder->middleware_bill_data = $validated['data'] ?? [];
         $paymentOrder->save();
 
         Log::info("Received Control Number, Control No: $controlNumber, Bill UUID: $uuid");
@@ -56,6 +57,7 @@ class BillingController extends Controller
 
         $paymentOrder->status = PaymentOrderStatus::Paid;
         $paymentOrder->paid_amount = $validated['paid_amount'];
+        $paymentOrder->middleware_bill_data = $validated['data'] ?? [];
         $paymentOrder->paid_at = now();
         $paymentOrder->save();
 
@@ -64,7 +66,7 @@ class BillingController extends Controller
         if ($wasNotInitiallyPaid) {
             PaymentOrderPaid::dispatch($paymentOrder);
         }
-        
+
         return [
             'status' => 'success',
         ];

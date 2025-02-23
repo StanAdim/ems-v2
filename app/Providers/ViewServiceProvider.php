@@ -3,7 +3,6 @@ namespace App\Providers;
 
 use App\Enums\EventState;
 use App\Models\EventModel;
-use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -34,7 +33,7 @@ class ViewServiceProvider extends ServiceProvider
                     EventState::ParticipationAndRegistration->value,
                 ];
                 $latestEvents = [];
-                $latestEventsModels = EventModel::whereState($statesToShow)
+                $latestEventsModels = EventModel::whereIn('state', $statesToShow)
                     ->latest()
                     ->take(4)
                     ->get();

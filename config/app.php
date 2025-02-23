@@ -194,6 +194,7 @@ return [
         'name' => env('BUSINESS_NAME'),
         'phone' => env('BUSINESS_PHONE'),
         'address' => env('BUSINESS_ADDRESS'),
+        'spCode' => env('BUSINESS_SP_CODE', 'SP19912'),
     ],
 
     'queues' => [

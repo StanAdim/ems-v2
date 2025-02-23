@@ -15,6 +15,7 @@ use LaravelDaily\Invoices\Classes\Buyer;
 use LaravelDaily\Invoices\Classes\InvoiceItem;
 use LaravelDaily\Invoices\Classes\Party;
 use LaravelDaily\Invoices\Facades\Invoice;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 /**
  *
@@ -92,6 +93,7 @@ class PaymentOrder extends Model
         'model_class',
         'model_id',
         'paid_amount',
+        'middleware_bill_data',
     ];
 
     protected $appends = ['amount_to_pay'];
@@ -127,6 +129,24 @@ class PaymentOrder extends Model
         return $payment_order;
     }
 
+    public static function getQRCodeSvg(string $content): ?string
+    {
+
+        $from = [13, 163, 222];
+        $to = [56, 172, 61];
+
+        $qrCode = QrCode::size(200)
+            ->style('dot')
+            ->eye('circle')
+            ->gradient($from[0], $from[1], $from[2], $to[0], $to[1], $to[2], 'diagonal')
+            ->margin(1)
+            ->generate(
+                $content,
+            );
+
+        return $qrCode;
+    }
+
     /**
      * Summary of generateDocumentFor
      * @param string $type - one of 'invoice' or 'receipt'
@@ -143,6 +163,7 @@ class PaymentOrder extends Model
                 'email' => $firstCustomer['email'],
                 'control_no' => $this->control_no,
                 'phone_number' => $this->phone_number,
+                'qr_code' => $this->control_no ? self::getQRCodeSvg($this->control_no) : '',
             ],
         ]);
 

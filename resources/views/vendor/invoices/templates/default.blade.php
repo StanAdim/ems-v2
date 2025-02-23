@@ -291,58 +291,74 @@
 
     <hr />
 
-    <table class="table" style="width: 300px">
-        <thead>
-            <tr>
-                <td class="border-0 pl-0" width="50%">
-                    <h3>Order Details: </h3>
-                </td>
-                <td class="border-0 pl-0"> </td>
-            </tr>
-        </thead>
-        <tbody>
-            <tr class="pt-0">
-                <td class="border-0 pl-0" width="50%">
-                    Control Number:
-                </td>
-                <td class="border-0 pl-0">
-                    {{ $invoice->buyer->custom_fields['control_no'] }}
-                </td>
-            </tr>
-            <tr class="mt-0">
-                <td class="border-0 pl-0" width="50%">
-                    Payment Reference:
-                </td>
-                <td class="border-0 pl-0">
-                    ICTC-{{ $invoice->buyer->custom_fields['control_no'] }}
-                </td>
-            </tr>
-            <tr>
-                <td class="border-0 pl-0" width="50%">
-                    Payer Name:
-                </td>
-                <td class="border-0 pl-0">
-                    {{ $invoice->buyer->name }}
-                </td>
-            </tr>
-            <tr>
-                <td class="border-0 pl-0" width="50%">
-                    Payer Phone:
-                </td>
-                <td class="border-0 pl-0">
-                    {{ $invoice->buyer->custom_fields['phone_number'] }}
-                </td>
-            </tr>
-            <tr>
-                <td class="border-0 pl-0" width="50%">
-                    Payer Email:
-                </td>
-                <td class="border-0 pl-0">
-                    {{ $invoice->buyer->custom_fields['email'] }}
-                </td>
-            </tr>
-        </tbody>
+    <table class="table" style="width: 450px">
+        <tr>
+            <td>
+                <table class="table" style="width: 300px">
+                    <thead>
+                        <tr>
+                            <td class="border-0 pl-0" width="50%">
+                                <h3>Order Details: </h3>
+                            </td>
+                            <td class="border-0 pl-0"> </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="pt-0">
+                            <td class="border-0 pl-0" width="50%">
+                                Control Number:
+                            </td>
+                            <td class="border-0 pl-0">
+                                {{ $invoice->buyer->custom_fields['control_no'] }}
+                            </td>
+                        </tr>
+                        <tr class="mt-0">
+                            <td class="border-0 pl-0" width="50%">
+                                Service Provider Code:
+                            </td>
+                            <td class="border-0 pl-0">
+                                {{ $invoice->seller->spCode }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="border-0 pl-0" width="50%">
+                                Payer Name:
+                            </td>
+                            <td class="border-0 pl-0">
+                                {{ $invoice->buyer->name }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="border-0 pl-0" width="50%">
+                                Payer Phone:
+                            </td>
+                            <td class="border-0 pl-0">
+                                {{ $invoice->buyer->custom_fields['phone_number'] }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="border-0 pl-0" width="50%">
+                                Payer Email:
+                            </td>
+                            <td class="border-0 pl-0">
+                                {{ $invoice->buyer->custom_fields['email'] }}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+            <td>
+                @if ($invoice->buyer->custom_fields['qr_code'])
+                    <div class="qr-code" class="mt-5">
+                        <img alt="QR Code" src="data:image/png;base64, {!! base64_encode($invoice->buyer->custom_fields['qr_code']) !!}">
+                        <p>SCAN & PAY </p>
+                    </div>
+                @endif
+            </td>
+        </tr>
     </table>
+
+
 
     {{-- <table class="mt-5 table">
         <tbody>
