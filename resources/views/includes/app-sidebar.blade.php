@@ -55,7 +55,7 @@
                     </svg>
                 </x-side-bar-link> --}}
 
-                <x-side-bar-link name="My Tickets" route='my-booking' active="{{ request()->routeIs('my-booking') }}">
+                <x-side-bar-link name="My Bookings" route='my-booking' active="{{ request()->routeIs('my-booking') }}">
                     <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path clip-rule="evenodd"
                             d="M7.875 2.8125C7.56432 2.8125 7.3125 3.06432 7.3125 3.375V4.5H6.1875V3.375C6.1875 2.44301 6.94299 1.6875 7.875 1.6875H10.125C11.057 1.6875 11.8125 2.443 11.8125 3.375V4.5H10.6875V3.375C10.6875 3.06433 10.4357 2.8125 10.125 2.8125H7.875Z"

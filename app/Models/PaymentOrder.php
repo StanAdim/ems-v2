@@ -168,7 +168,7 @@ class PaymentOrder extends Model
         ]);
 
         $item = InvoiceItem::make($this->description)->pricePerUnit($this->total_amount);
-        $invoice = Invoice::make($this->description . $type)
+        $invoice = Invoice::make($this->uuid . $this->description . $type)
             ->status($this->isPaid() ? 'paid' : 'not-paid')
             ->setCustomData(['paid_at' => $this->paid_at?->toDateString()])
             ->seller($seller)
