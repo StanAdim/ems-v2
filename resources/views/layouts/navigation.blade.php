@@ -82,7 +82,7 @@
                                 {{ __('Profile') }}
                             </a>
 
-                            @role('panel_user')
+                            @role(['panel_user', 'super_admin'])
                                 <x-dropdown-link class="my-2 rounded-sm" :href="route('filament.events.resources.event-models.index')">
                                     {{ __('Administration Panel') }}
                                 </x-dropdown-link>
@@ -140,7 +140,7 @@
                 <x-responsive-nav-link :href="route('profile.edit')">
                     {{ __('Profile') }}
                 </x-responsive-nav-link>
-                @role('panel_user')
+                @role(['panel_user', 'super_admin'])
                     <x-responsive-nav-link :href="route('filament.events.resources.event-models.index')">
                         {{ __('Administration Panel') }}
                     </x-responsive-nav-link>

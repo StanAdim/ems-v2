@@ -129,13 +129,15 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <!-- Slider indicators -->
+                            <div class="absolute z-30 flex -translate-x-1/2 bottom-5 left-1/2 space-x-3 rtl:space-x-reverse">
+                                <button type="button" class="w-3 h-3 rounded-full" aria-current="true"
+                                    aria-label="Slide {{ $event['sequence'] }}"
+                                    data-carousel-slide-to="{{ $event['sequence'] }}">
+                                </button>
+                            </div>
                         @endforeach
-                    </div>
-                    <!-- Slider indicators -->
-                    <div class="absolute z-30 flex -translate-x-1/2 bottom-5 left-1/2 space-x-3 rtl:space-x-reverse">
-                        <button type="button" class="w-3 h-3 rounded-full" aria-current="true"
-                            aria-label="Slide {{ $event['sequence'] }}"
-                            data-carousel-slide-to="{{ $event['sequence'] }}"></button>
                     </div>
 
                     <!-- Slider controls -->

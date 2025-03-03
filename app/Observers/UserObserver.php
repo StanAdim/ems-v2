@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\User;
+use Illuminate\Support\Facades\Log;
 
 class UserObserver
 {
@@ -11,8 +12,12 @@ class UserObserver
      */
     public function created(User $user): void
     {
-        $user->assignRole('user');
-        $user->save();
+        try {
+            $user->assignRole('user');
+            $user->save();
+        } catch (\Throwable $e) {
+            Log::error($e->getMessage());
+        }
     }
 
     /**

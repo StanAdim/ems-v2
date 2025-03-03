@@ -92,6 +92,10 @@ class ImportUsers extends Command
                     'email_verified_at' => $row->email_verified_at,
                     'password' => $row->password,
                 ]);
+
+                // Remove administrative roles, Laravel or Filament automatically assigns them for some reason
+                $user->removeRole('panel_user');
+                $user->removeRole('super_admin');
             } catch (Exception $e) {
                 $this->error($e->getMessage());
                 $user = null;
@@ -100,7 +104,9 @@ class ImportUsers extends Command
             if ($user) {
                 $profile = UserProfile::create([
                     'user_id' => $user->id,
-                    'registration_status' => $row->professionalStatus === 'f' ? 'non-registered' : 'registered',
+                    'registration_status' => $row->professionalStatus === 'f'
+                        ? UserProfile::STATUS_NOT_REGISTERED
+                        : UserProfile::STATUS_REGISTERED,
                     'registration_number' => $row->professionalNumber,
                     'phone_number' => $row->phoneNumber,
                     'institution_name' => $row->institution,
@@ -114,6 +120,10 @@ class ImportUsers extends Command
                     'type' => ProfileType::User,
                     'can_receive_notification' => $row->notificationConsent === 't' ?: false,
                 ]);
+
+                // Remove administrative roles, Laravel or Filament automatically assigns them for some reason
+                $user->removeRole('panel_user');
+                $user->removeRole('super_admin');
 
                 $created[] = [
                     $user->id,

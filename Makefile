@@ -38,3 +38,7 @@ filamentuser:
 
 superadmin:
 	docker-compose exec app php artisan shield:super-admin
+
+roles:
+    docker-compose exec app php artisan db:seed ShieldSeeder
+    docker-compose exec app php artisan db:seed RolesSeeder
