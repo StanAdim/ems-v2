@@ -86,12 +86,19 @@ class ImportUsers extends Command
             $row = (object) array_combine($headers, $usersAndInfo[$i]);
 
             try {
-                $user = User::create([
+                $userData = [
                     'name' => implode(' ', [$row->firstName, $row->middleName, $row->lastName]),
                     'email' => $row->email,
                     'email_verified_at' => $row->email_verified_at,
                     'password' => $row->password,
-                ]);
+                ];
+
+                $user = User::whereEmail($row->email)->first();
+                if ($user) {
+                    $user->update($userData);
+                } else {
+                    $user = User::create($userData);
+                }
 
                 // Remove administrative roles, Laravel or Filament automatically assigns them for some reason
                 $user->removeRole('panel_user');
@@ -102,9 +109,9 @@ class ImportUsers extends Command
             }
 
             if ($user) {
-                $profile = UserProfile::create([
+                $profileData = [
                     'user_id' => $user->id,
-                    'registration_status' => $row->professionalStatus === 'f'
+                    'registration_status' => boolval($row->professionalStatus)
                         ? UserProfile::STATUS_NOT_REGISTERED
                         : UserProfile::STATUS_REGISTERED,
                     'registration_number' => $row->professionalNumber,
@@ -114,12 +121,19 @@ class ImportUsers extends Command
                     'nationality' => $row->nation,
                     'address' => [
                         'physical_address' => $row->address,
-                        'region' => $row->region_id,
-                        'district' => $row->district_id,
+                        'region' => $row->region_name,
+                        'district' => $row->district_name,
                     ],
                     'type' => ProfileType::User,
-                    'can_receive_notification' => $row->notificationConsent === 't' ?: false,
-                ]);
+                    'can_receive_notification' => boolval($row->notificationConsent),
+                ];
+
+                $profile = UserProfile::whereUserId($user->id)->first();
+                if ($profile) {
+                    $profile->update($profileData);
+                } else {
+                    $profile = UserProfile::create($profileData);
+                }
 
                 // Remove administrative roles, Laravel or Filament automatically assigns them for some reason
                 $user->removeRole('panel_user');
