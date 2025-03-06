@@ -59,7 +59,7 @@ $whyParticipates = [
     [
         'icon' => 'resources/images/p-why-1.svg',
         'title' => 'Networking Opportunities',
-        'description' => 'Attending TAIC-2024 offers a chance to connect with ICT professionals, industry leaders, and innovators, facilitating valuable collaborations and partnerships in the rapidly growing fields of AI and robotics.',
+        'description' => "Attending $event->linkTitle offers a chance to connect with ICT professionals, industry leaders, and innovators, facilitating valuable collaborations and partnerships in the rapidly growing fields of AI and robotics.",
     ],
     [
         'icon' => 'resources/images/p-why-2.svg',
@@ -69,7 +69,7 @@ $whyParticipates = [
     [
         'icon' => 'resources/images/p-why-3.svg',
         'title' => 'Strategic Influence',
-        'description' => 'Being part of discussions and initiatives at TAIC-2024 allows participants to contribute to and influence the strategic direction of digital transformation in Tanzania and across Africa, aligning with broader socio-economic goals.',
+        'description' => "Being part of discussions and initiatives at $event->linkTitle allows participants to contribute to and influence the strategic direction of digital transformation in Tanzania and across Africa, aligning with broader socio-economic goals.",
     ],
 ];
             ?>

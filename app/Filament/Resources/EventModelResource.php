@@ -80,6 +80,10 @@ class EventModelResource extends Resource
                             TiptapEditor::make('aboutDescription')->label('Description')->required(),
                             SpatieMediaLibraryFileUpload::make('about_banner')->collection(EventModel::MEDIA_COLLECTION_ABOUT_BANNER),
                         ]),
+                        Tab::make('Help')->schema([
+                            Textarea::make('helpTitle')->label('Heading'),
+                            TiptapEditor::make('helpDescription')->label('Description'),
+                        ]),
                         Tab::make('Themes')->schema([
                             Textarea::make('theme')->label('Main')->required(),
                             Repeater::make('subThemes')->schema([

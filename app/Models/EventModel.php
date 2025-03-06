@@ -15,7 +15,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Permission\Traits\HasRoles;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $title
@@ -29,6 +29,8 @@ use Spatie\Permission\Traits\HasRoles;
  * @property string|null $locationDescription
  * @property string|null $aboutTitle
  * @property string $aboutDescription
+ * @property string|null $helpTitle
+ * @property string|null $helpDescription
  * @property string|null $whyParticipate
  * @property string $layout
  * @property array $fees
@@ -75,6 +77,8 @@ use Spatie\Permission\Traits\HasRoles;
  * @method static \Illuminate\Database\Eloquent\Builder|EventModel whereEndsOn($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EventModel whereExhibitionBooths($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EventModel whereFees($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|EventModel whereHelpDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|EventModel whereHelpTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EventModel whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EventModel whereLayout($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EventModel whereLinkTitle($value)
@@ -121,6 +125,8 @@ class EventModel extends Model implements HasMedia
         'locationDescription',
         'aboutTitle',
         'aboutDescription',
+        'helpTitle',
+        'helpDescription',
         'whyParticipate',
         'layout',
         'fees',
@@ -361,5 +367,21 @@ class EventModel extends Model implements HasMedia
         }
 
         return $this->getAvailableFeesList()[$statusMapping] ?? null;
+    }
+
+    public function getDateRangeDescription()
+    {
+        $initialPartFormat = 'jS F Y';
+
+        $yearsMatch = $this->startsOn->year == $this->endsOn->year;
+        $monthsMatch = $this->startsOn->month == $this->endsOn->month;
+
+        if ($yearsMatch && $monthsMatch) {
+            $initialPartFormat = 'jS';
+        } elseif ($yearsMatch && !$monthsMatch) {
+            $initialPartFormat = 'jS F';
+        }
+
+        return "{$this->startsOn->format($initialPartFormat)} - {$this->endsOn->format('jS F Y')}";
     }
 }

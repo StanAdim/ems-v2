@@ -105,7 +105,7 @@
                         </clipPath>
                     </defs>
                 </svg>
-                {{ $event->startsOn->format('jS') }} - {{ $event->endsOn->format('jS F Y') }}
+                {{ $event->getDateRangeDescription() }}
             </p>
         </div>
         {{-- <div class="place-content-center ml-auto justify-end">
