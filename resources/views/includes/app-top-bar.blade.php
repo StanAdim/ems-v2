@@ -1,8 +1,7 @@
 <div class="w-full fixed sm:h-auto md:h-15 py-4 z-40  bg-primary flex justify-center">
     <span class="mx-auto text-center align-middle text-white font-medium">
         <span class="ml-5 lg:ml-28 text-sm">
-            The United Republic of Tanzania | Ministry of Information,
-            Communication and Information Technology | Information and Communication Technologies Commission
+            The United Republic of Tanzania | Ministry Communication and Information Technology | Information and Communication Technologies Commission
         </span>
     </span>
     <div class="hidden md:flex divide-x-2 justify-center space-x-5 ">
