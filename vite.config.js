@@ -10,7 +10,8 @@ export default defineConfig({
                 'resources/css/fontawesome/css/brands.min.css',
                 'resources/css/fontawesome/css/solid.min.css',
                 'resources/js/app.js',
-                'resources/css/filament/events/theme.css'
+                'resources/css/filament/events/theme.css',
+                'resources/fonts/ibm-plex-sans/ibm-plex-sans.css',
             ],
             refresh: true,
         }),
