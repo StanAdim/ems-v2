@@ -35,13 +35,12 @@ class EventController extends Controller
             return redirect(route('login'));
         }
 
+        $allEventIds = array_merge([$event?->id], $event?->configuration->previousEditionsIds ?? []);
+        $reviewQuery = EventReview::whereIn('event_model_id', $allEventIds)
+            ->whereStatus(EventReview::STATUS_APPROVED);
 
-        $reviews = EventReview::whereEventModelId($event?->id)
-            ->whereStatus(EventReview::STATUS_APPROVED)
-            ->paginate(3)
-            ->withQueryString();
-        $reviewStats = EventReview::whereEventModelId($event?->id)
-            ->whereStatus(EventReview::STATUS_APPROVED)
+        $reviews = $reviewQuery->paginate(3)->withQueryString();
+        $reviewStats = $reviewQuery
             ->selectRaw("
                 COUNT(CASE WHEN rating = 5 THEN 1 END) as five_stars,
                 ROUND(LOG(COUNT(CASE WHEN rating = 5 THEN 1 END) + 1), 2) * 100 as five_stars_percent,

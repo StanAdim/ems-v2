@@ -34,7 +34,7 @@
         @if ($bookingType)
             <form wire:submit='store' wire.transition.out>
                 <div class="space-y-1 py-4 md:py-5">
-                    <p class="ml-4 pl-6 font-semibold">Attendees</p>
+                    <p class="ml-4 pl-6 font-semibold">Delegates/Participants</p>
 
                     @foreach ($emails as $index => $e)
                         @php
@@ -178,9 +178,8 @@
                     @enderror
                 <div
                     class="w-full max-w-sm rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800 sm:p-8">
-                    <h5 class="mb-4 text-xl font-medium text-gray-500 dark:text-gray-400">Individual Booking</h5>
                     <div class="flex items-baseline text-gray-900 dark:text-white">
-                        <span class="text-5xl font-extrabold tracking-tight">For Me</span>
+                        <span class="text-3xl font-extrabold tracking-tight">Individual Booking</span>
                     </div>
                     <ul role="list" class="my-7 space-y-5">
                         <li class="flex items-center">
@@ -213,9 +212,8 @@
                 </div>
                 <div
                     class="w-full max-w-sm rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800 sm:p-8">
-                    <h5 class="mb-4 text-xl font-medium text-gray-500 dark:text-gray-400">Group Booking</h5>
                     <div class="flex items-baseline text-gray-900 dark:text-white">
-                        <span class="text-5xl font-extrabold tracking-tight">For Many</span>
+                        <span class="text-3xl font-extrabold tracking-tight">Group Booking</span>
                     </div>
                     <ul role="list" class="my-7 space-y-5">
                         <li class="flex items-center">

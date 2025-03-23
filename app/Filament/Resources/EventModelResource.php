@@ -9,7 +9,9 @@ use App\Filament\Resources\EventModelResource\RelationManagers\ExhibitionBooking
 use App\Filament\Resources\EventModelResource\RelationManagers\ReviewsRelationManager;
 use App\Filament\Resources\EventModelResource\RelationManagers\TicketsRelationManager;
 use App\Models\EventModel;
+use App\Models\EventSpeaker;
 use ArberMustafa\FilamentLocationPickrField\Forms\Components\LocationPickr;
+use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Repeater;
@@ -20,6 +22,7 @@ use Filament\Forms\Components\Tabs;
 use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Support\RawJs;
@@ -96,6 +99,27 @@ class EventModelResource extends Resource
                             TextInput::make('locationDescription')->label('Description')->required(),
                             LocationPickr::make('location')->label('Map'),
                         ]),
+                        Tab::make('Speakers List')->schema([
+                            Repeater::make('speakers')
+                                ->relationship()
+                                ->columns(3)
+                                ->schema([
+                                    TextInput::make('name')->required()->columnSpan(1),
+                                    TextInput::make('company')->required()->columnSpan(1),
+                                    TextInput::make('position')->required()->columnSpan(1),
+                                    SpatieMediaLibraryFileUpload::make('photo')
+                                        ->collection(EventSpeaker::MEDIA_COLLECTION_SPEAKER_PHOTOS)
+                                        ->required()
+                                        ->downloadable()
+                                        ->image()
+                                        ->imageEditor()
+                                        ->imageResizeMode('cover')
+                                        ->imageCropAspectRatio('16:9')
+                                        ->columnSpan(3),
+                                    TextInput::make('topic')->columnSpan(2),
+                                    Toggle::make('is_key_speaker'),
+                                ])
+                        ]),
                         Tab::make('Banners Configuration')->schema([
                             SpatieMediaLibraryFileUpload::make('main_banner')->collection(EventModel::MEDIA_COLLECTION_MAIN_BANNER),
                             SpatieMediaLibraryFileUpload::make('participate_banner')->collection(EventModel::MEDIA_COLLECTION_PARTICIPATE_BANNER),
@@ -133,7 +157,22 @@ class EventModelResource extends Resource
                                 ->cloneable()
                                 ->label('Available Booths')
                                 ->columns(12),
-                        ])
+                        ]),
+                        Tab::make('Extra Configuration')->schema([
+                            Select::make('configuration.upcomingCardLayout')
+                                ->columnSpan(1)
+                                ->options(fn($record) => $record->configuration::getUpComingCardLayoutOptions()),
+                            Select::make('configuration.previousEditionsIds')
+                                ->columnSpan(1)
+                                ->label('Previous Editions')
+                                ->options(function (EventModel $record) {
+                                    return $record::whereNotIn('id', [$record->id])
+                                        ->get()
+                                        ->pluck('title', 'id');
+                                })
+                                ->multiple()
+                                ->searchable(),
+                        ]),
                     ]),
             ])->columns(1);
     }

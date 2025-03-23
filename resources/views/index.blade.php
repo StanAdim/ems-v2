@@ -8,22 +8,17 @@
 @extends('layouts.event')
 
 @section('content')
-    <div>
-        <!-- The only way to do great work is to love what you do. - Steve Jobs -->
-    </div>
+    <!-- The only way to do great work is to love what you do. - Steve Jobs -->
 
-    @include('includes.hero')
+    @include('includes.events-gallery')
 
-    <div class="container mx-auto grid grid-cols-1 gap-10 py-10 md:grid-cols-2 md:gap-0">
-        <div class="mx-2 md:h-[40rem]">
-            <p class="ml-10 text-5xl font-extralight text-primary md:text-7xl"> {!! $event->aboutTitle !!}
+    <div class="container mx-auto grid grid-cols-1 gap-10 py-10 md:grid-cols-3 md:gap-0">
+        <div class="col-span-1 mx-2 md:h-[40rem]">
+            <p class="ml-10 text-3xl font-semibold text-primary md:text-5xl"> {!! $event->aboutTitle !!}
             </p>
-            <img class="object-fit h-full w-full p-10 md:object-cover"
-                src="{{ $event->getEventLogoUrl() ?: Vite::asset('resources/images/about.svg') }}" alt=""
-                srcset="">
         </div>
 
-        <div class="m-4 place-content-evenly text-lg">
+        <div class="col-span-2 mx-8 place-content-evenly text-justify text-sm md:m-4 md:text-lg">
             @if ($event)
                 {!! $event->aboutDescription !!}
             @endif
@@ -31,17 +26,21 @@
         </div>
     </div>
 
+    <div class="container mx-auto">
+        <hr class="border-1 my-8 h-px bg-black dark:bg-gray-200">
+    </div>
+
     <div class="container mx-auto grid grid-cols-1 py-10 md:grid-cols-3">
 
-        <div class="bg-primary p-10 md:col-span-2 md:rounded-s-lg lg:p-32">
+        <div class="bg-brand-900 p-10 md:col-span-2 md:rounded-s-lg lg:p-32">
             <h4 class="mb-5 text-4xl font-light text-secondary">
-                MAIN THEME:
+                {{ $event->startsOn->year }} Theme
             </h4>
             <p class="mb-5 text-2xl font-bold text-white md:text-4xl xl:text-6xl">
                 {{ $event->theme }}
             </p>
 
-            <h4 class="mb-5 text-lg font-semibold text-white">
+            {{-- <h4 class="mb-5 text-lg font-semibold text-white">
                 SUB THEMES
             </h4>
             <div>
@@ -62,7 +61,7 @@
                     ];
                 @endphp
                 <div class="col-span-3 grid grid-cols-1 text-white">
-                    <div class="flex grid-cols-2 flex-wrap align-top md:grid xl:gap-10 lg:grid-cols-3">
+                    <div class="flex grid-cols-2 flex-wrap align-top md:grid lg:grid-cols-3 xl:gap-10">
                         @foreach ($event->subThemes as $subTheme)
                             <div class="m-2 grid max-w-sm gap-1 p-1 xl:p-6">
                                 @svg($subTheme['icon'], 'w-12 md:w-24 h-12 md:h-24 text-secondary')
@@ -72,7 +71,7 @@
 
                     </div>
                 </div>
-            </div>
+            </div> --}}
 
             @if ($event->isOpenForRegistration())
                 <a href="{{ route('register_for_event', ['event' => $event]) }}"
@@ -84,94 +83,108 @@
 
 
         </div>
-        <div class="grid bg-primary md:rounded-e-lg">
-            <img class="h-full w-full object-cover"
-                src="{{ $event->getThemeBannerUrl() ?: Vite::asset('resources/images/theme.svg') }}" alt=""
+        <div class="flex items-center justify-center bg-brand-900 md:rounded-e-lg">
+            <img class="h-64 w-64 object-cover"
+                src="{{ $event->getEventLogoUrl() ?: Vite::asset('resources/images/theme.svg') }}" alt=""
                 srcset="">
         </div>
     </div>
 
-    <div class="container mx-auto grid grid-cols-1 gap-10 py-10 md:gap-0 xl:grid-cols-2">
-        <div class="mx-auto flex w-[70%] flex-col space-y-4 rounded-lg p-2 md:p-5 text-lg">
-            <span class="text-3xl md:text-5xl font-semibold text-primary">
-                Drive Progress with your Ideas
-            </span>
-            <span>The tech world is constantly evolving, and your voice can be a catalyst for change. Join TAIC as a
+    @if (count($event->key_speakers) > 0)
+        <div class="container mx-auto grid grid-cols-1 gap-10 py-10">
+            <div class="mx-auto flex w-[70%] flex-col space-y-4 rounded-lg p-2 text-lg md:p-5">
+                <span class="text-center text-3xl font-semibold text-primary md:text-5xl">
+                    Key Speakers
+                </span>
+                {{--             <span>The tech world is constantly evolving, and your voice can be a catalyst for change. Join TAIC as a
                 speaker, and drive the conversation forward!</span>
             <div class="flex justify-items-start">
                 <a href="{{ $event->getCallForSpeakersDocumentUrl() }}" target="_blank"
                     class="rounded-lg bg-primary px-4 py-3 font-medium text-white md:px-10">
                     Become a Speaker
                 </a>
+            </div> --}}
+            </div>
+
+            <div class="mx-auto flex flex-row flex-wrap justify-center gap-4">
+                @php
+                    /** @var \App\Models\EventSpeaker $speaker **/
+                @endphp
+                @foreach ($event->key_speakers as $speaker)
+                    <div class="group relative h-64 w-64">
+                        <!-- Image -->
+                        <img src="{{ $speaker->getPhotoUrl() }}" alt="Image"
+                            class="h-full w-full rounded-lg object-cover" />
+
+                        <!-- Overlay Text (hidden by default) -->
+                        <div
+                            class="absolute inset-0 flex flex-col items-center justify-center rounded-lg bg-black bg-opacity-50 p-2 text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                            <span class="text-xl font-bold">{{ $speaker->name }}</span>
+                            <span>{{ $speaker->position }}</span>
+                            <span class="text-secondary">{{ $speaker->company }}</span>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    @endif
+
+    <div class="container my-5 rounded-lg bg-brand-900 md:mx-auto md:my-24">
+        <div class="grid grid-cols-1 md:grid-cols-1">
+            <div class="justify-center p-5 text-3xl font-normal md:p-10 xl:text-5xl">
+                <p class="text-center text-white">Participation Fee</p>
             </div>
         </div>
 
-        <div class="mx-2 h-full w-full text-left">
-            <img class="object-fit h-full w-full p-1"
-                src="{{ Vite::asset('resources/images/drive_progress_with_your_ideas.png') }}" alt=""
-                srcset="">
-        </div>
-    </div>
-
-
-    <div class="container my-5 rounded-lg bg-brand md:mx-auto md:my-24">
-        <div class="grid grid-cols-1 md:grid-cols-2">
-            <img class="w-100" src="{{ Vite::asset('resources/images/fee.svg') }}" alt="" srcset="">
-            <div class="justify-end p-10 text-4xl font-light md:p-20 xl:text-7xl">
-                <p class="text-end text-secondary">Conference</p>
-                <p class="text-end text-primary">Fees</p>
-            </div>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
+        <div class="flex w-full justify-center">
             @foreach ($event->fees as $feeItem)
                 @php
                     $amount = Number::format($feeItem['amount']);
                 @endphp
                 @switch($feeItem['package_type'])
                     @case($event::FEE_REGISTERED)
-                        <div class="grid grid-cols-1 gap-10">
+                        <div class="grid flex-auto grid-cols-1 gap-10">
                             <div class="grid grid-cols-1 bg-alt-green py-10">
-                                <div class="mx-auto my-5 w-24 md:w-56 place-content-center"><img class="w-full"
+                                <div class="mx-auto my-5 w-24 place-content-center md:w-56"><img class="w-full"
                                         src="{{ Vite::asset('resources/images/fee-1.svg') }}" alt="" srcset=""></div>
                                 <p class="my-2 text-center text-2xl text-white">For registered ict<br> Professionals.</p>
-                                <p class="mb-4 text-center text-4xl md:text-5xl font-extrabold text-white"><sup
+                                <p class="mb-4 text-center text-4xl font-extrabold text-white md:text-5xl"><sup
                                         class="align-top text-sm font-light">TZS</sup>{{ $amount }}</p>
                             </div>
                             @if ($event->isOpenForRegistration())
                                 <a href="{{ route('register_for_event', ['event' => $event]) }}"
-                                    class="mx-auto mb-10 rounded-lg bg-alt-green px-8 py-3 font-medium text-black md:px-20">Register
+                                    class="mx-auto mb-10 rounded-lg bg-alt-green px-8 py-3 font-medium text-white md:px-20">Register
                                     Now</a>
                             @endif
                         </div>
                     @break
 
                     @case($event::FEE_NON_REGISTERED)
-                        <div class="grid grid-cols-1 gap-10">
+                        <div class="grid flex-auto grid-cols-1 gap-10">
                             <div class="grid grid-cols-1 bg-primary py-10">
-                                <div class="mx-auto my-5 w-24 md:w-56 place-content-center"><img class="w-full"
+                                <div class="mx-auto my-5 w-24 place-content-center md:w-56"><img class="w-full"
                                         src="{{ Vite::asset('resources/images/fee-2.svg') }}" alt="" srcset=""></div>
                                 <p class="my-2 text-center text-2xl text-white">Per person for Non-<br> Registered ICT
                                     Professionals.
                                 </p>
-                                <p class="mb-4 text-center text-4xl md:text-5xl font-extrabold text-white"><sup
+                                <p class="mb-4 text-center text-4xl font-extrabold text-white md:text-5xl"><sup
                                         class="align-top text-sm font-light">TZS</sup>{{ $amount }}</p>
                             </div>
                             @if ($event->isOpenForRegistration())
                                 <a href="{{ route('register_for_event', ['event' => $event]) }}"
-                                    class="mx-auto mb-10 rounded-lg bg-primary px-8 py-3 font-medium text-black md:px-20">Register
+                                    class="mx-auto mb-10 rounded-lg bg-primary px-8 py-3 font-medium text-white md:px-20">Register
                                     Now</a>
                             @endif
                         </div>
                     @break
 
                     @case($event::FEE_FOREIGNER)
-                        <div class="grid grid-cols-1 gap-10">
+                        <div class="grid flex-auto grid-cols-1 gap-10">
                             <div class="grid grid-cols-1 bg-secondary py-10">
-                                <div class="mx-auto my-5 w-24 md:w-56 place-content-center"><img class="w-full"
+                                <div class="mx-auto my-5 w-24 place-content-center md:w-56"><img class="w-full"
                                         src="{{ Vite::asset('resources/images/fee-3.svg') }}" alt="" srcset=""></div>
                                 <p class="my-2 text-center text-2xl text-black">Foreign participants.<br><br></p>
-                                <p class="mb-4 text-center text-4xl md:text-5xl font-extrabold text-black"><sup
+                                <p class="mb-4 text-center text-4xl font-extrabold text-black md:text-5xl"><sup
                                         class="align-top text-sm font-light">TZS</sup>{{ $amount }}</p>
                             </div>
                             @if ($event->isOpenForRegistration())
@@ -181,18 +194,13 @@
                             @endif
                         </div>
                     @break
-
-                    @default
                 @endswitch
             @endforeach
         </div>
-
-
-
     </div>
 
     <div class="container mx-auto grid grid-cols-1 py-10">
-        <div class="mb-4 text-center text-3xl md:text-5xl font-light text-primary">
+        <div class="mb-4 text-center text-3xl font-light text-primary md:text-5xl">
             Location
         </div>
         <div class="mx-1 w-full px-8">
@@ -205,12 +213,12 @@
 
     <div>
         <div class="container mx-auto py-5 md:py-10">
-            <div class="grid grid-cols-1 md:grid-cols-3 py-10">
+            <div class="grid grid-cols-1 py-10 md:grid-cols-3">
                 <div class="hidden md:flex"></div>
 
-                <h4 class="text-center text-2xl px-3 md:px-0 md:text-4xl font-bold">Testimonials from Past Stakeholders</h4>
+                <h4 class="px-3 text-center text-2xl font-bold md:px-0 md:text-4xl">What people about {{ $event->linkTitle }}</h4>
 
-                <div class="justify-self-center pt-2 md:pt-0 md:justify-self-end">
+                <div class="justify-self-center pt-2 md:justify-self-end md:pt-0">
                     @auth
                         <button data-modal-target="review-modal" data-modal-toggle="review-modal"
                             class="rounded-lg bg-primary px-2 py-3 font-medium text-white xl:px-5" type="button">

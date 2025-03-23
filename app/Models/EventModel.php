@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Casts\BoothConfigurationCast;
+use App\Casts\EventModelConfigurationCast;
 use App\Enums\EventState;
 use BezhanSalleh\FilamentShield\Traits\HasPanelShield;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -39,6 +40,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @property \Illuminate\Support\Collection|\App\Models\JSON\Booth[]|null $exhibition_booths
  * @property EventState $state
  * @property string|null $edition
+ * @property mixed|null $configuration
  * @property-read mixed $about_banner
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\EventBooking> $bookings
  * @property-read int|null $bookings_count
@@ -48,6 +50,8 @@ use Spatie\Permission\Traits\HasRoles;
  * @property-read mixed $exhibition_layout_plan
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ExhibitionBooking> $exhibition_bookings
  * @property-read int|null $exhibition_bookings_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\EventSpeaker> $key_speakers
+ * @property-read int|null $key_speakers_count
  * @property-read mixed $main_banner
  * @property-read \Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection<int, Media> $media
  * @property-read int|null $media_count
@@ -60,6 +64,8 @@ use Spatie\Permission\Traits\HasRoles;
  * @property-read int|null $reviews_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Permission\Models\Role> $roles
  * @property-read int|null $roles_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\EventSpeaker> $speakers
+ * @property-read int|null $speakers_count
  * @property-read mixed $theme_banner
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Ticket> $tickets
  * @property-read int|null $tickets_count
@@ -72,6 +78,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @method static \Illuminate\Database\Eloquent\Builder|EventModel whereAboutDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EventModel whereAboutTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EventModel whereBannerText($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|EventModel whereConfiguration($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EventModel whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EventModel whereEdition($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EventModel whereEndsOn($value)
@@ -133,6 +140,8 @@ class EventModel extends Model implements HasMedia
         'exhibition_booths',
         'state',
         'edition',
+        'configuration',
+        'speakers',
     ];
 
     protected $casts = [
@@ -143,6 +152,7 @@ class EventModel extends Model implements HasMedia
         'fees' => 'json',
         'exhibition_booths' => BoothConfigurationCast::class,
         'state' => EventState::class,
+        'configuration' => EventModelConfigurationCast::class,
     ];
 
     protected $attributes = [
@@ -295,6 +305,16 @@ class EventModel extends Model implements HasMedia
     public function reviews(): HasMany
     {
         return $this->hasMany(EventReview::class, 'event_model_id');
+    }
+
+    public function speakers(): HasMany
+    {
+        return $this->hasMany(EventSpeaker::class, 'event_model_id');
+    }
+
+    public function key_speakers(): HasMany
+    {
+        return $this->speakers()->whereIsKeySpeaker(true);
     }
 
     public function getAvailableFeesList()

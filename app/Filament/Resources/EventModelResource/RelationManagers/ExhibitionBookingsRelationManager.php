@@ -131,7 +131,8 @@ class ExhibitionBookingsRelationManager extends RelationManager
                             )->columns(3)
                             ->label(''),
                     ])
-                    ->collapsed(),
+                    ->collapsed()
+                    ->label('Delegates/Participants'),
                 Section::make('Payment Information')
                     ->columns(3)
                     ->schema([

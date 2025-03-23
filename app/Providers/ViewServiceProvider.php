@@ -32,18 +32,9 @@ class ViewServiceProvider extends ServiceProvider
                     EventState::Registration->value,
                     EventState::ParticipationAndRegistration->value,
                 ];
-                $latestEvents = [];
-                $latestEventsModels = EventModel::whereIn('state', $statesToShow)
+                $latestEvents = EventModel::whereIn('state', $statesToShow)
                     ->latest()
-                    ->take(4)
                     ->get();
-                foreach ($latestEventsModels as $event) {
-                    $latestEvents[] = [
-                        'id' => $event->id,
-                        'title' => $event->linkTitle,
-                        'url' => route('event.index', ['event' => $event->id]),
-                    ];
-                }
 
                 $view->with('latestEvents', $latestEvents);
             }

@@ -1,8 +1,7 @@
 <div class="w-100 md:h-15 flex justify-between bg-primary py-4 sm:h-auto">
     <p class="mx-1 text-center align-middle text-xs font-medium text-white md:text-sm lg:mx-auto">
 
-        The United Republic of Tanzania | Ministry of Information,
-        Communication and Information Technology | Information and Communication Technologies Commission
+        The United Republic of Tanzania | Ministry of Communication and Information Technology | ICT Commission
 
     </p>
     <div class="hidden justify-center space-x-5 divide-x-2 md:flex">
@@ -27,7 +26,7 @@
     </div>
 </div>
 
-<div class="flex flex-wrap bg-[#0b1224] px-3 py-4 align-baseline">
+<div class="flex flex-wrap bg-brand px-3 py-4 align-baseline">
     <div class="container mx-auto grid grid-cols-1 md:grid-cols-2">
         <a href="/">
             <div class="flex justify-center divide-x-2 divide-gray-400 md:justify-start">
@@ -39,22 +38,26 @@
                 </p>
             </div>
         </a>
-
-        <div
-            class="mt-2 inline-flex place-content-center justify-center gap-2 text-nowrap py-2 align-middle md:gap-4 lg:justify-end">
-            @foreach ($latestEvents as $latestEvent)
-                <a href="{{ $latestEvent['url'] }}"
-                    class="{{ $event && $event?->id == $latestEvent['id'] ? 'text-secondary' : 'text-white' }} my-auto text-xs underline sm:text-base lg:text-xl">
-                    {{ $latestEvent['title'] }}
+        <div class="text-normal inline-flex items-center justify-end space-x-4 py-4">
+            @if (!auth()?->hasUser())
+                <a href="{{ route('register') }}" class="rounded-lg border border-white px-4 py-2 text-white">
+                    Register
                 </a>
-            @endforeach
+                <a href="{{ route('login') }}" class="rounded-lg bg-secondary px-4 py-2 font-semibold text-black">
+                    Sign in
+                </a>
+            @else
+                <a href="{{ route('dashboard') }}" class="rounded-lg bg-secondary px-4 py-2 font-semibold text-black">
+                    Dashboard
+                </a>
+            @endif
         </div>
 
     </div>
 </div>
 
-<hr class="bg-white text-white">
-<div class="hidden bg-brand px-3 py-4 text-white md:block">
+<hr class="white h-px border-0">
+{{-- <div class="hidden bg-brand px-3 py-4 text-white md:block">
     <div class="container mx-auto grid grid-cols-1 gap-4 xl:grid-cols-5">
         <div class="flex gap-2 xl:col-span-2">
             <p class="text-sm font-semibold lg:text-3xl xl:w-1/2">
@@ -108,27 +111,9 @@
                 {{ $event->getDateRangeDescription() }}
             </p>
         </div>
-        {{-- <div class="place-content-center ml-auto justify-end">
-            <a href="/login"><button class="ml-auto px-5 py-3 font-medium bg-secondary rounded-lg text-black">Register
-                    Now</button></a>
-        </div> --}}
-        <div class="ml-auto place-content-center justify-end">
-            <div class="flex">
-                @if ($event->isOpenForRegistration())
-                    <a href="{{ route('register_for_event', ['event' => $event]) }}"
-                        class="ml-auto rounded-lg bg-secondary px-5 py-3 font-medium text-black ring-1 ring-secondary">Attend
-                        this event</a>
-                @endif
-                <a class="ml-2 rounded-lg px-5 py-3 font-medium text-white ring-1 ring-white"
-                    href="{{ Auth::user() ? route('dashboard') : route('login') }}">
-                    {{ Auth::user() ? 'Dashboard' : 'Login' }}
-                </a>
-            </div>
-
-        </div>
     </div>
-</div>
-<hr class="bg-white text-white">
+</div> --}}
+{{-- <hr class="border-0 h-px white"> --}}
 
 <nav class="mx-auto bg-brand">
     <div class="flex justify-between">
@@ -153,8 +138,8 @@
             <ul
                 class="mt-0 grid grid-cols-1 space-x-8 overflow-hidden text-sm font-normal md:flex lg:text-lg rtl:space-x-reverse">
                 <li>
-                    <a href="{{ route('event.about', ['event' => $event]) }}"
-                        class="{{ Route::is('event.about') ? 'text-secondary' : 'text-white ' }} ms-8 hover:underline">About</a>
+                    <a href="{{ route('event.index', ['event' => $event]) }}"
+                        class="{{ Route::is('event.index') ? 'text-secondary font-semibold' : 'text-white ' }} ms-8 hover:underline">About</a>
                 </li>
                 {{-- <li>
                     <a href="#" class="text-white hover:underline">Company</a>
@@ -173,8 +158,9 @@
                 </li>
                 <li>
                     <a href="{{ route('event.hospitality-tours', ['event' => $event]) }}"
-                        class="{{ Route::is('event.hospitality-tours') ? 'text-secondary' : 'text-white ' }} hover:underline">Hospitality
-                        & Tours</a>
+                        class="{{ Route::is('event.hospitality-tours') ? 'text-secondary' : 'text-white ' }} hover:underline">
+                        Explore Tanzania
+                    </a>
                 </li>
                 <li>
                     <a href="{{ route('event.help', ['event' => $event]) }}"

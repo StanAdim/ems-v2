@@ -18,7 +18,7 @@
     @else
         <form wire:submit='store' wire.transition.out>
             <div class="space-y-1 py-4 md:py-5">
-                <p class="ml-4 pl-6 font-semibold">Attendees</p>
+                <p class="ml-4 pl-6 font-semibold">Delegates/Participants</p>
 
                 @foreach ($emails as $index => $e)
                     @php

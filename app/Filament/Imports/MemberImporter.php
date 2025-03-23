@@ -19,7 +19,7 @@ class MemberImporter extends Importer
                 ->rules(['required', 'date']),
             ImportColumn::make('registration_number')
                 ->requiredMapping()
-                ->rules(['required', 'regex:/[A-Z]\d{4}-?[A-Z]{3,4}/']),
+                ->rules(['required', 'string']),
             ImportColumn::make('name')
                 ->requiredMapping()
                 ->rules(['required']),
@@ -56,5 +56,10 @@ class MemberImporter extends Importer
         }
 
         return $body;
+    }
+
+    public function getJobRetryUntil(): \Carbon\CarbonInterface|null
+    {
+        return now()->addMinutes(10);
     }
 }

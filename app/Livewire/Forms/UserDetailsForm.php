@@ -52,7 +52,6 @@ class UserDetailsForm extends Form
                 'required_if:registration_status,registered',
                 'string',
                 'max:100',
-                'regex:/[A-Z]\d{4}-?[A-Z]{3,4}/',
                 'uppercase',
                 new EmailPhoneAndMembershipNumberMatchesAnyMember(
                     $this->email,

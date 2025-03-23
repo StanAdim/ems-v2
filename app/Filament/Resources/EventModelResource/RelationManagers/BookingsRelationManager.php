@@ -70,7 +70,8 @@ class BookingsRelationManager extends RelationManager
                     ->sortable(),
                 ViewColumn::make('attendees')
                     ->view('tables.columns.attendees-column')
-                    ->searchable(),
+                    ->searchable()
+                    ->label('Delegates/Participants'),
                 Tables\Columns\TextColumn::make('total_amount')
                     ->money('TSHS')
                     ->sortable(),

@@ -18,27 +18,27 @@
   }, 1000);
 }">
     <template x-if="remainingTime > 0">
-        <div class="grid auto-cols-max grid-flow-col gap-2 xl:gap-5 text-center">
+        <div class="grid auto-cols-max grid-flow-col gap-2 xl:gap-5 text-center text-xs">
             <div class="flex flex-col">
-                <span class="countdown text-xl lg:text-6xl">
+                <span class="countdown text-3xl lg:text-4xl">
                     <span x-text="formatTime(remainingTime).days"></span>
                 </span>
                 <span>DAYS</span>
             </div>
             <div class="flex flex-col">
-                <span class="countdown text-xl lg:text-6xl">
+                <span class="countdown text-3xl lg:text-4xl">
                     <span x-text="formatTime(remainingTime).hours"></span>
                 </span>
                 <span>HOURS</span>
             </div>
             <div class="flex flex-col">
-                <span class="countdown text-xl lg:text-6xl">
+                <span class="countdown text-3xl lg:text-4xl">
                     <span x-text="formatTime(remainingTime).minutes"></span>
                 </span>
                 <span>MINUTES</span>
             </div>
             <div class="flex flex-col">
-                <span class="countdown text-xl lg:text-6xl">
+                <span class="countdown text-3xl lg:text-4xl">
                     <span x-text="formatTime(remainingTime).seconds"></span>
                 </span>
                 <span>SECONDS</span>
