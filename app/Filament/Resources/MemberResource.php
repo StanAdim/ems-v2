@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Exports\MemberExporter;
 use App\Filament\Imports\MemberImporter;
 use App\Filament\Resources\MemberResource\Pages;
 use App\Filament\Resources\MemberResource\RelationManagers;
@@ -10,7 +11,9 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\ExportAction;
 use Filament\Tables\Actions\ImportAction;
+use Filament\Tables\Actions\SelectAction;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -98,7 +101,9 @@ class MemberResource extends Resource
             ])
             ->headerActions([
                 ImportAction::make()
-                    ->importer(MemberImporter::class)
+                    ->importer(MemberImporter::class),
+                ExportAction::make()
+                    ->exporter(MemberExporter::class),
             ]);
     }
 
